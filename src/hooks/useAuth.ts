@@ -13,5 +13,6 @@ export const useAuth = () => {
     ...authState,
     login: authStore.setAuth,
     logout: authStore.clearAuth,
+    updateUser: authStore.updateUser,
   };
 };

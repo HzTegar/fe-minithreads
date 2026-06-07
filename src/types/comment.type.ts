@@ -1,4 +1,4 @@
-import { User } from './user.type';
+import type { User } from './user.type';
 
 export interface Comment {
   id: string;
@@ -6,6 +6,8 @@ export interface Comment {
   content: string;
   authorId: string;
   author?: User;
+  is_accepted?: boolean;
+  version?: number;
   createdAt: string;
   updatedAt: string;
 }

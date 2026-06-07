@@ -1,5 +1,5 @@
 import React from 'react';
-import { Thread } from '../types/thread.type';
+import type { Thread } from '../types/thread.type';
 import { formatTimeAgo } from '../utils/formatDate';
 
 interface ThreadCardProps {

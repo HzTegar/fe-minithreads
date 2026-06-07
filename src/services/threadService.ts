@@ -1,5 +1,4 @@
-import { api } from './api';
-import { Thread, CreateThreadInput } from '../types/thread.type';
+import type { Thread, CreateThreadInput } from '../types/thread.type';
 
 export const threadService = {
   getAll: async (): Promise<Thread[]> => {
@@ -7,26 +6,26 @@ export const threadService = {
     return [];
   },
 
-  getById: async (id: string): Promise<Thread> => {
+  getById: async (_id: string): Promise<Thread> => {
     // return api.get(`/threads/${id}`);
     throw new Error('Not implemented');
   },
 
-  create: async (data: CreateThreadInput): Promise<Thread> => {
+  create: async (_data: CreateThreadInput): Promise<Thread> => {
     // return api.post('/threads', data);
     throw new Error('Not implemented');
   },
 
-  update: async (id: string, data: Partial<CreateThreadInput>): Promise<Thread> => {
+  update: async (_id: string, _data: Partial<CreateThreadInput>): Promise<Thread> => {
     // return api.put(`/threads/${id}`, data);
     throw new Error('Not implemented');
   },
 
-  delete: async (id: string): Promise<void> => {
+  delete: async (_id: string): Promise<void> => {
     // return api.delete(`/threads/${id}`);
   },
 
-  like: async (id: string): Promise<void> => {
+  like: async (_id: string): Promise<void> => {
     // return api.post(`/threads/${id}/like`, {});
   },
 };

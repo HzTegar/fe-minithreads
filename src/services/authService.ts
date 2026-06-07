@@ -1,5 +1,4 @@
-import { api } from './api';
-import { User } from '../types/user.type';
+import type { User } from '../types/user.type';
 
 export const authService = {
   login: async (credentials: any) => {
@@ -20,6 +19,6 @@ export const authService = {
 
   getCurrentUser: async (): Promise<User> => {
     // return api.get('/auth/me');
-    return { id: '1', username: 'testuser', email: 'test@example.com', createdAt: new Date().toISOString() };
+    return { id: '1', username: 'testuser', email: 'test@example.com', role: 'user', createdAt: new Date().toISOString() };
   },
 };

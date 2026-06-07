@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar } from '../components/Navbar';
 import { ThreadCard } from '../components/ThreadCard';
-import { Thread } from '../types/thread.type';
+import type { Thread } from '../types/thread.type';
 
 export const HomePage: React.FC = () => {
   // Mock data for initial skeleton
@@ -11,7 +11,7 @@ export const HomePage: React.FC = () => {
       title: 'Welcome to MiniThreads!',
       content: 'This is a simple forum built with React and TypeScript. Start by creating a new thread!',
       authorId: 'admin',
-      author: { id: 'admin', username: 'admin', email: 'admin@example.com', createdAt: new Date().toISOString() },
+      author: { id: 'admin', username: 'admin', email: 'admin@example.com', role: 'admin', createdAt: new Date().toISOString() },
       category: 'General',
       tags: ['welcome', 'react'],
       likesCount: 10,

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import { Input } from '../components/common/Input';
-import { ThreadCard } from '../components/ThreadCard';
 
 export const SearchPage: React.FC = () => {
   const [query, setQuery] = useState('');

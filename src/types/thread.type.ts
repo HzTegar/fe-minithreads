@@ -1,4 +1,4 @@
-import { User } from './user.type';
+import type { User } from './user.type';
 
 export interface Thread {
   id: string;
@@ -10,6 +10,9 @@ export interface Thread {
   tags: string[];
   likesCount: number;
   commentsCount: number;
+  accepted_answer_id?: string | null;
+  is_answered?: boolean;
+  version?: number;
   createdAt: string;
   updatedAt: string;
 }
