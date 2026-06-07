@@ -1,31 +1,35 @@
+import { api } from './api';
 import type { Thread, CreateThreadInput } from '../types/thread.type';
 
 export const threadService = {
   getAll: async (): Promise<Thread[]> => {
-    // return api.get('/threads');
-    return [];
+    const response = await api.get<{ data: { data: Thread[] } }>('/posts');
+    return response.data.data;
   },
 
-  getById: async (_id: string): Promise<Thread> => {
-    // return api.get(`/threads/${id}`);
-    throw new Error('Not implemented');
+  getById: async (id: string): Promise<Thread> => {
+    const response = await api.get<{ data: Thread }>(`/posts/${id}`);
+    return response.data;
   },
 
-  create: async (_data: CreateThreadInput): Promise<Thread> => {
-    // return api.post('/threads', data);
-    throw new Error('Not implemented');
+  create: async (data: any): Promise<Thread> => {
+    const response = await api.post<{ data: Thread }>('/posts', data);
+    return response.data;
   },
 
-  update: async (_id: string, _data: Partial<CreateThreadInput>): Promise<Thread> => {
-    // return api.put(`/threads/${id}`, data);
-    throw new Error('Not implemented');
+  update: async (id: string, data: any): Promise<Thread> => {
+    const response = await api.put<{ data: Thread }>(`/posts/${id}`, data);
+    return response.data;
   },
 
-  delete: async (_id: string): Promise<void> => {
-    // return api.delete(`/threads/${id}`);
+  delete: async (id: string): Promise<void> => {
+    await api.delete(`/posts/${id}`);
   },
 
-  like: async (_id: string): Promise<void> => {
-    // return api.post(`/threads/${id}/like`, {});
+  like: async (id: string): Promise<void> => {
+    await api.post('/like', {
+      likeable_id: id,
+      likeable_type: 'post'
+    });
   },
 };

@@ -17,8 +17,8 @@ interface ThreadFormProps {
 export const ThreadForm: React.FC<ThreadFormProps> = ({ initialData, onSubmit, isLoading }) => {
   const [formData, setFormData] = useState(initialData || {
     title: '',
-    content: '',
-    category: CATEGORIES[0],
+    body: '',
+    category_id: CATEGORIES[0].id,
     tags: [] as string[],
   });
 
@@ -42,12 +42,12 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({ initialData, onSubmit, i
           Category
         </label>
         <select
-          value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          value={formData.category_id}
+          onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
           style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d1d5db' }}
         >
           {CATEGORIES.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>
       </div>
@@ -57,8 +57,8 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({ initialData, onSubmit, i
           Content
         </label>
         <textarea
-          value={formData.content}
-          onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+          value={formData.body}
+          onChange={(e) => setFormData({ ...formData, body: e.target.value })}
           rows={6}
           style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #d1d5db', resize: 'vertical' }}
           placeholder="Share your thoughts..."

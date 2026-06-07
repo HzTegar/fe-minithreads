@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
@@ -7,29 +8,24 @@ import { CreateThreadPage } from '../pages/CreateThreadPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import { SearchPage } from '../pages/SearchPage';
 
-/**
- * Simple routing skeleton using conditional rendering.
- * This is a placeholder until react-router-dom is added.
- */
+import { NotificationsPage } from '../pages/NotificationsPage';
+import { BookmarksPage } from '../pages/BookmarksPage';
+
 export const AppRoutes: React.FC = () => {
-  const [path, setPath] = useState(window.location.pathname);
-
-  useEffect(() => {
-    const handleLocationChange = () => {
-      setPath(window.location.pathname);
-    };
-
-    window.addEventListener('popstate', handleLocationChange);
-    return () => window.removeEventListener('popstate', handleLocationChange);
-  }, []);
-
-  // Simple router logic
-  if (path === '/login') return <LoginPage />;
-  if (path === '/register') return <RegisterPage />;
-  if (path === '/create-thread') return <CreateThreadPage />;
-  if (path === '/profile') return <ProfilePage />;
-  if (path === '/search') return <SearchPage />;
-  if (path.startsWith('/thread/')) return <ThreadDetailPage />;
-  
-  return <HomePage />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/create-thread" element={<CreateThreadPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/bookmarks" element={<BookmarksPage />} />
+        <Route path="/thread/:id" element={<ThreadDetailPage />} />
+        <Route path="/edit-thread/:id" element={<ThreadDetailPage />} /> {/* Reusing detail or specific edit page if exists */}
+      </Routes>
+    </BrowserRouter>
+  );
 };
