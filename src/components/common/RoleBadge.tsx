@@ -1,8 +1,8 @@
 import React from 'react';
-import type { UserRole } from '../../types/user.type';
+import type { UserLevel } from '../../types/user.type';
 
 interface RoleBadgeProps {
-  role: UserRole;
+  role: UserLevel;
   showIcon?: boolean;
 }
 
@@ -40,7 +40,7 @@ export const RoleBadge: React.FC<RoleBadgeProps> = ({ role, showIcon = true }) =
     },
   };
 
-  const current = config[role];
+  const current = config[role] || config.user;
 
   return (
     <span 
@@ -59,7 +59,7 @@ export const RoleBadge: React.FC<RoleBadgeProps> = ({ role, showIcon = true }) =
       }}
     >
       {showIcon && current.icon}
-      {current.label}
+      {role ? current.label : 'User'}
     </span>
   );
 };

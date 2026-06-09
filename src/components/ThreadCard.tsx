@@ -8,6 +8,8 @@ interface ThreadCardProps {
 }
 
 export const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
+  if (!thread) return null;
+
   const cardStyle: React.CSSProperties = {
     padding: '1.5rem',
     backgroundColor: '#ffffff',
@@ -22,21 +24,21 @@ export const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
         <span>{thread.user?.username || 'Anonymous'}</span>
         <span>•</span>
-        <span>{formatTimeAgo(thread.created_at)}</span>
+        <span>{thread.created_at ? formatTimeAgo(thread.created_at) : 'recently'}</span>
         <span>•</span>
-        <span style={{ color: '#2563eb', fontWeight: 500 }}>{thread.category?.name}</span>
+        <span style={{ color: '#2563eb', fontWeight: 500 }}>{thread.category?.name || 'Uncategorized'}</span>
       </div>
       <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem' }}>
         <Link to={`/thread/${thread.id}`} style={{ textDecoration: 'none', color: '#111827' }}>
-          {thread.title}
+          {thread.title || 'Untitled'}
         </Link>
       </h3>
       <p style={{ color: '#4b5563', marginBottom: '1rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-        {thread.body}
+        {thread.body || 'No content available.'}
       </p>
       <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', color: '#6b7280' }}>
         <span>{thread.likes_count || 0} likes</span>
-        <span>{thread.comments?.length || 0} comments</span>
+        <span>{thread.comments_count || thread.comments?.length || 0} comments</span>
       </div>
     </div>
   );

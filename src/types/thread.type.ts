@@ -1,25 +1,44 @@
 import type { User } from './user.type';
+import type { Comment } from './comment.type';
+
+export interface Tag {
+  id: string;
+  name: string;
+  slug: string;
+  color: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+}
 
 export interface Thread {
   id: string;
   title: string;
-  content: string;
-  authorId: string;
-  author?: User;
-  category: string;
-  tags: string[];
-  likesCount: number;
-  commentsCount: number;
+  body: string;
+  user_id: string;
+  user?: User;
+  category_id: string;
+  category?: Category;
+  tags?: Tag[];
+  likes_count: number;
+  comments_count: number;
+  view_count: number;
   accepted_answer_id?: string | null;
   is_answered?: boolean;
-  version?: number;
-  createdAt: string;
-  updatedAt: string;
+  status: 'open' | 'closed';
+  edit_count?: number;
+  comments?: Comment[];
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateThreadInput {
   title: string;
-  content: string;
-  category: string;
+  body: string;
+  category_id: string;
   tags: string[];
 }

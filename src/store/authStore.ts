@@ -1,8 +1,23 @@
 import type { User, AuthState } from '../types/user.type';
 import { STORAGE_KEYS } from '../utils/constants';
 
+const getInitialUser = (): User | null => {
+  const data = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+  if (!data) return null;
+  try {
+    const user = JSON.parse(data);
+    // Legacy support: map 'role' to 'level' if 'level' is missing
+    if (user && !user.level && user.role) {
+      user.level = user.role;
+    }
+    return user;
+  } catch (e) {
+    return null;
+  }
+};
+
 let state: AuthState = {
-  user: JSON.parse(localStorage.getItem(STORAGE_KEYS.USER_DATA) || 'null'),
+  user: getInitialUser(),
   isAuthenticated: !!localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN),
   token: localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN),
 };

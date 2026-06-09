@@ -11,8 +11,8 @@ interface CommentItemProps {
 export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
   const { user: currentUser } = useAuth();
   
-  const canModerate = currentUser?.role === 'admin' || currentUser?.role === 'moderator';
-  const isOwner = currentUser?.id === comment.authorId;
+  const canModerate = currentUser?.level === 'admin' || currentUser?.level === 'moderator';
+  const isOwner = currentUser?.id === comment.user_id;
 
   return (
     <div className="flex gap-4 py-4 border-b border-[#e3e6e8]">
@@ -43,18 +43,20 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
 
       {/* Main content */}
       <div className="flex-1 min-w-0">
-        <div className="so-post-body mb-4">
-          {comment.content}
+        <div className="so-post-body mb-4 whitespace-pre-wrap">
+          {comment.body}
         </div>
         
         <div className="flex justify-between items-end">
           <div className="flex gap-3 text-xs text-[#6a737c]">
-            <button className="hover:text-[#0074cc] flex items-center gap-1">
-              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 14v7M5 4.971c0-1.642 1.333-2.97 3-2.97 1.667 0 3 1.328 3 2.97v10.058c0 1.642-1.333 2.971-3 2.971-1.667 0-3-1.33-3-2.97V4.97Z"/>
-              </svg>
-              Report
-            </button>
+            {!isOwner && (
+              <button className="hover:text-[#0074cc] flex items-center gap-1">
+                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 14v7M5 4.971c0-1.642 1.333-2.97 3-2.97 1.667 0 3 1.328 3 2.97v10.058c0 1.642-1.333 2.971-3 2.971-1.667 0-3-1.33-3-2.97V4.97Z"/>
+                </svg>
+                Report
+              </button>
+            )}
             
             {(isOwner || canModerate) && (
               <button className="hover:text-[#0074cc] flex items-center gap-1 text-[#0074cc]">
@@ -78,22 +80,22 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
           
           <div className="so-user-card">
             <div className="text-[#6a737c] mb-1">
-              answered {formatTimeAgo(comment.createdAt)}
+              answered {formatTimeAgo(comment.created_at)}
             </div>
             <div className="flex gap-2 items-center">
               <div className="size-8 bg-gray-200 rounded flex items-center justify-center text-[10px]">
-                {comment.author?.username?.substring(0,2).toUpperCase()}
+                {comment.user?.username?.substring(0,2)?.toUpperCase() || '??'}
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
                   <span className="text-[#0074cc] hover:text-[#0a95ff] cursor-pointer font-medium">
-                    {comment.author?.username || 'Anonymous'}
+                    {comment.user?.username || 'Anonymous'}
                   </span>
                 </div>
-                {comment.author?.role && comment.author.role !== 'user' && (
-                  <RoleBadge role={comment.author.role} showIcon={false} />
+                {comment.user?.level && comment.user.level !== 'user' && (
+                  <RoleBadge role={comment.user.level} showIcon={false} />
                 )}
-                <span className="text-[#6a737c] font-bold text-[10px]">1,241 rep</span>
+                <span className="text-[#6a737c] font-bold text-[10px]">{comment.user?.reputation_points || 0} rep</span>
               </div>
             </div>
           </div>

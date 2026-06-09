@@ -3,7 +3,7 @@ import { Navbar } from '../components/Navbar';
 import { Button } from '../components/common/Button';
 import { RoleBadge } from '../components/common/RoleBadge';
 import { useAuth } from '../hooks/useAuth';
-import type { UserRole } from '../types/user.type';
+import type { UserLevel } from '../types/user.type';
 
 export const ProfilePage: React.FC = () => {
   const { user: authUser, updateUser } = useAuth();
@@ -14,15 +14,15 @@ export const ProfilePage: React.FC = () => {
     username: 'admin',
     email: 'admin@example.com',
     bio: 'Software engineer and creator of MiniThreads.',
-    role: 'admin' as UserRole,
+    level: 'admin' as UserLevel,
     reputation: 1250,
     points: 450,
     createdAt: '2023-01-01T00:00:00Z',
   };
 
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (authUser) {
-      updateUser({ ...authUser, role: e.target.value as UserRole });
+      updateUser({ ...authUser, level: e.target.value as UserLevel });
     }
   };
 
@@ -36,7 +36,7 @@ export const ProfilePage: React.FC = () => {
           </div>
           
           <div style={{ marginBottom: '1rem' }}>
-            <RoleBadge role={displayUser.role} />
+            <RoleBadge role={displayUser.level} />
           </div>
 
           <h1 style={{ margin: '0 0 0.5rem 0' }}>{displayUser.username}</h1>
@@ -60,8 +60,8 @@ export const ProfilePage: React.FC = () => {
               [Demo Only] Switch Current Role:
             </label>
             <select 
-              value={displayUser.role} 
-              onChange={handleRoleChange}
+              value={displayUser.level} 
+              onChange={handleLevelChange}
               style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '0.875rem' }}
             >
               <option value="user">Regular User</option>

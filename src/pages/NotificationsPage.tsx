@@ -42,15 +42,15 @@ export const NotificationsPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="bg-[#f8f9f9] min-h-screen">
       <Navbar />
-      <main style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ margin: 0 }}>Notifications</h1>
+      <main className="max-w-[800px] mx-auto py-8 px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-[#232629]">Notifications</h1>
           {notifications.some(n => !n.read_at) && (
             <button 
               onClick={handleMarkAllAsRead}
-              style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '0.875rem' }}
+              className="text-sm text-[#0074cc] hover:text-[#0a95ff] font-medium transition-colors"
             >
               Mark all as read
             </button>
@@ -58,35 +58,36 @@ export const NotificationsPage: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <p style={{ textAlign: 'center' }}>Loading...</p>
+          <div className="flex flex-col items-center justify-center py-20 bg-white border border-[#e3e6e8] rounded-lg">
+            <p className="text-[#6a737c]">Loading your notifications...</p>
+          </div>
         ) : notifications.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div className="space-y-3">
             {notifications.map(notification => (
               <div 
                 key={notification.id}
                 onClick={() => !notification.read_at && handleMarkAsRead(notification.id)}
-                style={{ 
-                  padding: '1rem', 
-                  backgroundColor: notification.read_at ? '#ffffff' : '#eff6ff', 
-                  borderRadius: '8px', 
-                  border: '1px solid #e5e7eb',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
+                className={`p-4 rounded-lg border transition-all cursor-pointer flex justify-between items-start gap-4 ${
+                  notification.read_at 
+                    ? 'bg-white border-[#e3e6e8] opacity-80' 
+                    : 'bg-[#f0f8ff] border-[#b3d3f1] shadow-sm'
+                }`}
               >
-                <div>
-                  <p style={{ margin: '0 0 0.25rem 0', color: '#111827' }}>
-                    {notification.data.message}
-                  </p>
-                  <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
-                    {formatTimeAgo(notification.created_at)}
-                  </span>
+                <div className="flex gap-3">
+                  <div className={`mt-1 size-2 rounded-full shrink-0 ${notification.read_at ? 'bg-transparent' : 'bg-[#0074cc]'}`} />
+                  <div>
+                    <p className={`text-[15px] mb-1 ${notification.read_at ? 'text-[#4b5563]' : 'text-[#232629] font-medium'}`}>
+                      {notification.data.message}
+                    </p>
+                    <span className="text-xs text-[#6a737c]">
+                      {formatTimeAgo(notification.created_at)}
+                    </span>
+                  </div>
                 </div>
                 {notification.data.post_id && (
                   <Link 
                     to={`/thread/${notification.data.post_id}`}
-                    style={{ fontSize: '0.875rem', color: '#2563eb', textDecoration: 'none' }}
+                    className="text-xs font-bold text-[#0074cc] hover:bg-[#e1ecf4] px-3 py-1.5 rounded bg-[#f1f2f3] no-underline uppercase tracking-wide"
                   >
                     View
                   </Link>
@@ -95,7 +96,11 @@ export const NotificationsPage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <p style={{ textAlign: 'center', color: '#6b7280', padding: '3rem' }}>No notifications yet.</p>
+          <div className="flex flex-col items-center justify-center py-20 bg-white border border-[#e3e6e8] rounded-lg">
+            <div className="text-4xl mb-4">🔔</div>
+            <h2 className="text-lg font-medium text-[#3b4045] mb-1">No notifications yet</h2>
+            <p className="text-[#6a737c]">When someone interacts with your posts, you'll see it here.</p>
+          </div>
         )}
       </main>
     </div>

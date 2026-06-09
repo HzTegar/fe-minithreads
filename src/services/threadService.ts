@@ -3,33 +3,47 @@ import type { Thread, CreateThreadInput } from '../types/thread.type';
 
 export const threadService = {
   getAll: async (): Promise<Thread[]> => {
-    const response = await api.get<{ data: { data: Thread[] } }>('/posts');
-    return response.data.data;
+    const response: any = await api.get('/posts');
+    if (response.data?.data && Array.isArray(response.data.data)) return response.data.data;
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (Array.isArray(response)) return response;
+    return [];
   },
 
   getById: async (id: string): Promise<Thread> => {
-    const response = await api.get<{ data: Thread }>(`/posts/${id}`);
-    return response.data;
+    const response: any = await api.get(`/posts/${id}`);
+    return response.data || response;
   },
 
-  create: async (data: any): Promise<Thread> => {
-    const response = await api.post<{ data: Thread }>('/posts', data);
-    return response.data;
+  create: async (data: any): Promise<any> => {
+    // Backend expects 'category_id', 'title', 'body', and optional 'tags' (array of strings)
+    const response: any = await api.post('/posts', data);
+    return response.data || response;
   },
 
-  update: async (id: string, data: any): Promise<Thread> => {
-    const response = await api.put<{ data: Thread }>(`/posts/${id}`, data);
-    return response.data;
+  update: async (id: string, data: any): Promise<any> => {
+    const response: any = await api.post(`/posts/${id}`, { ...data, _method: 'PUT' });
+    return response.data || response;
   },
 
   delete: async (id: string): Promise<void> => {
     await api.delete(`/posts/${id}`);
   },
 
-  like: async (id: string): Promise<void> => {
-    await api.post('/like', {
-      likeable_id: id,
-      likeable_type: 'post'
+  like: async (id: string): Promise<{ likes_count: number; is_liked: boolean }> => {
+    const response: any = await api.post('/like', {
+      target_id: id,
+      target_type: 'post'
     });
+    return response.data || response;
+  },
+
+  vote: async (id: string, type: 'up' | 'down'): Promise<{ vote_score: number }> => {
+    const response: any = await api.post('/vote', {
+      target_id: id,
+      target_type: 'post',
+      vote_type: type
+    });
+    return response.data || response;
   },
 };

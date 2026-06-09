@@ -32,8 +32,6 @@ export const ThreadDetailPage: React.FC = () => {
         const threadData = await threadService.getById(id);
         setThread(threadData);
         setComments(threadData.comments || []);
-        // Check if bookmarked (this might require a backend flag in threadData)
-        // For now we assume if it exists in bookmarks list
       } catch (error) {
         console.error('Failed to fetch thread detail:', error);
       } finally {
@@ -54,26 +52,21 @@ export const ThreadDetailPage: React.FC = () => {
     }
   };
 
-  const handleCommentSubmit = async (body: string) => {
+  const handleVote = async (type: 'up' | 'down') => {
     if (!id || !thread) return;
-    setIsSubmitting(true);
     try {
-      const newComment = await commentService.create(id, { body });
-      setComments([...comments, newComment]);
-    } catch (error) {
-      console.error('Failed to post comment:', error);
-    } finally {
-      setIsSubmitting(false);
+      const response = await threadService.vote(id, type);
+      setThread({ ...thread, vote_score: response.vote_score });
+    } catch (error: any) {
+      alert(error.message || 'Failed to vote');
     }
   };
 
   const handleLike = async () => {
     if (!id || !thread) return;
     try {
-      await threadService.like(id);
-      // Re-fetch to get updated like count
-      const updatedThread = await threadService.getById(id);
-      setThread(updatedThread);
+      const response = await threadService.like(id);
+      setThread({ ...thread, likes_count: response.likes_count });
     } catch (error) {
       console.error('Failed to like thread:', error);
     }
@@ -118,13 +111,26 @@ export const ThreadDetailPage: React.FC = () => {
             <div className="flex gap-4 mb-8">
               {/* Vote Sidebar */}
               <div className="flex flex-col items-center w-12 pt-1 gap-2">
-                <button onClick={handleLike} className="text-[#bbc0c4] hover:text-orange-500">
+                <button onClick={() => handleVote('up')} className="text-[#bbc0c4] hover:text-orange-500 transition-colors" title="This question shows research effort; it is useful and clear">
                   <svg className="w-9 h-9" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 15 7-7 7 7"/>
                   </svg>
                 </button>
-                <span className="text-xl font-medium text-[#6a737c]">{thread.likes_count || 0}</span>
-                <button onClick={handleBookmark} className={`mt-2 hover:text-orange-500 ${isBookmarked ? 'text-orange-500' : 'text-[#bbc0c4]'}`}>
+                <span className="text-xl font-medium text-[#6a737c]">{thread.vote_score || 0}</span>
+                <button onClick={() => handleVote('down')} className="text-[#bbc0c4] hover:text-orange-500 transition-colors" title="This question does not show any research effort; it is unclear or not useful">
+                  <svg className="w-9 h-9" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7"/>
+                  </svg>
+                </button>
+                
+                <button onClick={handleLike} className="mt-2 text-[#bbc0c4] hover:text-red-500 flex flex-col items-center gap-1 transition-colors" title="Like this thread">
+                  <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill={thread.is_liked ? 'currentColor' : 'none'} viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                  </svg>
+                  <span className="text-xs font-bold">{thread.likes_count || 0}</span>
+                </button>
+
+                <button onClick={handleBookmark} className={`mt-2 hover:text-orange-500 transition-colors ${isBookmarked ? 'text-orange-500' : 'text-[#bbc0c4]'}`} title="Bookmark this thread">
                   <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill={isBookmarked ? 'currentColor' : 'none'} viewBox="0 0 14 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 20a1 1 0 0 1-.64-.231L7 15.3l-5.36 4.469A1 1 0 0 1 0 19V2a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v17a1 1 0 0 1-1 1Z"/>
                   </svg>
@@ -146,12 +152,14 @@ export const ThreadDetailPage: React.FC = () => {
 
                 <div className="flex justify-between items-end mb-8">
                   <div className="flex gap-3 text-xs text-[#6a737c]">
-                    <button className="hover:text-[#0074cc] flex items-center gap-1">
-                      <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 14v7M5 4.971c0-1.642 1.333-2.97 3-2.97 1.667 0 3 1.328 3 2.97v10.058c0 1.642-1.333 2.971-3 2.971-1.667 0-3-1.33-3-2.97V4.97Z"/>
-                      </svg>
-                      Report
-                    </button>
+                    {!isOwner(thread.user_id) && (
+                      <button className="hover:text-[#0074cc] flex items-center gap-1">
+                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 14v7M5 4.971c0-1.642 1.333-2.97 3-2.97 1.667 0 3 1.328 3 2.97v10.058c0 1.642-1.333 2.971-3 2.971-1.667 0-3-1.33-3-2.97V4.97Z"/>
+                        </svg>
+                        Report
+                      </button>
+                    )}
                     {(isOwner(thread.user_id) || canModerate) && (
                       <a href={`/edit-thread/${thread.id}`} className="hover:text-[#0074cc] flex items-center gap-1 text-[#0074cc] no-underline">
                         <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -161,13 +169,21 @@ export const ThreadDetailPage: React.FC = () => {
                         Edit
                       </a>
                     )}
+                    {canModerate && (
+                      <button className="hover:text-red-600 flex items-center gap-1 text-red-500 font-medium">
+                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                        </svg>
+                        Delete
+                      </button>
+                    )}
                   </div>
                   
                   <div className="so-user-card">
                     <div className="text-[#6a737c] mb-1 text-[10px]">asked {formatTimeAgo(thread.created_at)}</div>
                     <div className="flex gap-2 items-center">
                       <div className="size-8 bg-[#000000] rounded flex items-center justify-center text-white text-[10px]">
-                        {thread.user?.username?.substring(0,2).toUpperCase()}
+                        {thread.user?.username?.substring(0,2)?.toUpperCase() || '??'}
                       </div>
                       <div className="flex flex-col">
                         <div className="flex items-center gap-1">
