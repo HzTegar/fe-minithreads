@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { HomePage } from '../pages/HomePage';
-import { LoginPage } from '../pages/LoginPage';
-import { RegisterPage } from '../pages/RegisterPage';
-import { ThreadDetailPage } from '../pages/ThreadDetailPage';
-import { CreateThreadPage } from '../pages/CreateThreadPage';
-import { ProfilePage } from '../pages/ProfilePage';
-import { SearchPage } from '../pages/SearchPage';
+import { HomePage } from '../pages/(main)/view/HomePageView';
+import { LoginPage } from '../pages/(main)/view/LoginPageView';
+import { RegisterPage } from '../pages/(main)/view/RegisterPageView';
+import { ThreadDetailPage } from '../pages/(main)/view/ThreadDetailPageView';
+import { CreateThreadPage } from '../pages/(main)/view/CreateThreadPageView';
+import { ProfilePage } from '../pages/(main)/view/ProfilePageView';
+import { SearchPage } from '../pages/(main)/view/SearchPageView';
 
-import { NotificationsPage } from '../pages/NotificationsPage';
-import { BookmarksPage } from '../pages/BookmarksPage';
+import { NotificationsPage } from '../pages/(main)/view/NotificationsPageView';
+import { BookmarksPage } from '../pages/(main)/view/BookmarksPageView';
 
 export const AppRoutes: React.FC = () => {
   return (

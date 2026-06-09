@@ -1,35 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar } from '../components/Navbar';
-import { Input } from '../components/common/Input';
-import { api } from '../services/api';
-import { ThreadCard } from '../components/ThreadCard';
-import type { Thread } from '../types/thread.type';
+import React from 'react';
+import { Navbar } from '../../../components/Navbar';
+import { Input } from '../../../components/common/Input';
+import { ThreadCard } from '../../../components/ThreadCard';
+import { useSearchPage } from '../logic/SearchPage';
 
 export const SearchPage: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Thread[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(async () => {
-      if (query.length > 2) {
-        setIsLoading(true);
-        try {
-          // Menggunakan endpoint global search dari backend
-          const response = await api.get<{ data: { posts: Thread[] } }>(`/search/global?q=${query}`);
-          setResults(response.data.posts || []);
-        } catch (error) {
-          console.error('Search failed:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setResults([]);
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+  const {
+    query,
+    setQuery,
+    results,
+    isLoading
+  } = useSearchPage();
 
   return (
     <div>
@@ -64,3 +45,4 @@ export const SearchPage: React.FC = () => {
     </div>
   );
 };
+

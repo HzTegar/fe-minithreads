@@ -1,32 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Navbar } from '../components/Navbar';
-import { ThreadForm } from '../components/ThreadForm';
-import { threadService } from '../services/threadService';
+import React from 'react';
+import { Navbar } from '../../../components/Navbar';
+import { ThreadForm } from '../../../components/ThreadForm';
+import { useCreateThreadPage } from '../logic/CreateThreadPage';
 
 export const CreateThreadPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = async (data: any) => {
-    setIsLoading(true);
-    setError('');
-    try {
-      const response = await threadService.create(data);
-      // Redirect to the newly created thread if ID is available, else to home
-      const threadId = response?.id || response?.data?.id;
-      if (threadId) {
-        navigate(`/thread/${threadId}`);
-      } else {
-        navigate('/');
-      }
-    } catch (err: any) {
-      setError(err.message || 'Failed to create thread.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    isLoading,
+    error,
+    handleSubmit
+  } = useCreateThreadPage();
 
   return (
     <div className="bg-[#f8f9f9] min-h-screen">
@@ -65,3 +47,4 @@ export const CreateThreadPage: React.FC = () => {
     </div>
   );
 };
+

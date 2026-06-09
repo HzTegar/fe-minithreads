@@ -1,41 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Input } from '../components/common/Input';
-import { Button } from '../components/common/Button';
-import { APP_NAME } from '../utils/constants';
-import { authService } from '../services/authService';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Input } from '../../../components/common/Input';
+import { Button } from '../../../components/common/Button';
+import { APP_NAME } from '../../../utils/constants';
+import { useRegisterPage } from '../logic/RegisterPage';
 
 export const RegisterPage: React.FC = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    if (formData.password !== formData.password_confirmation) {
-      setError('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      await authService.register(formData);
-      navigate('/login');
-    } catch (err: any) {
-      setError(err.message || 'Registration failed.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    formData,
+    isLoading,
+    error,
+    handleSubmit,
+    handleInputChange
+  } = useRegisterPage();
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9fafb' }}>
@@ -49,28 +26,28 @@ export const RegisterPage: React.FC = () => {
           <Input 
             label="Username" 
             value={formData.username} 
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })} 
+            onChange={(e) => handleInputChange('username', e.target.value)} 
             required 
           />
           <Input 
             label="Email" 
             type="email" 
             value={formData.email} 
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+            onChange={(e) => handleInputChange('email', e.target.value)} 
             required 
           />
           <Input 
             label="Password" 
             type="password" 
             value={formData.password} 
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
+            onChange={(e) => handleInputChange('password', e.target.value)} 
             required 
           />
           <Input 
             label="Confirm Password" 
             type="password" 
             value={formData.password_confirmation} 
-            onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })} 
+            onChange={(e) => handleInputChange('password_confirmation', e.target.value)} 
             required 
           />
           <Button type="submit" disabled={isLoading} style={{ width: '100%', marginTop: '1rem' }}>
@@ -85,3 +62,4 @@ export const RegisterPage: React.FC = () => {
     </div>
   );
 };
+

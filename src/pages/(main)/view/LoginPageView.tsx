@@ -1,35 +1,20 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Input } from '../components/common/Input';
-import { Button } from '../components/common/Button';
-import { APP_NAME } from '../utils/constants';
-import { authService } from '../services/authService';
-import { authStore } from '../store/authStore';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Input } from '../../../components/common/Input';
+import { Button } from '../../../components/common/Button';
+import { APP_NAME } from '../../../utils/constants';
+import { useLoginPage } from '../logic/LoginPage';
 
 export const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const response = await authService.login({ email, password });
-      // Backend mengembalikan 'access_token', bukan 'token'
-      authStore.setAuth(response.user, response.access_token);
-      navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Login failed. Please check your credentials.');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoading,
+    error,
+    handleSubmit
+  } = useLoginPage();
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9fafb' }}>
@@ -66,3 +51,4 @@ export const LoginPage: React.FC = () => {
     </div>
   );
 };
+

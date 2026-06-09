@@ -1,19 +1,13 @@
 import React from 'react';
-import { Navbar } from '../components/Navbar';
-import { ThreadForm } from '../components/ThreadForm';
+import { Navbar } from '../../../components/Navbar';
+import { ThreadForm } from '../../../components/ThreadForm';
+import { useEditThreadPage } from '../logic/EditThreadPage';
 
 export const EditThreadPage: React.FC = () => {
-  // Mock initial data
-  const initialData = {
-    title: 'Welcome to MiniThreads!',
-    content: 'This is a simple forum built with React and TypeScript. Start by creating a new thread!',
-    category: 'General',
-    tags: ['welcome', 'react'],
-  };
-
-  const handleSubmit = (data: any) => {
-    console.log('Updating thread:', data);
-  };
+  const {
+    initialData,
+    handleSubmit
+  } = useEditThreadPage();
 
   return (
     <div>
@@ -27,3 +21,4 @@ export const EditThreadPage: React.FC = () => {
     </div>
   );
 };
+

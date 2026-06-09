@@ -1,30 +1,14 @@
 import React from 'react';
-import { Navbar } from '../components/Navbar';
-import { Button } from '../components/common/Button';
-import { RoleBadge } from '../components/common/RoleBadge';
-import { useAuth } from '../hooks/useAuth';
-import type { UserLevel } from '../types/user.type';
+import { Navbar } from '../../../components/Navbar';
+import { Button } from '../../../components/common/Button';
+import { RoleBadge } from '../../../components/common/RoleBadge';
+import { useProfilePage } from '../logic/ProfilePage';
 
 export const ProfilePage: React.FC = () => {
-  const { user: authUser, updateUser } = useAuth();
-
-  // Fallback to mock if not logged in
-  const displayUser = authUser || {
-    id: 'mock-1',
-    username: 'admin',
-    email: 'admin@example.com',
-    bio: 'Software engineer and creator of MiniThreads.',
-    level: 'admin' as UserLevel,
-    reputation: 1250,
-    points: 450,
-    createdAt: '2023-01-01T00:00:00Z',
-  };
-
-  const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (authUser) {
-      updateUser({ ...authUser, level: e.target.value as UserLevel });
-    }
-  };
+  const {
+    displayUser,
+    handleLevelChange
+  } = useProfilePage();
 
   return (
     <div>
@@ -84,3 +68,4 @@ export const ProfilePage: React.FC = () => {
     </div>
   );
 };
+
