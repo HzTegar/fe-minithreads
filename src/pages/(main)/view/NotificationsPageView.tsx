@@ -3,6 +3,7 @@ import { Navbar } from '../../../components/Navbar';
 import { formatTimeAgo } from '../../../utils/formatDate';
 import { Link } from 'react-router-dom';
 import { useNotificationsPage } from '../logic/NotificationsPage';
+import { HiBell } from 'react-icons/hi';
 
 export const NotificationsPage: React.FC = () => {
   const {
@@ -68,7 +69,9 @@ export const NotificationsPage: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 bg-white border border-[#e3e6e8] rounded-lg">
-            <div className="text-4xl mb-4">🔔</div>
+            <div className="text-4xl mb-4 text-[#0074cc]">
+              <HiBell />
+            </div>
             <h2 className="text-lg font-medium text-[#3b4045] mb-1">No notifications yet</h2>
             <p className="text-[#6a737c]">When someone interacts with your posts, you'll see it here.</p>
           </div>
@@ -77,4 +80,5 @@ export const NotificationsPage: React.FC = () => {
     </div>
   );
 };
+
 

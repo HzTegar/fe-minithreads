@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from '../../../components/Navbar';
 import { ThreadCard } from '../../../components/ThreadCard';
 import { useBookmarksPage } from '../logic/BookmarksPage';
+import { HiBookmark } from 'react-icons/hi';
 
 export const BookmarksPage: React.FC = () => {
   const {
@@ -28,7 +29,9 @@ export const BookmarksPage: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 bg-white border border-[#e3e6e8] rounded-lg">
-              <div className="text-4xl mb-4"></div>
+              <div className="text-5xl mb-4 text-[#9ca3af]">
+                <HiBookmark />
+              </div>
               <h2 className="text-lg font-medium text-[#3b4045] mb-1">No bookmarks yet</h2>
               <p className="text-[#6a737c] mb-6">Save threads to read them later or keep track of important discussions.</p>
               <a 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 
 interface LikeButtonProps {
   count: number;
@@ -24,7 +25,9 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ count, isLiked, onLike }
         transition: 'all 0.2s',
       }}
     >
-      <span style={{ fontSize: '18px' }}>{isLiked ? '❤️' : '🤍'}</span>
+      <span style={{ display: 'flex', alignItems: 'center', fontSize: '18px' }}>
+        {isLiked ? <HiHeart /> : <HiOutlineHeart />}
+      </span>
       <span style={{ fontWeight: 500 }}>{count}</span>
     </button>
   );

@@ -3,6 +3,7 @@ import { Navbar } from '../../../components/Navbar';
 import { ThreadCard } from '../../../components/ThreadCard';
 import { RoleBadge } from '../../../components/common/RoleBadge';
 import { useHomePage } from '../logic/HomePage';
+import { HiUser } from 'react-icons/hi';
 
 export const HomePage: React.FC = () => {
   const {
@@ -60,8 +61,8 @@ export const HomePage: React.FC = () => {
           {isAuthenticated ? (
             <div style={{ backgroundColor: 'white', border: '1px solid #e3e6e8', borderRadius: '4px', padding: '1.5rem', position: 'sticky', top: '5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                <div style={{ width: '48px', height: '48px', backgroundColor: '#e1ecf4', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem' }}>
-                  👤
+                <div style={{ width: '48px', height: '48px', backgroundColor: '#e1ecf4', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', color: '#6b7280' }}>
+                  <HiUser />
                 </div>
                 <div>
                   <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{user?.username}</div>

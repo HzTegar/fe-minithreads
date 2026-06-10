@@ -3,6 +3,7 @@ import { Navbar } from '../../../components/Navbar';
 import { Input } from '../../../components/common/Input';
 import { ThreadCard } from '../../../components/ThreadCard';
 import { useSearchPage } from '../logic/SearchPage';
+import { HiSearch } from 'react-icons/hi';
 
 export const SearchPage: React.FC = () => {
   const {
@@ -17,12 +18,17 @@ export const SearchPage: React.FC = () => {
       <Navbar />
       <main style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
         <h1 style={{ marginBottom: '1.5rem' }}>Search Threads</h1>
-        <div style={{ marginBottom: '2rem' }}>
-          <Input 
-            placeholder="Search by title, content or category..." 
-            value={query} 
-            onChange={(e) => setQuery(e.target.value)}
-          />
+        <div style={{ marginBottom: '2rem', position: 'relative' }}>
+          <div style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+            <HiSearch fontSize="20px" />
+          </div>
+          <div style={{ paddingLeft: '32px' }}>
+            <Input 
+              placeholder="Search by title, content or category..." 
+              value={query} 
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
         </div>
         
         {isLoading ? (

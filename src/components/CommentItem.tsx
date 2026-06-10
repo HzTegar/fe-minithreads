@@ -3,6 +3,14 @@ import type { Comment } from '../types/comment.type';
 import { formatTimeAgo } from '../utils/formatDate';
 import { useAuth } from '../hooks/useAuth';
 import { RoleBadge } from './common/RoleBadge';
+import { 
+  HiChevronUp, 
+  HiChevronDown, 
+  HiFlag, 
+  HiPencilAlt, 
+  HiTrash,
+  HiCheckCircle
+} from 'react-icons/hi';
 
 interface CommentItemProps {
   comment: Comment;
@@ -18,25 +26,19 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
     <div className="flex gap-4 py-4 border-b border-[#e3e6e8]">
       {/* Sidebar: Voting + Accepted Check */}
       <div className="flex flex-col items-center w-12 pt-1">
-        <button className="text-[#bbc0c4] hover:text-orange-500 transition-colors">
-          <svg className="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 15 7-7 7 7"/>
-          </svg>
+        <button className="text-[#bbc0c4] hover:text-orange-500 transition-colors text-3xl">
+          <HiChevronUp />
         </button>
         <span className="text-lg font-medium text-[#6a737c] my-1">
-          {Math.floor(Math.random() * 5)}
+          {comment.vote_score || 0}
         </span>
-        <button className="text-[#bbc0c4] hover:text-orange-500 transition-colors">
-          <svg className="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7"/>
-          </svg>
+        <button className="text-[#bbc0c4] hover:text-orange-500 transition-colors text-3xl">
+          <HiChevronDown />
         </button>
         
         {comment.is_accepted && (
-          <div className="text-[#2e7d32] mt-2" title="The question owner accepted this as the best answer">
-            <svg className="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm13.7-1.3a1 1 0 0 0-1.4-1.4L11 12.6l-1.8-1.8a1 1 0 0 0-1.4 1.4l2.5 2.5a1 1 0 0 0 1.4 0l4-4Z" clipRule="evenodd"/>
-            </svg>
+          <div className="text-[#2e7d32] mt-2 text-3xl" title="The question owner accepted this as the best answer">
+            <HiCheckCircle />
           </div>
         )}
       </div>
@@ -51,28 +53,21 @@ export const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
           <div className="flex gap-3 text-xs text-[#6a737c]">
             {!isOwner && (
               <button className="hover:text-[#0074cc] flex items-center gap-1">
-                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 14v7M5 4.971c0-1.642 1.333-2.97 3-2.97 1.667 0 3 1.328 3 2.97v10.058c0 1.642-1.333 2.971-3 2.971-1.667 0-3-1.33-3-2.97V4.97Z"/>
-                </svg>
+                <HiFlag className="w-3 h-3" />
                 Report
               </button>
             )}
             
             {(isOwner || canModerate) && (
               <button className="hover:text-[#0074cc] flex items-center gap-1 text-[#0074cc]">
-                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M11.3 6.2H5a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h11c1.1 0 2-1 2-2v-6.3l-1.6 1.6V19a.4.4 0 0 1-.4.4H5a.4.4 0 0 1-.4-.4V8.2c0-.2.2-.4.4-.4h6.3l1.6-1.6Zm1.8 1.8L13 6.4 17.6 2l3.4 3.4-4.6 4.6-1.6-1.6Zm-1.8 1.8 1.8 1.8-1.8 1.8-1.8-1.8 1.8-1.8Z" clipRule="evenodd"/>
-                  <path d="M19.8 8 16 4.2l-1.4 1.4 3.8 3.8L19.8 8Z"/>
-                </svg>
+                <HiPencilAlt className="w-3 h-3" />
                 Edit
               </button>
             )}
             
             {canModerate && (
               <button className="hover:text-red-600 flex items-center gap-1 text-red-500 font-medium">
-                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                </svg>
+                <HiTrash className="w-3 h-3" />
                 Delete
               </button>
             )}

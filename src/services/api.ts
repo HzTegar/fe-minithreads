@@ -4,6 +4,7 @@ const getHeaders = () => {
   const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;

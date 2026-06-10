@@ -3,6 +3,7 @@ import { Navbar } from '../../../components/Navbar';
 import { Button } from '../../../components/common/Button';
 import { RoleBadge } from '../../../components/common/RoleBadge';
 import { useProfilePage } from '../logic/ProfilePage';
+import { HiUser } from 'react-icons/hi';
 
 export const ProfilePage: React.FC = () => {
   const {
@@ -15,8 +16,8 @@ export const ProfilePage: React.FC = () => {
       <Navbar />
       <main style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
         <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', border: '1px solid #e5e7eb', textAlign: 'center' }}>
-          <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#e5e7eb', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', position: 'relative' }}>
-            👤
+          <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#e5e7eb', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', position: 'relative', color: '#6b7280' }}>
+            <HiUser />
           </div>
           
           <div style={{ marginBottom: '1rem' }}>
