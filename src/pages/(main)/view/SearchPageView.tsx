@@ -45,7 +45,7 @@ export const SearchPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          <p style={{ textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>Enter at least 3 characters to find threads.</p>
+          <p style={{ textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>Enter at least 2 characters to find threads.</p>
         )}
       </main>
     </div>

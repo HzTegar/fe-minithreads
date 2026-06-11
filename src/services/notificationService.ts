@@ -1,22 +1,34 @@
 import { api } from './api';
 
+export interface NotificationData {
+  type: string;
+  message: string;
+  username?: string;
+  user_id?: string;
+  post_id?: string;
+  post_title?: string;
+  comment_id?: string;
+}
+
 export interface Notification {
   id: string;
-  type: string;
-  data: {
-    message: string;
-    post_id?: string;
-    comment_id?: string;
-    sender_name?: string;
-  };
+  type: string; // full class name e.g. "App\\Notifications\\NewCommentNotification"
+  data: NotificationData;
   read_at: string | null;
   created_at: string;
 }
 
 export const notificationService = {
-  getAll: async (): Promise<Notification[]> => {
-    const response = await api.get<{ data: Notification[] }>('/notifications');
-    return response.data;
+  getAll: async (): Promise<{ notifications: Notification[]; unread_count: number }> => {
+    const response = await api.get<{
+      success: boolean;
+      unread_count: number;
+      data: { data: Notification[] };
+    }>('/notifications');
+    return {
+      notifications: response.data?.data ?? [],
+      unread_count: response.unread_count ?? 0,
+    };
   },
 
   markAsRead: async (id: string): Promise<void> => {

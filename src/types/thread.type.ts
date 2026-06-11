@@ -31,6 +31,8 @@ export interface Thread {
   is_answered?: boolean;
   status: 'open' | 'closed';
   edit_count?: number;
+  vote_score?: number;
+  is_liked?: boolean;
   comments?: Comment[];
   created_at: string;
   updated_at: string;

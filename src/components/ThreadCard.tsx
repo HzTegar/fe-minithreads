@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Thread } from '../types/thread.type';
 import { formatTimeAgo } from '../utils/formatDate';
+import { UserLink } from './common/UserLink';
 
 interface ThreadCardProps {
   thread: Thread;
@@ -10,19 +11,10 @@ interface ThreadCardProps {
 export const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
   if (!thread) return null;
 
-  const cardStyle: React.CSSProperties = {
-    padding: '1.5rem',
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-    border: '1px solid #e5e7eb',
-    marginBottom: '1rem',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-  };
-
   return (
-    <div style={cardStyle}>
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
-        <span>{thread.user?.username || 'Anonymous'}</span>
+    <div style={{ padding: '1.5rem', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', marginBottom: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#6b7280', alignItems: 'center' }}>
+        <UserLink username={thread.user?.username} />
         <span>•</span>
         <span>{thread.created_at ? formatTimeAgo(thread.created_at) : 'recently'}</span>
         <span>•</span>

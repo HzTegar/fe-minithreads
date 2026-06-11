@@ -10,6 +10,14 @@ export const threadService = {
     return [];
   },
 
+  getByUser: async (username: string): Promise<Thread[]> => {
+    const response: any = await api.get(`/posts?user=${encodeURIComponent(username)}`);
+    if (response.data?.data && Array.isArray(response.data.data)) return response.data.data;
+    if (response.data && Array.isArray(response.data)) return response.data;
+    if (Array.isArray(response)) return response;
+    return [];
+  },
+
   getById: async (id: string): Promise<Thread> => {
     const response: any = await api.get(`/posts/${id}`);
     return response.data || response;

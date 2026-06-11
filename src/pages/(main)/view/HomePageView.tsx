@@ -13,7 +13,8 @@ export const HomePage: React.FC = () => {
     isAuthenticated,
     reputation,
     currentRank,
-    progress
+    progress,
+    threadCount,
   } = useHomePage();
 
   return (
@@ -93,11 +94,11 @@ export const HomePage: React.FC = () => {
                 <div style={{ fontSize: '0.875rem', color: '#3b4045', fontWeight: 500, marginBottom: '0.75rem' }}>Quick Stats</div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                   <div style={{ backgroundColor: '#f8f9f9', padding: '0.5rem', borderRadius: '4px', textAlign: 'center' }}>
-                    <div style={{ fontWeight: 'bold' }}>{user?.points || 0}</div>
-                    <div style={{ fontSize: '0.7rem', color: '#6a737c', textTransform: 'uppercase' }}>Available</div>
+                    <div style={{ fontWeight: 'bold' }}>{reputation.toLocaleString()}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#6a737c', textTransform: 'uppercase' }}>Points</div>
                   </div>
                   <div style={{ backgroundColor: '#f8f9f9', padding: '0.5rem', borderRadius: '4px', textAlign: 'center' }}>
-                    <div style={{ fontWeight: 'bold' }}>0</div>
+                    <div style={{ fontWeight: 'bold' }}>{threadCount}</div>
                     <div style={{ fontSize: '0.7rem', color: '#6a737c', textTransform: 'uppercase' }}>Threads</div>
                   </div>
                 </div>

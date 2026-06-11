@@ -1,51 +1,120 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Navbar } from '../../../components/Navbar';
 import { Button } from '../../../components/common/Button';
 import { RoleBadge } from '../../../components/common/RoleBadge';
+import { ThreadCard } from '../../../components/ThreadCard';
 import { useProfilePage } from '../logic/ProfilePage';
-import { HiUser } from 'react-icons/hi';
+import { HiUser, HiCamera, HiX } from 'react-icons/hi';
 
 export const ProfilePage: React.FC = () => {
   const {
-    displayUser,
-    handleLevelChange
+    authUser,
+    reputation,
+    rankName,
+    myThreads,
+    isLoadingThreads,
+    isEditOpen,
+    bioInput,
+    setBioInput,
+    avatarPreview,
+    fileInputRef,
+    isSaving,
+    saveError,
+    openEdit,
+    closeEdit,
+    handleAvatarChange,
+    handleSaveProfile,
+    handleLevelChange,
+    handleLogout,
   } = useProfilePage();
 
+  if (!authUser) {
+    return (
+      <div>
+        <Navbar />
+        <div style={{ textAlign: 'center', marginTop: '3rem', color: '#6b7280' }}>
+          Please <Link to="/login">log in</Link> to view your profile.
+        </div>
+      </div>
+    );
+  }
+
+  const avatarSrc = avatarPreview || authUser.avatar_url || null;
+
   return (
-    <div>
+    <div style={{ backgroundColor: '#f8f9f9', minHeight: '100vh' }}>
       <Navbar />
       <main style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
+
+        {/* Profile Card */}
         <div style={{ backgroundColor: '#ffffff', padding: '2rem', borderRadius: '8px', border: '1px solid #e5e7eb', textAlign: 'center' }}>
-          <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#e5e7eb', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', position: 'relative', color: '#6b7280' }}>
-            <HiUser />
+
+          {/* Avatar */}
+          <div style={{ width: '100px', height: '100px', borderRadius: '50%', backgroundColor: '#e5e7eb', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', color: '#6b7280', overflow: 'hidden' }}>
+            {avatarSrc
+              ? <img src={avatarSrc} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : <HiUser />
+            }
           </div>
-          
+
+          {/* Role badge */}
+          <div style={{ marginBottom: '0.5rem' }}>
+            <RoleBadge role={authUser.level} />
+          </div>
+
+          {/* Rank badge */}
           <div style={{ marginBottom: '1rem' }}>
-            <RoleBadge role={displayUser.level} />
+            <span style={{
+              display: 'inline-block',
+              backgroundColor: '#fef3c7',
+              color: '#92400e',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              padding: '0.2rem 0.75rem',
+              borderRadius: '9999px',
+              border: '1px solid #fde68a',
+            }}>
+              {rankName}
+            </span>
           </div>
 
-          <h1 style={{ margin: '0 0 0.5rem 0' }}>{displayUser.username}</h1>
-          <p style={{ color: '#6b7280', marginBottom: '1rem' }}>{displayUser.email}</p>
-          <p style={{ maxWidth: '500px', margin: '0 auto 1.5rem', color: '#4b5563' }}>{displayUser.bio}</p>
-          
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '2rem', padding: '1rem 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
+          <h1 style={{ margin: '0 0 0.25rem 0', fontSize: '1.5rem' }}>{authUser.username}</h1>
+          <p style={{ color: '#6b7280', marginBottom: '1rem', fontSize: '0.9rem' }}>{authUser.email}</p>
+          <p style={{ maxWidth: '500px', margin: '0 auto 1.5rem', color: '#4b5563' }}>
+            {authUser.bio
+              ? authUser.bio
+              : <span style={{ fontStyle: 'italic', color: '#9ca3af' }}>No bio yet. Click Edit Profile to add one.</span>
+            }
+          </p>
+
+          {/* Stats row */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '2rem', padding: '1rem 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>{(displayUser.reputation || 0).toLocaleString()}</div>
-              <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reputation</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
+                {reputation.toLocaleString()}
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Reputation
+              </div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>{(displayUser.points || 0).toLocaleString()}</div>
-              <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Points</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
+                {myThreads.length}
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Threads
+              </div>
             </div>
           </div>
 
-          {/* Role Tester for Demo Purposes */}
+          {/* Demo role switcher */}
           <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px', border: '1px dashed #d1d5db' }}>
             <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', display: 'block', marginBottom: '0.5rem' }}>
               [Demo Only] Switch Current Role:
             </label>
-            <select 
-              value={displayUser.level} 
+            <select
+              value={authUser.level}
               onChange={handleLevelChange}
               style={{ padding: '0.4rem', borderRadius: '4px', border: '1px solid #d1d5db', fontSize: '0.875rem' }}
             >
@@ -54,19 +123,129 @@ export const ProfilePage: React.FC = () => {
               <option value="admin">Administrator</option>
             </select>
           </div>
-          
+
+          {/* Actions */}
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-            <Button variant="outline">Edit Profile</Button>
-            <Button variant="danger">Logout</Button>
+            <Button variant="outline" onClick={openEdit}>Edit Profile</Button>
+            <Button variant="danger" onClick={handleLogout}>Logout</Button>
           </div>
         </div>
-        
+
+        {/* My Threads */}
         <div style={{ marginTop: '3rem' }}>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>My Threads</h2>
-          <p style={{ color: '#6b7280', fontStyle: 'italic' }}>You haven't posted any threads yet.</p>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>
+            My Threads ({myThreads.length})
+          </h2>
+          {isLoadingThreads ? (
+            <p style={{ color: '#6b7280' }}>Loading your threads...</p>
+          ) : myThreads.length > 0 ? (
+            myThreads.map(thread => (
+              <ThreadCard key={thread.id} thread={thread} />
+            ))
+          ) : (
+            <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}>
+              <p style={{ color: '#6b7280', marginBottom: '1rem' }}>You haven't posted any threads yet.</p>
+              <Link
+                to="/create-thread"
+                style={{ backgroundColor: '#0a95ff', color: 'white', padding: '0.5rem 1rem', borderRadius: '4px', textDecoration: 'none', fontSize: '0.875rem' }}
+              >
+                Ask a Question
+              </Link>
+            </div>
+          )}
         </div>
       </main>
+
+      {/* ── Edit Profile Modal ── */}
+      {isEditOpen && (
+        <div
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}
+          onClick={(e) => { if (e.target === e.currentTarget) closeEdit(); }}
+        >
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', width: '100%', maxWidth: '480px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+
+            {/* Modal header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', borderBottom: '1px solid #e5e7eb' }}>
+              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Edit Profile</h2>
+              <button onClick={closeEdit} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: '1.25rem', display: 'flex' }}>
+                <HiX />
+              </button>
+            </div>
+
+            {/* Modal body */}
+            <div style={{ padding: '1.5rem' }}>
+
+              {/* Avatar upload */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
+                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', color: '#6b7280', overflow: 'hidden' }}>
+                    {avatarPreview || authUser.avatar_url
+                      ? <img src={avatarPreview || authUser.avatar_url!} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : <HiUser />
+                    }
+                  </div>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: '#0a95ff', color: 'white', border: 'none', borderRadius: '50%', width: '26px', height: '26px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}
+                    title="Change avatar"
+                  >
+                    <HiCamera />
+                  </button>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/jpg"
+                  style={{ display: 'none' }}
+                  onChange={handleAvatarChange}
+                />
+                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>JPEG / PNG, maks 2MB</span>
+              </div>
+
+              {/* Bio */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.5rem' }}>
+                  Bio
+                </label>
+                <textarea
+                  value={bioInput}
+                  onChange={e => setBioInput(e.target.value)}
+                  maxLength={500}
+                  rows={4}
+                  placeholder="Ceritakan sedikit tentang dirimu..."
+                  style={{ width: '100%', padding: '0.6rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '0.875rem', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }}
+                />
+                <div style={{ textAlign: 'right', fontSize: '0.75rem', color: '#9ca3af' }}>
+                  {bioInput.length}/500
+                </div>
+              </div>
+
+              {/* Read-only info */}
+              <div style={{ backgroundColor: '#f9fafb', borderRadius: '6px', padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: '#6b7280' }}>
+                <div style={{ marginBottom: '0.25rem' }}><strong>Username:</strong> {authUser.username} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
+                <div><strong>Email:</strong> {authUser.email} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
+              </div>
+
+              {/* Error */}
+              {saveError && (
+                <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '0.6rem 0.75rem', marginBottom: '1rem', fontSize: '0.875rem', color: '#dc2626' }}>
+                  {saveError}
+                </div>
+              )}
+
+              {/* Footer buttons */}
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                <Button variant="outline" onClick={closeEdit} disabled={isSaving}>
+                  Batal
+                </Button>
+                <Button onClick={handleSaveProfile} isLoading={isSaving} disabled={isSaving}>
+                  Simpan
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-

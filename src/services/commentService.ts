@@ -1,15 +1,7 @@
 import { api } from './api';
-import type { Comment, CreateCommentInput } from '../types/comment.type';
+import type { Comment } from '../types/comment.type';
 
 export const commentService = {
-  getByThreadId: async (postId: string): Promise<Comment[]> => {
-    // Backend returns nested comments in the post detail, but we can also fetch if needed.
-    // Based on api.php, there isn't a direct standalone GET for all comments of a post,
-    // they are usually included in the Post show response.
-    const response = await api.get<{ data: any }>(`/posts/${postId}`);
-    return response.data.comments || [];
-  },
-
   create: async (postId: string, data: { body: string; parent_id?: string }): Promise<Comment> => {
     const response = await api.post<{ data: Comment }>(`/posts/${postId}/comments`, data);
     return response.data;
@@ -24,7 +16,17 @@ export const commentService = {
     await api.delete(`/comments/${id}`);
   },
 
-  toggleLike: async (id: string): Promise<void> => {
-    await api.post(`/comments/${id}/like`, {});
+  toggleLike: async (id: string): Promise<{ likes_count: number }> => {
+    const response = await api.post<any>(`/comments/${id}/like`, {});
+    return response.data || response;
+  },
+
+  vote: async (id: string, type: 'up' | 'down'): Promise<{ vote_score: number }> => {
+    const response = await api.post<any>('/vote', {
+      target_id: id,
+      target_type: 'comment',
+      vote_type: type,
+    });
+    return response.data || response;
   },
 };

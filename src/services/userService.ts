@@ -12,7 +12,13 @@ export const userService = {
     return response.user;
   },
 
-  toggleFollow: async (userId: string): Promise<void> => {
-    await api.post(`/user/follow/${userId}`, {});
+  toggleFollow: async (userId: string): Promise<{ is_following: boolean; message: string }> => {
+    const response = await api.post<{ success: boolean; message: string; is_following?: boolean }>(
+      `/user/follow/${userId}`,
+      {}
+    );
+    // Backend response message tells us the state
+    const is_following = response.message?.includes('mengikuti') && !response.message?.includes('berhenti');
+    return { is_following, message: response.message ?? '' };
   },
 };

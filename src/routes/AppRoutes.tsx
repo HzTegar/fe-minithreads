@@ -6,8 +6,8 @@ import { RegisterPage } from '../pages/(main)/view/RegisterPageView';
 import { ThreadDetailPage } from '../pages/(main)/view/ThreadDetailPageView';
 import { CreateThreadPage } from '../pages/(main)/view/CreateThreadPageView';
 import { ProfilePage } from '../pages/(main)/view/ProfilePageView';
+import { UserProfilePage } from '../pages/(main)/view/UserProfilePageView';
 import { SearchPage } from '../pages/(main)/view/SearchPageView';
-
 import { NotificationsPage } from '../pages/(main)/view/NotificationsPageView';
 import { BookmarksPage } from '../pages/(main)/view/BookmarksPageView';
 
@@ -20,11 +20,12 @@ export const AppRoutes: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/create-thread" element={<CreateThreadPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/users/:username" element={<UserProfilePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/thread/:id" element={<ThreadDetailPage />} />
-        <Route path="/edit-thread/:id" element={<ThreadDetailPage />} /> {/* Reusing detail or specific edit page if exists */}
+        <Route path="/edit-thread/:id" element={<ThreadDetailPage />} />
       </Routes>
     </BrowserRouter>
   );

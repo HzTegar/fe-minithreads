@@ -9,11 +9,11 @@ export const useSearchPage = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (query.length > 2) {
+      if (query.length >= 2) {
         setIsLoading(true);
         try {
           // Menggunakan endpoint global search dari backend
-          const response = await api.get<{ data: { posts: Thread[] } }>(`/search/global?q=${query}`);
+          const response = await api.get<{ data: { posts: Thread[] } }>(`/search/global?keyword=${encodeURIComponent(query)}`);
           setResults(response.data.posts || []);
         } catch (error) {
           console.error('Search failed:', error);
