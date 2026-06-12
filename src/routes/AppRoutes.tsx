@@ -10,6 +10,7 @@ import { UserProfilePage } from '../pages/(main)/view/UserProfilePageView';
 import { SearchPage } from '../pages/(main)/view/SearchPageView';
 import { NotificationsPage } from '../pages/(main)/view/NotificationsPageView';
 import { BookmarksPage } from '../pages/(main)/view/BookmarksPageView';
+import { EditThreadPage } from '@/pages/(main)/view/EditThreadPageView';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -25,7 +26,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/thread/:id" element={<ThreadDetailPage />} />
-        <Route path="/edit-thread/:id" element={<ThreadDetailPage />} />
+       <Route path="/edit-thread/:id" element={<EditThreadPage />} />
       </Routes>
     </BrowserRouter>
   );
