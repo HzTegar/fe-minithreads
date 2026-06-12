@@ -7,6 +7,7 @@ import { authStore } from '../../../store/authStore';
 import type { UserLevel } from '../../../types/user.type';
 import type { Thread } from '../../../types/thread.type';
 
+
 export const useProfilePage = () => {
   const { user: authUser } = useAuth();
   const navigate = useNavigate();

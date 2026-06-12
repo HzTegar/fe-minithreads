@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { User } from '../types/user.type';
+import type { User} from '../types/user.type';
 
 export const userService = {
   getProfile: async (): Promise<User> => {
@@ -21,4 +21,7 @@ export const userService = {
     const is_following = response.message?.includes('mengikuti') && !response.message?.includes('berhenti');
     return { is_following, message: response.message ?? '' };
   },
+  
 };
+
+

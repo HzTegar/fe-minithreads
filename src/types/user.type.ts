@@ -1,4 +1,4 @@
-export type UserLevel = 'user' | 'moderator' | 'admin';
+export type UserLevel = "user" | "moderator" | "admin";
 
 export interface User {
   id: string;
@@ -22,3 +22,10 @@ export interface AuthState {
   isAuthenticated: boolean;
   token: string | null;
 }
+export interface ProfileFormValues {
+  username: string;
+  email: string;
+  bio: string;
+  password: string;
+}
+

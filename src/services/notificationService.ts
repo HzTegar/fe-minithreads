@@ -1,4 +1,4 @@
-import { api } from './api';
+import { api } from "./api";
 
 export interface NotificationData {
   type: string;
@@ -8,6 +8,9 @@ export interface NotificationData {
   post_id?: string;
   post_title?: string;
   comment_id?: string;
+  report_id?: string;
+  report_type?: string; // 'post' | 'comment' | 'user'
+  reported_id?: string; // id konten yang dilaporkan
 }
 
 export interface Notification {
@@ -19,12 +22,15 @@ export interface Notification {
 }
 
 export const notificationService = {
-  getAll: async (): Promise<{ notifications: Notification[]; unread_count: number }> => {
+  getAll: async (): Promise<{
+    notifications: Notification[];
+    unread_count: number;
+  }> => {
     const response = await api.get<{
       success: boolean;
       unread_count: number;
       data: { data: Notification[] };
-    }>('/notifications');
+    }>("/notifications");
     return {
       notifications: response.data?.data ?? [],
       unread_count: response.unread_count ?? 0,
@@ -36,7 +42,7 @@ export const notificationService = {
   },
 
   markAllAsRead: async (): Promise<void> => {
-    await api.post('/notifications/read-all', {});
+    await api.post("/notifications/read-all", {});
   },
 
   delete: async (id: string): Promise<void> => {
