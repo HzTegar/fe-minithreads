@@ -29,6 +29,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/thread/:id" element={<ThreadDetailPage />} />
         <Route path="/edit-thread/:id" element={<EditThreadPage />} />
+
         <Route
           path="/admin/reports"
           element={

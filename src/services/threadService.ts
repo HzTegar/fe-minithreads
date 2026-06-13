@@ -4,6 +4,7 @@ import type { Thread } from '../types/thread.type';
 export const threadService = {
   getAll: async (): Promise<Thread[]> => {
     const response: any = await api.get('/posts');
+    // Jika response paginated (seperti data yang kamu kirim), ambil dari response.data.data
     if (response.data?.data && Array.isArray(response.data.data)) return response.data.data;
     if (response.data && Array.isArray(response.data)) return response.data;
     if (Array.isArray(response)) return response;
@@ -20,18 +21,19 @@ export const threadService = {
 
   getById: async (id: string): Promise<Thread> => {
     const response: any = await api.get(`/posts/${id}`);
-    return response.data || response;
+    // PENTING: Mengambil .data dari object response agar field edit_count terbaca
+    return response.data?.data || response.data || response;
   },
 
   create: async (data: any): Promise<any> => {
-    // Backend expects 'category_id', 'title', 'body', and optional 'tags' (array of strings)
     const response: any = await api.post('/posts', data);
-    return response.data || response;
+    return response.data?.data || response.data || response;
   },
 
   update: async (id: string, data: any): Promise<any> => {
+    // Tetap menggunakan _method: 'PUT' untuk Laravel
     const response: any = await api.post(`/posts/${id}`, { ...data, _method: 'PUT' });
-    return response.data || response;
+    return response.data?.data || response.data || response;
   },
 
   delete: async (id: string): Promise<void> => {
@@ -43,7 +45,7 @@ export const threadService = {
       target_id: id,
       target_type: 'post'
     });
-    return response.data || response;
+    return response.data?.data || response.data || response;
   },
 
   vote: async (id: string, type: 'up' | 'down'): Promise<{ vote_score: number }> => {
@@ -52,6 +54,6 @@ export const threadService = {
       target_type: 'post',
       vote_type: type
     });
-    return response.data || response;
+    return response.data?.data || response.data || response;
   },
 };

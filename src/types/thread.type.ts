@@ -15,6 +15,18 @@ export interface Category {
   description: string;
 }
 
+// Tambahkan interface ini untuk riwayat edit
+export interface ThreadEditHistory {
+  id: string | number; // Menyesuaikan tipe ID-mu
+  user_id: string;
+  old_title: string;
+  new_title: string;
+  old_body: string;
+  new_body: string;
+  edit_number: number;
+  created_at: string;
+}
+
 export interface Thread {
   id: string;
   title: string;
@@ -31,6 +43,8 @@ export interface Thread {
   is_answered?: boolean;
   status: 'open' | 'closed';
   edit_count?: number;
+  // Ini tambahannya bro
+  edit_histories?: ThreadEditHistory[]; 
   vote_score?: number;
   is_liked?: boolean;
   comments?: Comment[];
