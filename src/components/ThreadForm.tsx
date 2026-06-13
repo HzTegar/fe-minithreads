@@ -3,7 +3,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Button } from "./common/Button";
 import { Input } from "./common/Input";
-import { categoryService, type Category } from "../services/categoryService";
+import { categoryService } from "../services/categoryService";
+import type { Category } from "../types/category.type";
 import { tagService, type Tag } from "../services/tagService";
 
 interface ThreadFormProps {
@@ -24,7 +25,6 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
-
   const [newTag, setNewTag] = useState("");
 
   useEffect(() => {

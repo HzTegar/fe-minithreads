@@ -1,18 +1,18 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { HomePage } from '../pages/(main)/view/HomePageView';
-import { LoginPage } from '../pages/(main)/view/LoginPageView';
-import { RegisterPage } from '../pages/(main)/view/RegisterPageView';
-import { ThreadDetailPage } from '../pages/(main)/view/ThreadDetailPageView';
-import { CreateThreadPage } from '../pages/(main)/view/CreateThreadPageView';
-import { EditThreadPage } from '../pages/(main)/view/EditThreadPageView';
-import { ProfilePage } from '../pages/(main)/view/ProfilePageView';
-import { UserProfilePage } from '../pages/(main)/view/UserProfilePageView';
-import { SearchPage } from '../pages/(main)/view/SearchPageView';
-import { NotificationsPage } from '../pages/(main)/view/NotificationsPageView';
-import { BookmarksPage } from '../pages/(main)/view/BookmarksPageView';
-import { AdminReportsPage } from '../pages/(admin)/view/AdminReportsPageView';
-import { ProtectedRoute } from './ProtectedRoute';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HomePage } from "../pages/(main)/view/HomePageView";
+import { LoginPage } from "../pages/(main)/view/LoginPageView";
+import { RegisterPage } from "../pages/(main)/view/RegisterPageView";
+import { ThreadDetailPage } from "../pages/(main)/view/ThreadDetailPageView";
+import { CreateThreadPage } from "../pages/(main)/view/CreateThreadPageView";
+import { EditThreadPage } from "../pages/(main)/view/EditThreadPageView";
+import { ProfilePage } from "../pages/(main)/view/ProfilePageView";
+import { UserProfilePage } from "../pages/(main)/view/UserProfilePageView";
+import { SearchPage } from "../pages/(main)/view/SearchPageView";
+import { NotificationsPage } from "../pages/(main)/view/NotificationsPageView";
+import { BookmarksPage } from "../pages/(main)/view/BookmarksPageView";
+import { AdminReportsPage } from "../pages/(admin)/view/AdminReportsPageView";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export const AppRoutes: React.FC = () => {
   return (

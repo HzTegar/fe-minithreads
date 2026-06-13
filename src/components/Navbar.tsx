@@ -64,8 +64,7 @@ export const Navbar: React.FC = () => {
                 Reports
               </Link>
             )}
-           
-            
+
             <Link to="/notifications" style={linkStyle}>
               Notifications
             </Link>
