@@ -30,11 +30,9 @@ export const UserProfilePage: React.FC = () => {
 
   if (isLoading)
     return (
-      <div>
+      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
         <Navbar />
-        <div
-          style={{ textAlign: "center", marginTop: "3rem", color: "#6b7280" }}
-        >
+        <div className="text-center mt-12 text-neutral-500">
           Loading profile...
         </div>
       </div>
@@ -42,11 +40,9 @@ export const UserProfilePage: React.FC = () => {
 
   if (notFound || !profile)
     return (
-      <div>
+      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
         <Navbar />
-        <div
-          style={{ textAlign: "center", marginTop: "3rem", color: "#6b7280" }}
-        >
+        <div className="text-center mt-12 text-neutral-500">
           User tidak ditemukan.
         </div>
       </div>
@@ -55,7 +51,7 @@ export const UserProfilePage: React.FC = () => {
   const { user, threads } = profile;
 
   return (
-    <div style={{ backgroundColor: "#f8f9f9", minHeight: "100vh" }}>
+    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
       <Navbar />
       <main
         style={{ maxWidth: "800px", margin: "2rem auto", padding: "0 1rem" }}
@@ -63,10 +59,10 @@ export const UserProfilePage: React.FC = () => {
         {/* Profile Card */}
         <div
           style={{
-            backgroundColor: "#ffffff",
+            backgroundColor: "#1a1a1a",
             padding: "2rem",
-            borderRadius: "8px",
-            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            border: "1px solid #2a2a2a",
             textAlign: "center",
           }}
         >
@@ -76,13 +72,13 @@ export const UserProfilePage: React.FC = () => {
               width: "100px",
               height: "100px",
               borderRadius: "50%",
-              backgroundColor: "#e5e7eb",
+              backgroundColor: "#2a2a2a",
               margin: "0 auto 1rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "3rem",
-              color: "#6b7280",
+              color: "#525252",
               overflow: "hidden",
             }}
           >
@@ -111,20 +107,20 @@ export const UserProfilePage: React.FC = () => {
             <span
               style={{
                 display: "inline-block",
-                backgroundColor: "#fef3c7",
-                color: "#92400e",
+                backgroundColor: "rgba(251,191,36,0.15)",
+                color: "#fbbf24",
                 fontSize: "0.75rem",
                 fontWeight: 600,
                 padding: "0.2rem 0.75rem",
                 borderRadius: "9999px",
-                border: "1px solid #fde68a",
+                border: "1px solid rgba(251,191,36,0.3)",
               }}
             >
               {user.rank_level}
             </span>
           </div>
 
-          <h1 style={{ margin: "0 0 0.5rem 0", fontSize: "1.5rem" }}>
+          <h1 style={{ margin: "0 0 0.5rem 0", fontSize: "1.5rem", color: "#e5e5e5" }}>
             {user.username}
           </h1>
 
@@ -133,7 +129,7 @@ export const UserProfilePage: React.FC = () => {
               style={{
                 maxWidth: "500px",
                 margin: "0 auto 1.25rem",
-                color: "#4b5563",
+                color: "#a3a3a3",
                 fontSize: "0.9rem",
               }}
             >
@@ -159,15 +155,15 @@ export const UserProfilePage: React.FC = () => {
                   alignItems: "center",
                   gap: "0.4rem",
                   padding: "0.5rem 1.25rem",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   fontSize: "0.875rem",
                   fontWeight: 600,
                   cursor: isFollowLoading ? "not-allowed" : "pointer",
                   border: "1px solid",
                   transition: "all 0.15s",
-                  backgroundColor: isFollowing ? "#ffffff" : "#0a95ff",
-                  color: isFollowing ? "#e53e3e" : "#ffffff",
-                  borderColor: isFollowing ? "#e53e3e" : "#0a95ff",
+                  backgroundColor: isFollowing ? "transparent" : "#6366f1",
+                  color: isFollowing ? "#f87171" : "#ffffff",
+                  borderColor: isFollowing ? "#f87171" : "#6366f1",
                   opacity: isFollowLoading ? 0.7 : 1,
                 }}
               >
@@ -182,13 +178,13 @@ export const UserProfilePage: React.FC = () => {
                   alignItems: "center",
                   gap: "0.4rem",
                   padding: "0.5rem 1.25rem",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   fontSize: "0.875rem",
                   fontWeight: 600,
                   cursor: "pointer",
                   border: "1px solid #dc2626",
-                  backgroundColor: "#ffffff",
-                  color: "#dc2626",
+                  backgroundColor: "transparent",
+                  color: "#f87171",
                   transition: "all 0.15s",
                 }}
               >
@@ -203,9 +199,9 @@ export const UserProfilePage: React.FC = () => {
               style={{
                 marginBottom: "1.5rem",
                 padding: "0.75rem 1rem",
-                backgroundColor: "#f8f9f9",
-                border: "1px solid #e3e6e8",
-                borderRadius: "6px",
+                backgroundColor: "#222",
+                border: "1px solid #333",
+                borderRadius: "8px",
                 textAlign: "left",
               }}
             >
@@ -221,7 +217,7 @@ export const UserProfilePage: React.FC = () => {
                 <span
                   style={{
                     fontSize: "0.85rem",
-                    color: "#3b4045",
+                    color: "#a3a3a3",
                     fontWeight: 600,
                   }}
                 >
@@ -236,10 +232,11 @@ export const UserProfilePage: React.FC = () => {
                     }
                     style={{
                       padding: "0.4rem 0.6rem",
-                      borderRadius: "4px",
-                      border: "1px solid #babfc4",
+                      borderRadius: "6px",
+                      border: "1px solid #404040",
                       fontSize: "0.85rem",
-                      backgroundColor: "white",
+                      backgroundColor: "#1a1a1a",
+                      color: "#e5e5e5",
                       cursor: "pointer",
                     }}
                   >
@@ -252,9 +249,9 @@ export const UserProfilePage: React.FC = () => {
                     disabled={isRoleUpdating}
                     style={{
                       padding: "0.4rem 1rem",
-                      borderRadius: "4px",
+                      borderRadius: "6px",
                       border: "none",
-                      backgroundColor: "#0a95ff",
+                      backgroundColor: "#6366f1",
                       color: "white",
                       fontSize: "0.85rem",
                       fontWeight: 600,
@@ -268,24 +265,12 @@ export const UserProfilePage: React.FC = () => {
               </div>
 
               {roleMessage && (
-                <p
-                  style={{
-                    margin: "0.5rem 0 0",
-                    fontSize: "0.8rem",
-                    color: "#188038",
-                  }}
-                >
+                <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", color: "#4ade80" }}>
                   {roleMessage}
                 </p>
               )}
               {roleError && (
-                <p
-                  style={{
-                    margin: "0.5rem 0 0",
-                    fontSize: "0.8rem",
-                    color: "#d93025",
-                  }}
-                >
+                <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", color: "#f87171" }}>
                   {roleError}
                 </p>
               )}
@@ -299,91 +284,39 @@ export const UserProfilePage: React.FC = () => {
               justifyContent: "center",
               gap: "2.5rem",
               padding: "1rem 0",
-              borderTop: "1px solid #f3f4f6",
-              borderBottom: "1px solid #f3f4f6",
+              borderTop: "1px solid #2a2a2a",
+              borderBottom: "1px solid #2a2a2a",
             }}
           >
             <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#2563eb",
-                }}
-              >
+              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {(user.reputation_points ?? 0).toLocaleString()}
               </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Reputation
               </div>
             </div>
             <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#2563eb",
-                }}
-              >
+              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {threads.length}
               </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Threads
               </div>
             </div>
             <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#2563eb",
-                }}
-              >
+              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {followersCount}
               </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Followers
               </div>
             </div>
             <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#2563eb",
-                }}
-              >
+              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {user.following_count ?? 0}
               </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Following
               </div>
             </div>
@@ -404,12 +337,12 @@ export const UserProfilePage: React.FC = () => {
               style={{
                 textAlign: "center",
                 padding: "2rem",
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #2a2a2a",
+                borderRadius: "12px",
               }}
             >
-              <p style={{ color: "#6b7280" }}>User ini belum punya threads.</p>
+              <p style={{ color: "#737373" }}>User ini belum punya threads.</p>
             </div>
           )}
         </div>

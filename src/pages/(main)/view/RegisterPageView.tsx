@@ -13,12 +13,12 @@ export const RegisterPage: React.FC = () => {
   } = useRegisterPage();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9fafb' }}>
-      <div style={{ maxWidth: '400px', width: '100%', padding: '2rem', backgroundColor: '#ffffff', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-        <h1 style={{ textAlign: 'center', color: '#2563eb', marginBottom: '0.5rem' }}>{APP_NAME}</h1>
-        <h2 style={{ textAlign: 'center', fontSize: '1.25rem', marginBottom: '2rem', color: '#374151' }}>Create an account</h2>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0d0d0d' }}>
+      <div style={{ maxWidth: '400px', width: '100%', padding: '2rem', backgroundColor: '#1a1a1a', borderRadius: '12px', border: '1px solid #2a2a2a', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
+        <h1 style={{ textAlign: 'center', color: '#818cf8', marginBottom: '0.5rem' }}>{APP_NAME}</h1>
+        <h2 style={{ textAlign: 'center', fontSize: '1.25rem', marginBottom: '2rem', color: '#d4d4d4' }}>Create an account</h2>
         
-        {error && <p style={{ color: '#ef4444', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
+        {error && <p style={{ color: '#f87171', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
         <form onSubmit={formik.handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
@@ -30,7 +30,7 @@ export const RegisterPage: React.FC = () => {
               onBlur={formik.handleBlur}
             />
             {formik.touched.username && formik.errors.username ? (
-              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.username}</p>
+              <p style={{ color: '#f87171', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.username}</p>
             ) : null}
           </div>
 
@@ -44,7 +44,7 @@ export const RegisterPage: React.FC = () => {
               onBlur={formik.handleBlur}
             />
             {formik.touched.email && formik.errors.email ? (
-              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.email}</p>
+              <p style={{ color: '#f87171', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.email}</p>
             ) : null}
           </div>
 
@@ -58,7 +58,7 @@ export const RegisterPage: React.FC = () => {
               onBlur={formik.handleBlur}
             />
             {formik.touched.password && formik.errors.password ? (
-              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password}</p>
+              <p style={{ color: '#f87171', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password}</p>
             ) : null}
           </div>
 
@@ -72,7 +72,7 @@ export const RegisterPage: React.FC = () => {
               onBlur={formik.handleBlur}
             />
             {formik.touched.password_confirmation && formik.errors.password_confirmation ? (
-              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password_confirmation}</p>
+              <p style={{ color: '#f87171', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password_confirmation}</p>
             ) : null}
           </div>
 
@@ -81,8 +81,8 @@ export const RegisterPage: React.FC = () => {
           </Button>
         </form>
         
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: '#6b7280', fontSize: '0.875rem' }}>
-          Already have an account? <Link to="/login" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 500 }}>Sign In</Link>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: '#737373', fontSize: '0.875rem' }}>
+          Already have an account? <Link to="/login" style={{ color: '#818cf8', textDecoration: 'none', fontWeight: 500 }}>Sign In</Link>
         </p>
       </div>
     </div>

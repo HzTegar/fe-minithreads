@@ -12,23 +12,45 @@ export const ThreadCard: React.FC<ThreadCardProps> = ({ thread }) => {
   if (!thread) return null;
 
   return (
-    <div style={{ padding: '1.5rem', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e5e7eb', marginBottom: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.875rem', color: '#6b7280', alignItems: 'center' }}>
+    <div className="px-5 py-4 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl mb-3 transition-colors">
+      
+      {/* Meta row */}
+      <div className="flex gap-2 mb-2 text-[0.8rem] text-neutral-500 items-center">
         <UserLink username={thread.user?.username} />
-        <span>•</span>
+        <span>·</span>
         <span>{thread.created_at ? formatTimeAgo(thread.created_at) : 'recently'}</span>
-        <span>•</span>
-        <span style={{ color: '#2563eb', fontWeight: 500 }}>{thread.category?.name || 'Uncategorized'}</span>
+        <span>·</span>
+        <span className="text-indigo-400 font-medium">
+          {thread.category?.name || 'Uncategorized'}
+        </span>
       </div>
-      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem' }}>
-        <Link to={`/thread/${thread.id}`} style={{ textDecoration: 'none', color: '#111827' }}>
+
+      {/* Title */}
+      <h3 className="m-0 mb-2 text-[1.05rem] font-semibold leading-snug">
+        <Link
+          to={`/thread/${thread.id}`}
+          className="text-neutral-100 hover:text-indigo-300 no-underline transition-colors"
+        >
           {thread.title || 'Untitled'}
         </Link>
       </h3>
-      <p style={{ color: '#4b5563', marginBottom: '1rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+
+      {/* Body preview */}
+      <p
+        className="text-neutral-400 text-[0.875rem] leading-relaxed mb-3"
+        style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          margin: '0 0 0.75rem',
+        }}
+      >
         {thread.body || 'No content available.'}
       </p>
-      <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', color: '#6b7280' }}>
+
+      {/* Footer */}
+      <div className="flex gap-4 text-[0.78rem] text-neutral-600">
         <span>{thread.likes_count || 0} likes</span>
         <span>{thread.comments_count || thread.comments?.length || 0} comments</span>
       </div>

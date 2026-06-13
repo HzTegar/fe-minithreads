@@ -9,42 +9,42 @@ export const EditThreadPage: React.FC = () => {
 
   if (isLoading)
     return (
-      <div>
+      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
         <Navbar />
-        <div className="text-center mt-10">Loading...</div>
+        <div className="text-center mt-10 text-neutral-500">Loading...</div>
       </div>
     );
   if (!thread)
     return (
-      <div>
+      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
         <Navbar />
-        <div className="text-center mt-10">Thread tidak ditemukan.</div>
+        <div className="text-center mt-10 text-neutral-500">Thread tidak ditemukan.</div>
       </div>
     );
 
   return (
-    <div className="bg-[#f8f9f9] min-h-screen">
+    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
       <Navbar />
       <main className="max-w-275 mx-auto py-8 px-4 flex gap-8">
         {/* Kolom Kiri: Form Utama */}
-        <div className="flex-1 bg-white p-8 rounded-lg border border-[#e3e6e8] shadow-sm">
-          <h1 className="text-2xl font-bold text-[#232629] mb-8">
+        <div className="flex-1 bg-[#1a1a1a] p-8 rounded-xl border border-[#2a2a2a]">
+          <h1 className="text-2xl font-bold mb-8">
             Edit your question
           </h1>
 
           {isLimitReached && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6 text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
               <strong>Peringatan:</strong> Batas edit 3x sudah tercapai. Kamu
               tidak bisa lagi menyimpan perubahan.
             </div>
           )}
 
           {isLoading ? (
-            <div className="text-center py-12 text-[#6a737c]">
+            <div className="text-center py-12 text-neutral-500">
               Loading thread details...
             </div>
           ) : !thread ? (
-            <div className="text-center py-12 text-[#6a737c]">
+            <div className="text-center py-12 text-neutral-500">
               Thread tidak ditemukan.
             </div>
           ) : (
@@ -70,16 +70,16 @@ export const EditThreadPage: React.FC = () => {
 
         {/* Kolom Kanan: Sidebar */}
         <aside className="w-75 hidden lg:block">
-          <div className="bg-white border border-[#e3e6e8] rounded shadow-sm overflow-hidden">
-            <div className="bg-[#f8f9f9] p-3 border-b border-[#e3e6e8] font-medium text-[15px]">
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
+            <div className="bg-[#222] p-3 border-b border-[#2a2a2a] font-medium text-[15px] text-neutral-300">
               Step 1: Draft your question
             </div>
-            <div className="p-4 text-sm text-[#3b4045] space-y-4">
+            <div className="p-4 text-sm text-neutral-400 space-y-4">
               <p>
                 The community is here to help you with specific coding,
                 algorithm, or language problems.
               </p>
-              <ul className="list-disc pl-4 space-y-2 text-[#6a737c]">
+              <ul className="list-disc pl-4 space-y-2 text-neutral-500">
                 <li>Summarize your problem in a one-line title.</li>
                 <li>Describe your problem in more detail.</li>
                 <li>

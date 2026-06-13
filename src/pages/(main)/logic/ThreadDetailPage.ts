@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { threadService } from "../../../services/threadService";
 import { commentService } from "../../../services/commentService";
 import { bookmarkService } from "../../../services/bookmarkService";
@@ -12,6 +12,7 @@ export const useThreadDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
+  const queryClient = useQueryClient();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -54,6 +55,7 @@ export const useThreadDetailPage = () => {
     if (!id || !thread) return;
     try {
       await threadService.vote(id, type);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       alert(error.message || "Failed to vote");
     }
@@ -63,6 +65,7 @@ export const useThreadDetailPage = () => {
     if (!id || !thread) return;
     try {
       await threadService.like(id);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       console.error(error);
     }
@@ -86,6 +89,7 @@ export const useThreadDetailPage = () => {
     setIsSubmitting(true);
     try {
       await commentService.create(id, { body });
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       alert(error.message || "Failed to post answer");
     } finally {
@@ -100,6 +104,7 @@ export const useThreadDetailPage = () => {
         body,
         parent_id: parentId,
       });
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       alert(error.message || "Failed to post reply");
     }
@@ -108,6 +113,7 @@ export const useThreadDetailPage = () => {
   const handleCommentVote = async (commentId: string, type: "up" | "down") => {
     try {
       await commentService.vote(commentId, type);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       alert(error.message || "Failed to vote on comment");
     }
@@ -128,6 +134,7 @@ export const useThreadDetailPage = () => {
     try {
       await commentService.update(commentId, { body: editingBody });
       cancelEditComment();
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       alert(error.message || "Failed to update comment");
     }
@@ -137,6 +144,7 @@ export const useThreadDetailPage = () => {
     if (!confirm("Yakin mau hapus jawaban ini?")) return;
     try {
       await commentService.delete(commentId);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
     } catch (error: any) {
       alert(error.message || "Failed to delete comment");
     }

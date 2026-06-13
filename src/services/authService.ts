@@ -1,4 +1,5 @@
 import { api } from './api';
+import type { User } from '../types/user.type';
 
 export const authService = {
   login: async (credentials: any) => {

@@ -17,15 +17,15 @@ export const SearchPage: React.FC = () => {
   const totalResults = results.posts.length + results.users.length + results.tags.length + results.categories.length + results.comments.length;
 
   return (
-    <div>
+    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
       <Navbar />
-      <main style={{ maxWidth: '800px', margin: '2rem auto', padding: '0 1rem' }}>
-        <h1 style={{ marginBottom: '1.5rem' }}>Search</h1>
-        <div style={{ marginBottom: '2rem', position: 'relative' }}>
-          <div style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+      <main className="max-w-[800px] mx-auto py-8 px-4">
+        <h1 className="text-2xl font-bold mb-6">Search</h1>
+        <div className="mb-8 relative">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 z-10 flex items-center">
             <HiSearch fontSize="25px" />
           </div>
-          <div style={{ paddingLeft: '42px' }}>
+          <div className="pl-[42px]">
             <Input 
               placeholder="Search for threads, users, categories..." 
               value={query} 
@@ -35,16 +35,16 @@ export const SearchPage: React.FC = () => {
         </div>
         
         {isLoading ? (
-          <p style={{ textAlign: 'center', padding: '3rem' }}>Searching...</p>
+          <p className="text-center py-12 text-neutral-500">Searching...</p>
         ) : query.length >= 1 ? (
           <div>
-            <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>
+            <p className="text-neutral-500 mb-6">
               {totalResults > 0 ? `Showing results for "${query}"` : `No results found for "${query}"`}
             </p>
             
             {results.users.length > 0 && (
-              <section style={{ marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', borderBottom: '2px solid #f3f4f6', paddingBottom: '0.5rem' }}>Users</h2>
+              <section className="mb-8">
+                <h2 className="text-lg font-semibold mb-4 border-b border-[#2a2a2a] pb-2 text-neutral-200">Users</h2>
                 <div>
                   {results.users.map(user => (
                     <UserCard key={user.id} user={user} />
@@ -54,8 +54,8 @@ export const SearchPage: React.FC = () => {
             )}
 
             {results.posts.length > 0 && (
-              <section style={{ marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', borderBottom: '2px solid #f3f4f6', paddingBottom: '0.5rem' }}>Threads</h2>
+              <section className="mb-8">
+                <h2 className="text-lg font-semibold mb-4 border-b border-[#2a2a2a] pb-2 text-neutral-200">Threads</h2>
                 <div>
                   {results.posts.map(thread => (
                     <ThreadCard key={thread.id} thread={thread} />
@@ -65,13 +65,13 @@ export const SearchPage: React.FC = () => {
             )}
 
             {totalResults === 0 && (
-              <p style={{ textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>
+              <p className="text-center py-12 text-neutral-600">
                 Try searching for something else.
               </p>
             )}
           </div>
         ) : (
-          <p style={{ textAlign: 'center', padding: '3rem', color: '#9ca3af' }}>Type to search for threads, users, and more.</p>
+          <p className="text-center py-12 text-neutral-600">Type to search for threads, users, and more.</p>
         )}
       </main>
     </div>

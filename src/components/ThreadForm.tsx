@@ -124,13 +124,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
           placeholder="What is your question? Be specific."
         />
         {formik.touched.title && formik.errors.title ? (
-          <p
-            style={{
-              color: "#ef4444",
-              fontSize: "0.75rem",
-              marginTop: "0.25rem",
-            }}
-          >
+          <p style={{ color: "#f87171", fontSize: "0.75rem", marginTop: "0.25rem" }}>
             {formik.errors.title}
           </p>
         ) : null}
@@ -142,7 +136,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             display: "block",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#3b4045",
+            color: "#a3a3a3",
             marginBottom: "6px",
           }}
         >
@@ -156,9 +150,11 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
           style={{
             width: "100%",
             padding: "10px 12px",
-            borderRadius: "4px",
-            border: "1px solid #babfc4",
+            borderRadius: "6px",
+            border: "1px solid #333",
             fontSize: "15px",
+            backgroundColor: "#1a1a1a",
+            color: "#e5e5e5",
           }}
         >
           <option value="" disabled>
@@ -171,13 +167,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
           ))}
         </select>
         {formik.touched.category_id && formik.errors.category_id ? (
-          <p
-            style={{
-              color: "#ef4444",
-              fontSize: "0.75rem",
-              marginTop: "0.25rem",
-            }}
-          >
+          <p style={{ color: "#f87171", fontSize: "0.75rem", marginTop: "0.25rem" }}>
             {formik.errors.category_id}
           </p>
         ) : null}
@@ -189,7 +179,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             display: "block",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#3b4045",
+            color: "#a3a3a3",
             marginBottom: "6px",
           }}
         >
@@ -210,8 +200,10 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             style={{
               flex: 1,
               padding: "8px",
-              borderRadius: "4px",
-              border: "1px solid #babfc4",
+              borderRadius: "6px",
+              border: "1px solid #333",
+              backgroundColor: "#1a1a1a",
+              color: "#e5e5e5",
             }}
           />
           <button
@@ -219,11 +211,12 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             onClick={handleAddTag}
             style={{
               padding: "4px 12px",
-              background: "#0a95ff",
+              background: "#6366f1",
               color: "white",
-              borderRadius: "4px",
+              borderRadius: "6px",
               border: "none",
               cursor: "pointer",
+              fontWeight: 500,
             }}
           >
             Add
@@ -241,13 +234,14 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
                 disabled={!isSelected && formik.values.tags.length >= 5}
                 style={{
                   padding: "4px 10px",
-                  borderRadius: "3px",
+                  borderRadius: "6px",
                   fontSize: "12px",
                   border: "none",
                   cursor: "pointer",
-                  backgroundColor: isSelected ? "#39739d" : "#e1ecf4",
-                  color: isSelected ? "#ffffff" : "#39739d",
+                  backgroundColor: isSelected ? "#6366f1" : "#2a2a2a",
+                  color: isSelected ? "#ffffff" : "#a3a3a3",
                   transition: "all 0.2s",
+                  fontWeight: isSelected ? 600 : 400,
                 }}
               >
                 {tag.name}
@@ -255,17 +249,11 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             );
           })}
         </div>
-        <p style={{ fontSize: "11px", color: "#6a737c", margin: 0 }}>
+        <p style={{ fontSize: "11px", color: "#737373", margin: "8px 0 0" }}>
           Select up to 5 tags to describe what your question is about.
         </p>
         {formik.errors.tags ? (
-          <p
-            style={{
-              color: "#ef4444",
-              fontSize: "0.75rem",
-              marginTop: "0.25rem",
-            }}
-          >
+          <p style={{ color: "#f87171", fontSize: "0.75rem", marginTop: "0.25rem" }}>
             {formik.errors.tags}
           </p>
         ) : null}
@@ -277,7 +265,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             display: "block",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#3b4045",
+            color: "#a3a3a3",
             marginBottom: "6px",
           }}
         >
@@ -292,23 +280,20 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
           style={{
             width: "100%",
             padding: "12px",
-            borderRadius: "4px",
-            border: "1px solid #babfc4",
+            borderRadius: "6px",
+            border: "1px solid #333",
             resize: "vertical",
             fontSize: "15px",
             fontFamily: "inherit",
             lineHeight: "1.5",
+            backgroundColor: "#1a1a1a",
+            color: "#e5e5e5",
+            boxSizing: "border-box",
           }}
           placeholder="Explain your problem in detail..."
         />
         {formik.touched.body && formik.errors.body ? (
-          <p
-            style={{
-              color: "#ef4444",
-              fontSize: "0.75rem",
-              marginTop: "0.25rem",
-            }}
-          >
+          <p style={{ color: "#f87171", fontSize: "0.75rem", marginTop: "0.25rem" }}>
             {formik.errors.body}
           </p>
         ) : null}
@@ -326,7 +311,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
           isLoading={isLoading}
           disabled={!formik.isValid}
           size="lg"
-          style={{ backgroundColor: "#0a95ff", padding: "0.8rem 2rem" }}
+          style={{ backgroundColor: "#6366f1", padding: "0.8rem 2rem" }}
         >
           {initialData ? "Update Thread" : "Post Your Question"}
         </Button>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { threadService } from '../../../services/threadService';
 import { categoryService } from '../../../services/categoryService';
@@ -7,11 +8,6 @@ import { useAuth } from '../../../hooks/useAuth';
 import { authStore } from '../../../store/authStore';
 
 export const useHomePage = () => {
-<<<<<<< HEAD
-=======
-  const [threads, setThreads] = useState<Thread[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [threadCount, setThreadCount] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isCatLoading, setIsCatLoading] = useState(false);
   const [catError, setCatError] = useState('');
@@ -20,7 +16,6 @@ export const useHomePage = () => {
   const [selectedCat, setSelectedCat] = useState<Category | null>(null);
   const [catDeleteTarget, setCatDeleteTarget] = useState<Category | null>(null);
   const [isCatDeleting, setIsCatDeleting] = useState(false);
->>>>>>> origin/najwa-dev
   const { user, isAuthenticated } = useAuth();
 
   // Fetch all threads with React Query
@@ -29,7 +24,6 @@ export const useHomePage = () => {
     queryFn: () => threadService.getAll(),
   });
 
-<<<<<<< HEAD
   // Refresh user data from server with React Query
   useQuery({
     queryKey: ['user-profile', user?.id],
@@ -40,7 +34,7 @@ export const useHomePage = () => {
     },
     enabled: !!isAuthenticated && !!user?.id,
   });
-=======
+
   useEffect(() => {
     const fetchCategories = async () => {
       setIsCatLoading(true);
@@ -75,7 +69,7 @@ export const useHomePage = () => {
   };
 
   const handleCatSubmit = async (
-    values: { name: string; description: string },
+    values: { name: string },
     setSubmitting: (isSubmitting: boolean) => void,
     setFieldError: (field: string, message: string) => void
   ) => {
@@ -112,11 +106,6 @@ export const useHomePage = () => {
       setIsCatDeleting(false);
     }
   };
-
-  // Refresh user data from server to get latest reputation_points & thread count
-  const userId = user?.id;
-  const username = user?.username;
->>>>>>> origin/najwa-dev
 
   // Fetch user thread count with React Query
   const { data: userThreads = [] } = useQuery({

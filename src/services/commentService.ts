@@ -32,7 +32,7 @@ export const commentService = {
 
   // 👇 TAMBAHKAN FUNGSI INI UNTUK MENGAMBIL HISTORY
   getHistory: async (id: string): Promise<any> => {
-    const response = await api.get(`/comments/${id}/history`);
+    const response = await api.get<any>(`/comments/${id}/history`);
     // Mengembalikan response data (meng-handle jika dibungkus "data" dari Laravel Resource)
     return response.data?.data || response.data || response;
   },

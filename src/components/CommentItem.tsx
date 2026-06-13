@@ -272,25 +272,25 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   };
 
   return (
-    <div className="flex gap-4 py-4 border-b border-[#e3e6e8]">
+    <div className="flex gap-4 py-4 border-b border-white/[0.08]">
       <div className="flex flex-col items-center w-12 pt-1">
         <button
           onClick={() => onVote(comment.id, "up")}
-          className="text-[#bbc0c4] hover:text-orange-500 transition-colors text-3xl"
+          className="text-neutral-500 hover:text-indigo-400 transition-colors text-3xl cursor-pointer"
         >
           <HiChevronUp />
         </button>
-        <span className="text-lg font-medium text-[#6a737c] my-1">
+        <span className="text-lg font-bold text-neutral-200 my-1">
           {comment.vote_score ?? 0}
         </span>
         <button
           onClick={() => onVote(comment.id, "down")}
-          className="text-[#bbc0c4] hover:text-orange-500 transition-colors text-3xl"
+          className="text-neutral-500 hover:text-indigo-400 transition-colors text-3xl cursor-pointer"
         >
           <HiChevronDown />
         </button>
         {comment.is_accepted && (
-          <div className="text-[#2e7d32] mt-2 text-3xl">
+          <div className="text-emerald-500 mt-2 text-3xl">
             <HiCheckCircle />
           </div>
         )}
@@ -302,19 +302,19 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             <textarea
               value={editingBody}
               onChange={(e) => onEditBodyChange(e.target.value)}
-              className="w-full p-3 border border-[#bbc0c4] rounded text-sm resize-y min-h-25"
+              className="w-full bg-[#1a1a1a] border border-white/[0.08] text-white p-3 rounded-xl text-sm resize-y min-h-25 outline-none focus:border-indigo-500 transition-colors"
               autoFocus
             />
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => onEditSave(comment.id)}
-                className="bg-[#0a95ff] hover:bg-[#0074cc] text-white px-3 py-1 rounded text-sm"
+                className="bg-white hover:bg-neutral-200 text-black font-semibold px-4 py-1.5 rounded-full text-xs transition-colors cursor-pointer"
               >
                 Save
               </button>
               <button
                 onClick={onEditCancel}
-                className="text-[#6a737c] hover:text-[#3b4045] px-3 py-1 rounded text-sm border border-[#e3e6e8]"
+                className="text-neutral-400 hover:text-white px-4 py-1.5 rounded-full text-xs border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -322,38 +322,38 @@ export const CommentItem: React.FC<CommentItemProps> = ({
           </div>
         ) : (
           <div className="mb-4">
-            <div className="so-post-body whitespace-pre-wrap break-all">
+            <div className="text-[0.925rem] leading-relaxed text-neutral-300 whitespace-pre-wrap break-all">
               {comment.body}
             </div>
             {(comment.edit_count ?? 0) > 0 && (
-              <p className="text-[10px] text-gray-500 italic mt-1">Edited</p>
+              <p className="text-[10px] text-neutral-500 italic mt-1">Edited</p>
             )}
           </div>
         )}
 
         <div className="flex justify-between items-center flex-wrap gap-2">
-          <div className="flex flex-wrap items-center gap-3 text-xs text-[#6a737c]">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500">
             {currentUser && !isEditing && (
               <button
                 onClick={() => setShowReplyForm((v) => !v)}
-                className="hover:text-[#0074cc] flex items-center gap-1"
+                className="hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition-colors"
               >
-                <HiReply className="w-3 h-3" />{" "}
+                <HiReply className="w-3.5 h-3.5" />{" "}
                 {showReplyForm ? "Cancel Reply" : "Reply"}
               </button>
             )}
             {currentUser && !isOwner && !isEditing && (
-              <button className="hover:text-[#0074cc] flex items-center gap-1">
-                <HiFlag className="w-3 h-3" />
+              <button className="hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition-colors">
+                <HiFlag className="w-3.5 h-3.5" />
                 Report
               </button>
             )}
             {(isOwner || canModerate) && !isEditing && (
               <button
                 onClick={() => onDelete(comment.id)}
-                className="hover:text-red-600 flex items-center gap-1 text-red-500 font-medium"
+                className="hover:text-red-400 flex items-center gap-1 text-red-500 font-medium cursor-pointer transition-colors"
               >
-                <HiTrash className="w-3 h-3" /> Delete
+                <HiTrash className="w-3.5 h-3.5" /> Delete
               </button>
             )}
 
@@ -365,13 +365,13 @@ export const CommentItem: React.FC<CommentItemProps> = ({
         </div>
 
         {showReplyForm && (
-          <div className="mt-4 pl-4 border-l-2 border-[#e3e6e8]">
+          <div className="mt-4 pl-4 border-l-2 border-white/[0.08]">
             <CommentForm onSubmit={handleReplySubmit} />
           </div>
         )}
 
         {comment.replies && comment.replies.length > 0 && (
-          <div className="mt-4 pl-4 border-l-2 border-[#e3e6e8] space-y-2">
+          <div className="mt-4 pl-4 border-l-2 border-white/[0.08] space-y-2">
             {comment.replies.map((reply) => (
               <CommentItem
                 key={reply.id}

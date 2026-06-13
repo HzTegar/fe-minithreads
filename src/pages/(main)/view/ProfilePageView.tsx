@@ -14,35 +14,26 @@ export const ProfilePage: React.FC = () => {
     rankName,
     myThreads,
     isLoadingThreads,
-    formik,
     isEditOpen,
     avatarPreview,
     avatarError,
     fileInputRef,
-<<<<<<< HEAD
-    openEdit,
-    closeEdit,
-    handleAvatarChange,
-    formik,
-=======
     saveError,
     saveSuccess,
     openEdit,
     closeEdit,
     handleAvatarChange,
->>>>>>> origin/najwa-dev
+    formik,
     handleLevelChange,
     handleLogout,
   } = useProfilePage();
 
   if (!authUser) {
     return (
-      <div>
+      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
         <Navbar />
-        <div
-          style={{ textAlign: "center", marginTop: "3rem", color: "#6b7280" }}
-        >
-          Please <Link to="/login">log in</Link> to view your profile.
+        <div className="text-center mt-12 text-neutral-500">
+          Please <Link to="/login" className="text-indigo-400 hover:text-indigo-300">log in</Link> to view your profile.
         </div>
       </div>
     );
@@ -51,18 +42,16 @@ export const ProfilePage: React.FC = () => {
   const avatarSrc = avatarPreview || authUser.avatar_url || null;
 
   return (
-    <div style={{ backgroundColor: "#f8f9f9", minHeight: "100vh" }}>
+    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
       <Navbar />
-      <main
-        style={{ maxWidth: "800px", margin: "2rem auto", padding: "0 1rem" }}
-      >
+      <main className="max-w-[800px] mx-auto py-8 px-4">
         {/* Profile Card */}
         <div
           style={{
-            backgroundColor: "#ffffff",
+            backgroundColor: "#1a1a1a",
             padding: "2rem",
-            borderRadius: "8px",
-            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            border: "1px solid #2a2a2a",
             textAlign: "center",
           }}
         >
@@ -72,13 +61,13 @@ export const ProfilePage: React.FC = () => {
               width: "100px",
               height: "100px",
               borderRadius: "50%",
-              backgroundColor: "#e5e7eb",
+              backgroundColor: "#2a2a2a",
               margin: "0 auto 1rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "3rem",
-              color: "#6b7280",
+              color: "#525252",
               overflow: "hidden",
             }}
           >
@@ -103,53 +92,36 @@ export const ProfilePage: React.FC = () => {
             <span
               style={{
                 display: "inline-block",
-                backgroundColor: "#fef3c7",
-                color: "#92400e",
+                backgroundColor: "rgba(251,191,36,0.15)",
+                color: "#fbbf24",
                 fontSize: "0.75rem",
                 fontWeight: 600,
                 padding: "0.2rem 0.75rem",
                 borderRadius: "9999px",
-                border: "1px solid #fde68a",
+                border: "1px solid rgba(251,191,36,0.3)",
               }}
             >
               {rankName}
             </span>
           </div>
 
-          <h1 style={{ margin: "0 0 0.25rem 0", fontSize: "1.5rem" }}>
+          <h1 style={{ margin: "0 0 0.25rem 0", fontSize: "1.5rem", color: "#e5e5e5" }}>
             {authUser.username}
           </h1>
-          <p
-            style={{
-              color: "#6b7280",
-              marginBottom: "1rem",
-              fontSize: "0.9rem",
-            }}
-          >
+          <p style={{ color: "#737373", marginBottom: "1rem", fontSize: "0.9rem" }}>
             {authUser.email}
           </p>
-          <p
-            style={{
-              maxWidth: "500px",
-              margin: "0 auto 1.5rem",
-              color: "#4b5563",
-            }}
-          >
+          <p style={{ maxWidth: "500px", margin: "0 auto 1.5rem", color: "#a3a3a3" }}>
             {authUser.bio ? (
               authUser.bio
             ) : (
-              <span style={{ fontStyle: "italic", color: "#9ca3af" }}>
+              <span style={{ fontStyle: "italic", color: "#525252" }}>
                 No bio yet. Click Edit Profile to add one.
               </span>
             )}
           </p>
 
           {/* Stats row */}
-<<<<<<< HEAD
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '2rem', padding: '1rem 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
-=======
           <div
             style={{
               display: "flex",
@@ -157,66 +129,39 @@ export const ProfilePage: React.FC = () => {
               gap: "3rem",
               marginBottom: "2rem",
               padding: "1rem 0",
-              borderTop: "1px solid #f3f4f6",
-              borderBottom: "1px solid #f3f4f6",
+              borderTop: "1px solid #2a2a2a",
+              borderBottom: "1px solid #2a2a2a",
             }}
           >
             <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#2563eb",
-                }}
-              >
->>>>>>> origin/najwa-dev
+              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {reputation.toLocaleString()}
               </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Reputation
               </div>
             </div>
             <div style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  color: "#2563eb",
-                }}
-              >
+              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {myThreads.length}
               </div>
-              <div
-                style={{
-                  fontSize: "0.7rem",
-                  color: "#6b7280",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
+              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Threads
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#818cf8' }}>
                 {authUser.followers_count ?? 0}
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ fontSize: '0.7rem', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Followers
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#818cf8' }}>
                 {authUser.following_count ?? 0}
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div style={{ fontSize: '0.7rem', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Following
               </div>
             </div>
@@ -227,16 +172,16 @@ export const ProfilePage: React.FC = () => {
             style={{
               marginBottom: "2rem",
               padding: "1rem",
-              backgroundColor: "#f9fafb",
+              backgroundColor: "#222",
               borderRadius: "8px",
-              border: "1px dashed #d1d5db",
+              border: "1px dashed #404040",
             }}
           >
             <label
               style={{
                 fontSize: "0.875rem",
                 fontWeight: 500,
-                color: "#374151",
+                color: "#a3a3a3",
                 display: "block",
                 marginBottom: "0.5rem",
               }}
@@ -248,9 +193,11 @@ export const ProfilePage: React.FC = () => {
               onChange={handleLevelChange}
               style={{
                 padding: "0.4rem",
-                borderRadius: "4px",
-                border: "1px solid #d1d5db",
+                borderRadius: "6px",
+                border: "1px solid #404040",
                 fontSize: "0.875rem",
+                backgroundColor: "#1a1a1a",
+                color: "#e5e5e5",
               }}
             >
               <option value="user">Regular User</option>
@@ -260,9 +207,7 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           {/* Actions */}
-          <div
-            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
-          >
+          <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
             <Button variant="outline" onClick={openEdit}>
               Edit Profile
             </Button>
@@ -278,7 +223,7 @@ export const ProfilePage: React.FC = () => {
             My Threads ({myThreads.length})
           </h2>
           {isLoadingThreads ? (
-            <p style={{ color: "#6b7280" }}>Loading your threads...</p>
+            <p style={{ color: "#737373" }}>Loading your threads...</p>
           ) : myThreads.length > 0 ? (
             myThreads.map((thread) => (
               <ThreadCard key={thread.id} thread={thread} />
@@ -288,21 +233,21 @@ export const ProfilePage: React.FC = () => {
               style={{
                 textAlign: "center",
                 padding: "2rem",
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
+                backgroundColor: "#1a1a1a",
+                border: "1px solid #2a2a2a",
+                borderRadius: "12px",
               }}
             >
-              <p style={{ color: "#6b7280", marginBottom: "1rem" }}>
+              <p style={{ color: "#737373", marginBottom: "1rem" }}>
                 You haven't posted any threads yet.
               </p>
               <Link
                 to="/create-thread"
                 style={{
-                  backgroundColor: "#0a95ff",
+                  backgroundColor: "#6366f1",
                   color: "white",
                   padding: "0.5rem 1rem",
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   textDecoration: "none",
                   fontSize: "0.875rem",
                 }}
@@ -320,7 +265,7 @@ export const ProfilePage: React.FC = () => {
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
+            backgroundColor: "rgba(0,0,0,0.7)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -333,130 +278,44 @@ export const ProfilePage: React.FC = () => {
         >
           <div
             style={{
-              backgroundColor: "white",
-              borderRadius: "8px",
+              backgroundColor: "#1a1a1a",
+              borderRadius: "12px",
               width: "100%",
               maxWidth: "480px",
               overflow: "hidden",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+              border: "1px solid #2a2a2a",
             }}
           >
             {/* Modal header */}
-<<<<<<< HEAD
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', borderBottom: '1px solid #e5e7eb' }}>
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Edit Profile</h2>
-              <button type="button" onClick={closeEdit} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: '1.25rem', display: 'flex' }}>
-=======
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 padding: "1.25rem 1.5rem",
-                borderBottom: "1px solid #e5e7eb",
+                borderBottom: "1px solid #2a2a2a",
               }}
             >
-              <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 600 }}>
+              <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 600, color: "#e5e5e5" }}>
                 Edit Profile
               </h2>
               <button
+                type="button"
                 onClick={closeEdit}
                 style={{
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: "#6b7280",
+                  color: "#737373",
                   fontSize: "1.25rem",
                   display: "flex",
                 }}
               >
->>>>>>> origin/najwa-dev
                 <HiX />
               </button>
             </div>
             {/* Modal body */}
-<<<<<<< HEAD
-            <form onSubmit={formik.handleSubmit}>
-              <div style={{ padding: '1.5rem' }}>
-
-                {/* Avatar upload */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>
-                  <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
-                    <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', color: '#6b7280', overflow: 'hidden' }}>
-                      {avatarPreview || authUser.avatar_url
-                        ? <img src={avatarPreview || authUser.avatar_url!} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        : <HiUser />
-                      }
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: '#0a95ff', color: 'white', border: 'none', borderRadius: '50%', width: '26px', height: '26px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}
-                      title="Change avatar"
-                    >
-                      <HiCamera />
-                    </button>
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/jpg"
-                    style={{ display: 'none' }}
-                    onChange={handleAvatarChange}
-                  />
-                  <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>JPEG / PNG, maks 2MB</span>
-                  {formik.touched.avatar && formik.errors.avatar ? (
-                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.avatar as string}</p>
-                  ) : null}
-                </div>
-
-                {/* Bio */}
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.5rem' }}>
-                    Bio
-                  </label>
-                  <textarea
-                    name="bio"
-                    value={formik.values.bio}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    maxLength={500}
-                    rows={4}
-                    placeholder="Ceritakan sedikit tentang dirimu..."
-                    style={{ width: '100%', padding: '0.6rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '0.875rem', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }}
-                  />
-                  {formik.touched.bio && formik.errors.bio ? (
-                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.bio}</p>
-                  ) : null}
-                  <div style={{ textAlign: 'right', fontSize: '0.75rem', color: '#9ca3af' }}>
-                    {formik.values.bio.length}/500
-                  </div>
-                </div>
-
-                {/* Read-only info */}
-                <div style={{ backgroundColor: '#f9fafb', borderRadius: '6px', padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: '#6b7280' }}>
-                  <div style={{ marginBottom: '0.25rem' }}><strong>Username:</strong> {authUser.username} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
-                  <div><strong>Email:</strong> {authUser.email} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
-                </div>
-
-                {/* Error */}
-                {formik.status && (
-                  <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '0.6rem 0.75rem', marginBottom: '1rem', fontSize: '0.875rem', color: '#dc2626' }}>
-                    {formik.status}
-                  </div>
-                )}
-
-                {/* Footer buttons */}
-                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
-                  <Button type="button" variant="outline" onClick={closeEdit} disabled={formik.isSubmitting}>
-                    Batal
-                  </Button>
-                  <Button type="submit" isLoading={formik.isSubmitting} disabled={formik.isSubmitting || !formik.isValid}>
-                    Simpan
-                  </Button>
-                </div>
-              </div>
-=======
             <form onSubmit={formik.handleSubmit} style={{ padding: "1.5rem" }}>
               {/* Avatar upload */}
               <div
@@ -473,12 +332,12 @@ export const ProfilePage: React.FC = () => {
                       width: "80px",
                       height: "80px",
                       borderRadius: "50%",
-                      backgroundColor: "#e5e7eb",
+                      backgroundColor: "#2a2a2a",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: "2.5rem",
-                      color: "#6b7280",
+                      color: "#525252",
                       overflow: "hidden",
                     }}
                   >
@@ -486,11 +345,7 @@ export const ProfilePage: React.FC = () => {
                       <img
                         src={avatarPreview || authUser.avatar_url!}
                         alt="preview"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       />
                     ) : (
                       <HiUser />
@@ -503,7 +358,7 @@ export const ProfilePage: React.FC = () => {
                       position: "absolute",
                       bottom: 0,
                       right: 0,
-                      backgroundColor: "#0a95ff",
+                      backgroundColor: "#6366f1",
                       color: "white",
                       border: "none",
                       borderRadius: "50%",
@@ -527,17 +382,11 @@ export const ProfilePage: React.FC = () => {
                   style={{ display: "none" }}
                   onChange={handleAvatarChange}
                 />
-                <span style={{ fontSize: "0.75rem", color: "#9ca3af" }}>
+                <span style={{ fontSize: "0.75rem", color: "#525252" }}>
                   JPEG / PNG, maks 2MB
                 </span>
                 {avatarError && (
-                  <span
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "#dc2626",
-                      marginTop: "0.25rem",
-                    }}
-                  >
+                  <span style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
                     {avatarError}
                   </span>
                 )}
@@ -551,7 +400,7 @@ export const ProfilePage: React.FC = () => {
                     display: "block",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "#374151",
+                    color: "#a3a3a3",
                     marginBottom: "0.5rem",
                   }}
                 >
@@ -568,21 +417,17 @@ export const ProfilePage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "0.6rem 0.75rem",
-                    border: `1px solid ${formik.touched.username && formik.errors.username ? "#fca5a5" : "#d1d5db"}`,
+                    border: `1px solid ${formik.touched.username && formik.errors.username ? "#f87171" : "#333"}`,
                     borderRadius: "6px",
                     fontSize: "0.875rem",
                     boxSizing: "border-box",
                     outline: "none",
+                    backgroundColor: "#0d0d0d",
+                    color: "#e5e5e5",
                   }}
                 />
                 {formik.touched.username && formik.errors.username && (
-                  <div
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "#dc2626",
-                      marginTop: "0.25rem",
-                    }}
-                  >
+                  <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
                     {formik.errors.username}
                   </div>
                 )}
@@ -596,7 +441,7 @@ export const ProfilePage: React.FC = () => {
                     display: "block",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "#374151",
+                    color: "#a3a3a3",
                     marginBottom: "0.5rem",
                   }}
                 >
@@ -614,12 +459,14 @@ export const ProfilePage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "0.6rem 0.75rem",
-                    border: `1px solid ${formik.touched.bio && formik.errors.bio ? "#fca5a5" : "#d1d5db"}`,
+                    border: `1px solid ${formik.touched.bio && formik.errors.bio ? "#f87171" : "#333"}`,
                     borderRadius: "6px",
                     fontSize: "0.875rem",
                     resize: "vertical",
                     boxSizing: "border-box",
                     outline: "none",
+                    backgroundColor: "#0d0d0d",
+                    color: "#e5e5e5",
                   }}
                 />
                 <div
@@ -627,10 +474,10 @@ export const ProfilePage: React.FC = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     fontSize: "0.75rem",
-                    color: "#9ca3af",
+                    color: "#525252",
                   }}
                 >
-                  <span style={{ color: "#dc2626" }}>
+                  <span style={{ color: "#f87171" }}>
                     {formik.touched.bio && formik.errors.bio}
                   </span>
                   <span>{formik.values.bio.length}/500</span>
@@ -645,12 +492,12 @@ export const ProfilePage: React.FC = () => {
                     display: "block",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "#374151",
+                    color: "#a3a3a3",
                     marginBottom: "0.5rem",
                   }}
                 >
                   Password Baru{" "}
-                  <span style={{ color: "#9ca3af", fontWeight: 400 }}>
+                  <span style={{ color: "#525252", fontWeight: 400 }}>
                     (opsional)
                   </span>
                 </label>
@@ -665,21 +512,17 @@ export const ProfilePage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "0.6rem 0.75rem",
-                    border: `1px solid ${formik.touched.password && formik.errors.password ? "#fca5a5" : "#d1d5db"}`,
+                    border: `1px solid ${formik.touched.password && formik.errors.password ? "#f87171" : "#333"}`,
                     borderRadius: "6px",
                     fontSize: "0.875rem",
                     boxSizing: "border-box",
                     outline: "none",
+                    backgroundColor: "#0d0d0d",
+                    color: "#e5e5e5",
                   }}
                 />
                 {formik.touched.password && formik.errors.password && (
-                  <div
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "#dc2626",
-                      marginTop: "0.25rem",
-                    }}
-                  >
+                  <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
                     {formik.errors.password}
                   </div>
                 )}
@@ -694,7 +537,7 @@ export const ProfilePage: React.FC = () => {
                       display: "block",
                       fontSize: "0.875rem",
                       fontWeight: 500,
-                      color: "#374151",
+                      color: "#a3a3a3",
                       marginBottom: "0.5rem",
                     }}
                   >
@@ -711,22 +554,18 @@ export const ProfilePage: React.FC = () => {
                     style={{
                       width: "100%",
                       padding: "0.6rem 0.75rem",
-                      border: `1px solid ${formik.touched.confirmPassword && formik.errors.confirmPassword ? "#fca5a5" : "#d1d5db"}`,
+                      border: `1px solid ${formik.touched.confirmPassword && formik.errors.confirmPassword ? "#f87171" : "#333"}`,
                       borderRadius: "6px",
                       fontSize: "0.875rem",
                       boxSizing: "border-box",
                       outline: "none",
+                      backgroundColor: "#0d0d0d",
+                      color: "#e5e5e5",
                     }}
                   />
                   {formik.touched.confirmPassword &&
                     formik.errors.confirmPassword && (
-                      <div
-                        style={{
-                          fontSize: "0.75rem",
-                          color: "#dc2626",
-                          marginTop: "0.25rem",
-                        }}
-                      >
+                      <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
                         {formik.errors.confirmPassword}
                       </div>
                     )}
@@ -736,17 +575,17 @@ export const ProfilePage: React.FC = () => {
               {/* Read-only info */}
               <div
                 style={{
-                  backgroundColor: "#f9fafb",
+                  backgroundColor: "#222",
                   borderRadius: "6px",
                   padding: "0.75rem 1rem",
                   marginBottom: "1.5rem",
                   fontSize: "0.8rem",
-                  color: "#6b7280",
+                  color: "#737373",
                 }}
               >
                 <div>
                   <strong>Email:</strong> {authUser.email}{" "}
-                  <span style={{ color: "#9ca3af" }}>(tidak bisa diubah)</span>
+                  <span style={{ color: "#525252" }}>(tidak bisa diubah)</span>
                 </div>
               </div>
 
@@ -754,13 +593,13 @@ export const ProfilePage: React.FC = () => {
               {saveSuccess && (
                 <div
                   style={{
-                    backgroundColor: "#f0fdf4",
-                    border: "1px solid #bbf7d0",
+                    backgroundColor: "rgba(74,222,128,0.1)",
+                    border: "1px solid rgba(74,222,128,0.3)",
                     borderRadius: "6px",
                     padding: "0.6rem 0.75rem",
                     marginBottom: "1rem",
                     fontSize: "0.875rem",
-                    color: "#16a34a",
+                    color: "#4ade80",
                   }}
                 >
                   {saveSuccess}
@@ -771,13 +610,13 @@ export const ProfilePage: React.FC = () => {
               {saveError && (
                 <div
                   style={{
-                    backgroundColor: "#fef2f2",
-                    border: "1px solid #fecaca",
+                    backgroundColor: "rgba(248,113,113,0.1)",
+                    border: "1px solid rgba(248,113,113,0.3)",
                     borderRadius: "6px",
                     padding: "0.6rem 0.75rem",
                     marginBottom: "1rem",
                     fontSize: "0.875rem",
-                    color: "#dc2626",
+                    color: "#f87171",
                   }}
                 >
                   {saveError}
@@ -808,7 +647,6 @@ export const ProfilePage: React.FC = () => {
                   Simpan
                 </Button>
               </div>
->>>>>>> origin/najwa-dev
             </form>
           </div>
         </div>
