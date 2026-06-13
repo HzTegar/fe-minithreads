@@ -6,6 +6,8 @@ import { formatTimeAgo } from '../../../utils/formatDate';
 import { RoleBadge } from '../../../components/common/RoleBadge';
 import { UserLink } from '../../../components/common/UserLink';
 import { useThreadDetailPage } from '../logic/ThreadDetailPage';
+// IMPORT MODAL BARU DISINI
+
 import {
   HiChevronUp,
   HiChevronDown,
@@ -16,7 +18,9 @@ import {
   HiFlag,
   HiPencilAlt,
   HiTrash,
+// Tambahan icon history jika ingin serasi
 } from 'react-icons/hi';
+import { ThreadHistoryModal } from '@/components/ThreadsHistoryModal';
 
 export const ThreadDetailPage: React.FC = () => {
   const {
@@ -123,7 +127,7 @@ export const ThreadDetailPage: React.FC = () => {
 
                 {/* Post meta row */}
                 <div className="flex justify-between items-end mb-8">
-                  <div className="flex gap-3 text-xs text-[#6a737c]">
+                  <div className="flex gap-4 items-center text-xs text-[#6a737c]">
                     {currentUser && !isOwner(thread.user_id) && (
                       <button className="hover:text-[#0074cc] flex items-center gap-1">
                         <HiFlag className="w-3 h-3" /> Report
@@ -146,6 +150,13 @@ export const ThreadDetailPage: React.FC = () => {
                       <button onClick={handleDelete} className="hover:text-red-600 flex items-center gap-1 text-red-500 font-medium">
                         <HiTrash className="w-3 h-3" /> Delete
                       </button>
+                    )}
+
+                    {/* DISINI TEMPAT MODAL HISTORY UNTUK MODERATOR/ADMIN */}
+                    {canModerate && thread.edit_histories && thread.edit_histories.length > 0 && (
+                      <div className="border-l border-[#e3e6e8] pl-4">
+                         <ThreadHistoryModal histories={thread.edit_histories} />
+                      </div>
                     )}
                   </div>
 
