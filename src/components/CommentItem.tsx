@@ -7,7 +7,8 @@ import {
   HiChevronUp,
   HiChevronDown,
   HiFlag,
-  HiTrash,
+  HiPencilAlt,
+  HiTrash, // 👈 HiTrash dipanggil lagi khusus buat Admin
   HiCheckCircle,
   HiReply,
 } from "react-icons/hi";
@@ -36,10 +37,7 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
   const fetchHistory = async () => {
     setLoading(true);
     try {
-      // 👇 Memanggil API langsung lewat service (Base URL & Token sudah otomatis)
       const result = await commentService.getHistory(commentId);
-
-      // Ambil array datanya
       const historyData = result.data ? result.data : result;
       setHistories(Array.isArray(historyData) ? historyData : []);
     } catch (err) {
@@ -49,7 +47,6 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
     }
   };
 
-  // Urutkan data dari yang terbaru (edit_number terbesar di atas)
   const sortedHistories = [...histories].sort(
     (a, b) => b.edit_number - a.edit_number,
   );
@@ -100,7 +97,6 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
             </svg>
             Riwayat Perubahan Komentar
           </DialogTitle>
-          {/* 👇 Menambahkan deskripsi untuk screen reader (menyembunyikan warning kuning) */}
           <DialogDescription className="sr-only">
             Melihat riwayat perubahan teks komentar dari waktu ke waktu.
           </DialogDescription>
@@ -252,7 +248,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   onEdit,
   onEditSave,
   onEditCancel,
-  onDelete,
+  onDelete, 
   onReply,
 }) => {
   const { user: currentUser } = useAuth();
@@ -261,10 +257,17 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 
   const isEditing = activeEditId === comment.id;
 
-  // Pastikan pengecekan role loginmu sudah sesuai (Level Admin atau Moderator)
+  // 👇 Variabel untuk cek akses riwayat (Admin & Mod bisa lihat riwayat)
   const canModerate =
     currentUser?.level === "admin" || currentUser?.level === "moderator";
-  const isOwner = currentUser?.id === comment.user_id;
+    
+  // 👇 Variabel HANYA untuk Admin (buat hapus komentar)
+  const isAdmin = currentUser?.level === "admin";
+    
+  // Cek owner pakai String() biar anti bug kalau tipe datanya number
+  const isOwner = currentUser?.id 
+    ? String(currentUser.id) === String(comment.user_id) 
+    : false;
 
   const handleReplySubmit = (body: string) => {
     onReply(comment.id, body);
@@ -342,13 +345,29 @@ export const CommentItem: React.FC<CommentItemProps> = ({
                 {showReplyForm ? "Cancel Reply" : "Reply"}
               </button>
             )}
+            
             {currentUser && !isOwner && !isEditing && (
-              <button className="hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition-colors">
+              <button 
+                onClick={() => setIsReportOpen(true)}
+                className="hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition-colors"
+              >
                 <HiFlag className="w-3.5 h-3.5" />
                 Report
               </button>
             )}
-            {(isOwner || canModerate) && !isEditing && (
+
+            {/* Tombol Edit (Cuma muncul buat yang bikin komentar) */}
+            {isOwner && !isEditing && (
+              <button
+                onClick={() => onEdit(comment)}
+                className="hover:text-indigo-400 flex items-center gap-1 text-indigo-500 font-medium cursor-pointer transition-colors"
+              >
+                <HiPencilAlt className="w-3.5 h-3.5" /> Edit
+              </button>
+            )}
+
+            {/* 👇 TOMBOL DELETE KEMBALI, TAPI KHUSUS ADMIN AJA 👇 */}
+            {isAdmin && !isEditing && (
               <button
                 onClick={() => onDelete(comment.id)}
                 className="hover:text-red-400 flex items-center gap-1 text-red-500 font-medium cursor-pointer transition-colors"

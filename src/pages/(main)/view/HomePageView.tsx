@@ -40,9 +40,11 @@ export const HomePage: React.FC = () => {
   return (
     <div className="bg-[#0a0a0a] min-h-screen text-neutral-100 pb-12">
       <Navbar />
-      <main className="max-w-[1200px] w-full mx-auto my-8 px-6 grid grid-cols-1 md:grid-cols-[220px_1fr_300px] gap-8 box-border">
+
+      <main className="max-w-[1200px] w-full mx-auto my-8 px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[220px_1fr_300px] gap-6 box-border">
+
         {/* Left Sidebar - Categories */}
-        <aside className="sticky top-20 align-self-start">
+        <aside className="lg:sticky lg:top-20 lg:self-start">
           <div className="bg-[#121212] border border-white/[0.08] rounded-xl p-4 shadow-sm">
             <div className="flex justify-between items-center mb-3">
               <h4 className="m-0 text-sm font-semibold text-neutral-300">
@@ -59,27 +61,24 @@ export const HomePage: React.FC = () => {
             </div>
 
             {isCatLoading && (
-              <p className="text-xs text-neutral-500 m-0">
-                Loading...
-              </p>
+              <p className="text-xs text-neutral-500 m-0">Loading...</p>
             )}
             {catError && (
-              <p className="text-xs text-red-400 m-0">
-                {catError}
-              </p>
+              <p className="text-xs text-red-400 m-0">{catError}</p>
             )}
 
-            <div className="space-y-1.5 mt-2">
+            {/* On mobile: horizontal scroll; on desktop: vertical list */}
+            <div className="flex flex-row flex-wrap gap-2 mt-2 lg:flex-col lg:space-y-1.5 lg:gap-0">
               {categories.map((cat) => (
                 <div
                   key={cat.id}
-                  className="flex justify-between items-center py-2 border-b border-white/[0.04] last:border-b-0"
+                  className="flex justify-between items-center py-1.5 lg:py-2 lg:border-b lg:border-white/[0.04] lg:last:border-b-0"
                 >
-                  <span className="text-[0.85rem] text-neutral-300 font-medium">
+                  <span className="text-[0.85rem] text-neutral-300 font-medium bg-neutral-800 lg:bg-transparent px-2.5 py-1 lg:px-0 lg:py-0 rounded-full lg:rounded-none">
                     {cat.name}
                   </span>
                   {isAdminOrMod && (
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 ml-2">
                       <button
                         onClick={() => openEditCatModal(cat)}
                         className="background-none border-none cursor-pointer text-neutral-500 hover:text-white p-0.5 transition-colors"
@@ -101,7 +100,7 @@ export const HomePage: React.FC = () => {
         </aside>
 
         {/* Main Content */}
-        <div>
+        <div className="min-w-0">
           <div className="flex justify-between items-center mb-6">
             <h1 className="m-0 text-xl font-bold text-white tracking-tight">
               Top Questions
@@ -109,7 +108,7 @@ export const HomePage: React.FC = () => {
             {isAuthenticated && (
               <a
                 href="/create-thread"
-                className="bg-white hover:bg-neutral-200 text-black font-semibold text-xs px-4 py-2 rounded-full transition-colors shadow-sm"
+                className="bg-white hover:bg-neutral-200 text-black font-semibold text-xs px-4 py-2 rounded-full transition-colors shadow-sm whitespace-nowrap ml-4"
               >
                 Ask Question
               </a>
@@ -138,9 +137,9 @@ export const HomePage: React.FC = () => {
         </div>
 
         {/* Right Sidebar */}
-        <aside>
+        <aside className="lg:sticky lg:top-20 lg:self-start">
           {isAuthenticated ? (
-            <div className="bg-[#121212] border border-white/[0.08] rounded-xl p-5 sticky top-20 shadow-sm">
+            <div className="bg-[#121212] border border-white/[0.08] rounded-xl p-5 shadow-sm">
               <div className="flex items-center gap-3 mb-6">
                 <UserAvatar
                   username={user?.username}
@@ -253,7 +252,7 @@ export const HomePage: React.FC = () => {
 
       {/* Modal Create/Edit Category */}
       {isCatModalOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-xs">
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-xs px-4">
           <div className="bg-[#181818] border border-white/[0.08] rounded-xl p-6 w-full max-w-[400px] shadow-xl">
             <h3 className="margin-0 mb-4 text-base font-bold text-white">
               {catModalMode === "create" ? "Tambah Kategori" : "Edit Kategori"}
@@ -283,9 +282,7 @@ export const HomePage: React.FC = () => {
                     />
                     <ErrorMessage name="name">
                       {(msg) => (
-                        <p className="text-red-400 text-xs mt-1 mb-0">
-                          {msg}
-                        </p>
+                        <p className="text-red-400 text-xs mt-1 mb-0">{msg}</p>
                       )}
                     </ErrorMessage>
                   </div>
@@ -315,7 +312,7 @@ export const HomePage: React.FC = () => {
 
       {/* Modal Konfirmasi Delete */}
       {catDeleteTarget && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-xs">
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center backdrop-blur-xs px-4">
           <div className="bg-[#181818] border border-white/[0.08] rounded-xl p-6 w-full max-w-[360px] shadow-xl">
             <h3 className="margin-0 mb-2 text-base font-bold text-white">
               Hapus Kategori
