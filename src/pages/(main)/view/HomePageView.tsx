@@ -7,7 +7,7 @@ import { UserAvatar } from '../../../components/common/UserAvatar';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { categoryValidationSchema } from "../../../types/category.type";
 import type { CategoryFormValues } from "../../../types/category.type";
-import { HiPencil, HiTrash } from "react-icons/hi";
+import { HiPencil, HiTrash, HiHashtag } from "react-icons/hi";
 
 export const HomePage: React.FC = () => {
   const {
@@ -36,20 +36,25 @@ export const HomePage: React.FC = () => {
   } = useHomePage();
 
   const isAdminOrMod = user?.level === "admin" || user?.level === "moderator";
+  const isRegularUser = isAuthenticated && !isAdminOrMod;
 
   return (
     <div className="bg-[#0a0a0a] min-h-screen text-neutral-100 pb-12">
       <Navbar />
 
-      <main className="max-w-[1200px] w-full mx-auto my-8 px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[220px_1fr_300px] gap-6 box-border">
+      <main className="max-w-[1200px] w-full mx-auto my-8 px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[260px_1fr_300px] gap-6 box-border">
 
-        {/* Left Sidebar - Categories */}
-        <aside className="lg:sticky lg:top-20 lg:self-start">
-          <div className="bg-[#121212] border border-white/[0.08] rounded-xl p-4 shadow-sm">
-            <div className="flex justify-between items-center mb-3">
-              <h4 className="m-0 text-sm font-semibold text-neutral-300">
-                Categories
-              </h4>
+        {/* Left Sidebar - Categories & Info */}
+        <aside className="lg:sticky lg:top-20 lg:self-start space-y-4">
+          {/* Categories Section */}
+          <div className="bg-gradient-to-br from-[#121212] to-[#0e0e0e] border border-white/[0.08] rounded-xl p-4 shadow-sm">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center gap-2">
+                <HiHashtag className="text-[rgb(0,116,204)] text-sm" />
+                <h4 className="m-0 text-sm font-semibold text-neutral-300">
+                  Categories
+                </h4>
+              </div>
               {isAdminOrMod && (
                 <button
                   onClick={openCreateCatModal}
@@ -67,36 +72,103 @@ export const HomePage: React.FC = () => {
               <p className="text-xs text-red-400 m-0">{catError}</p>
             )}
 
-            {/* On mobile: horizontal scroll; on desktop: vertical list */}
-            <div className="flex flex-row flex-wrap gap-2 mt-2 lg:flex-col lg:space-y-1.5 lg:gap-0">
-              {categories.map((cat) => (
+            {/* Categories List */}
+            <div className="flex flex-col gap-1">
+              {categories.map((cat, index) => (
                 <div
                   key={cat.id}
-                  className="flex justify-between items-center py-1.5 lg:py-2 lg:border-b lg:border-white/[0.04] lg:last:border-b-0"
+                  className="group flex justify-between items-center py-2 px-2 rounded-lg hover:bg-white/[0.04] transition-all duration-200"
                 >
-                  <span className="text-[0.85rem] text-neutral-300 font-medium bg-neutral-800 lg:bg-transparent px-2.5 py-1 lg:px-0 lg:py-0 rounded-full lg:rounded-none">
-                    {cat.name}
-                  </span>
+                  <div className="flex items-center gap-2 flex-1">
+                    <div className="w-1 h-1 rounded-full bg-[rgb(0,116,204)]/60 group-hover:bg-[rgb(0,116,204)] transition-colors" />
+                    <span className="text-[0.85rem] text-neutral-300 font-medium truncate">
+                      {cat.name}
+                    </span>
+                    <span className="text-[0.65rem] text-neutral-600 ml-auto">
+                    </span>
+                  </div>
                   {isAdminOrMod && (
-                    <div className="flex gap-2 ml-2">
+                    <div className="flex gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => openEditCatModal(cat)}
-                        className="background-none border-none cursor-pointer text-neutral-500 hover:text-white p-0.5 transition-colors"
+                        className="background-none border-none cursor-pointer text-neutral-500 hover:text-[rgb(0,116,204)] p-1 transition-colors"
                       >
-                        <HiPencil size={14} />
+                        <HiPencil size={12} />
                       </button>
                       <button
                         onClick={() => setCatDeleteTarget(cat)}
-                        className="background-none border-none cursor-pointer text-neutral-500 hover:text-red-400 p-0.5 transition-colors"
+                        className="background-none border-none cursor-pointer text-neutral-500 hover:text-red-400 p-1 transition-colors"
                       >
-                        <HiTrash size={14} />
+                        <HiTrash size={12} />
                       </button>
                     </div>
                   )}
                 </div>
               ))}
             </div>
+
+            {/* Category Stats Footer */}
+            <div className="mt-4 pt-3 border-t border-white/[0.04]">
+              <div className="flex justify-between text-[0.65rem] text-neutral-500">
+                <span>Total Categories</span>
+                <span className="font-semibold text-[rgb(0,116,204)]">{categories.length}</span>
+              </div>
+            </div>
           </div>
+
+          {/* Admin/Moderator Guide Section */}
+          {isAdminOrMod && (
+            <div className="bg-gradient-to-br from-[rgb(0,116,204)]/10 to-[rgb(0,116,204)]/5 border border-[rgb(0,116,204)]/30 rounded-xl p-4">
+              <h4 className="text-xs font-semibold text-[rgb(0,116,204)] uppercase tracking-wider m-0 mb-3">
+                Admin & Moderator Guide
+              </h4>
+              <ul className="p-0 m-0 list-none text-xs text-neutral-400 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Create & manage categories to organize threads</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Pin important threads for better visibility</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Remove inappropriate content to maintain quality</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Help users follow community guidelines</span>
+                </li>
+              </ul>
+            </div>
+          )}
+
+          {/* Regular User Guide Section */}
+          {isRegularUser && (
+            <div className="bg-gradient-to-br from-[rgb(0,116,204)]/10 to-[rgb(0,116,204)]/5 border border-[rgb(0,116,204)]/30 rounded-xl p-4">
+              <h4 className="text-xs font-semibold text-[rgb(0,116,204)] uppercase tracking-wider m-0 mb-3">
+                Tips for You
+              </h4>
+              <ul className="p-0 m-0 list-none text-xs text-neutral-400 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Create quality threads to earn reputation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Help others by answering their questions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Upvote helpful content to support the community</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[rgb(0,116,204)] text-xs mt-0.5">•</span>
+                  <span>Stay active to unlock new ranks and privileges</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </aside>
 
         {/* Main Content */}
@@ -165,7 +237,7 @@ export const HomePage: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-xs font-medium">
                   <span className="text-neutral-400">Current Rank</span>
-                  <span className="font-semibold text-indigo-400">
+                  <span className="font-semibold text-[rgb(0,116,204)]">
                     {currentRank.name}
                   </span>
                 </div>
@@ -173,7 +245,7 @@ export const HomePage: React.FC = () => {
                 {/* Progress Bar */}
                 <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden mt-4">
                   <div
-                    className="h-full bg-indigo-500 transition-all duration-300 rounded-full"
+                    className="h-full bg-[rgb(0,116,204)] transition-all duration-300 rounded-full"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -231,19 +303,19 @@ export const HomePage: React.FC = () => {
             <ul className="p-0 m-0 list-none text-xs text-neutral-500 space-y-2">
               <li>
                 • Create thread:{" "}
-                <span className="text-indigo-400 font-medium ml-1">+20 pts</span>
+                <span className="text-[rgb(0,116,204)] font-medium ml-1">+20 pts</span>
               </li>
               <li>
                 • Answer accepted:{" "}
-                <span className="text-indigo-400 font-medium ml-1">+15 pts</span>
+                <span className="text-[rgb(0,116,204)] font-medium ml-1">+15 pts</span>
               </li>
               <li>
                 • Receive like:{" "}
-                <span className="text-indigo-400 font-medium ml-1">+10 pts</span>
+                <span className="text-[rgb(0,116,204)] font-medium ml-1">+10 pts</span>
               </li>
               <li>
                 • Give vote:{" "}
-                <span className="text-indigo-400 font-medium ml-1">+5 pts</span>
+                <span className="text-[rgb(0,116,204)] font-medium ml-1">+5 pts</span>
               </li>
             </ul>
           </div>
@@ -278,7 +350,7 @@ export const HomePage: React.FC = () => {
                       name="name"
                       type="text"
                       placeholder="Nama kategori"
-                      className="w-full bg-[#242424] border border-white/[0.08] rounded-lg p-2 text-sm text-white focus:outline-none focus:border-indigo-500 box-border placeholder:text-neutral-600"
+                      className="w-full bg-[#242424] border border-white/[0.08] rounded-lg p-2 text-sm text-white focus:outline-none focus:border-[rgb(0,116,204)] box-border placeholder:text-neutral-600"
                     />
                     <ErrorMessage name="name">
                       {(msg) => (

@@ -5,6 +5,7 @@ import { ThreadCard } from "../../../components/ThreadCard";
 import { useUserProfilePage } from "../logic/UserProfilePage";
 import { ReportModal } from "../../../components/common/ReportModal";
 import { HiUser, HiUserAdd, HiUserRemove } from "react-icons/hi";
+import { resolveAvatarUrl } from "../../../utils/constants";
 
 export const UserProfilePage: React.FC = () => {
   const {
@@ -17,13 +18,6 @@ export const UserProfilePage: React.FC = () => {
     followersCount,
     isFollowLoading,
     handleToggleFollow,
-    canAssignRole,
-    selectedRole,
-    setSelectedRole,
-    isRoleUpdating,
-    roleMessage,
-    roleError,
-    handleAssignRole,
   } = useUserProfilePage();
 
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -49,6 +43,7 @@ export const UserProfilePage: React.FC = () => {
     );
 
   const { user, threads } = profile;
+  const avatarSrc = resolveAvatarUrl(user.avatar_url);
 
   return (
     <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
@@ -82,9 +77,9 @@ export const UserProfilePage: React.FC = () => {
               overflow: "hidden",
             }}
           >
-            {user.avatar_url ? (
+            {avatarSrc ? (
               <img
-                src={user.avatar_url}
+                src={avatarSrc}
                 alt={user.username}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
@@ -190,90 +185,6 @@ export const UserProfilePage: React.FC = () => {
               >
                 🚩 Laporkan
               </button>
-            </div>
-          )}
-
-          {/* [Admin Only] Switch Role Panel */}
-          {canAssignRole && (
-            <div
-              style={{
-                marginBottom: "1.5rem",
-                padding: "0.75rem 1rem",
-                backgroundColor: "#222",
-                border: "1px solid #333",
-                borderRadius: "8px",
-                textAlign: "left",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
-                  gap: "0.5rem",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "0.85rem",
-                    color: "#a3a3a3",
-                    fontWeight: 600,
-                  }}
-                >
-                  Switch Current Role:
-                </span>
-
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <select
-                    value={selectedRole}
-                    onChange={(e) =>
-                      setSelectedRole(e.target.value as "admin" | "moderator")
-                    }
-                    style={{
-                      padding: "0.4rem 0.6rem",
-                      borderRadius: "6px",
-                      border: "1px solid #404040",
-                      fontSize: "0.85rem",
-                      backgroundColor: "#1a1a1a",
-                      color: "#e5e5e5",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <option value="admin">Admin</option>
-                    <option value="moderator">Moderator</option>
-                  </select>
-
-                  <button
-                    onClick={handleAssignRole}
-                    disabled={isRoleUpdating}
-                    style={{
-                      padding: "0.4rem 1rem",
-                      borderRadius: "6px",
-                      border: "none",
-                      backgroundColor: "#6366f1",
-                      color: "white",
-                      fontSize: "0.85rem",
-                      fontWeight: 600,
-                      cursor: isRoleUpdating ? "not-allowed" : "pointer",
-                      opacity: isRoleUpdating ? 0.7 : 1,
-                    }}
-                  >
-                    {isRoleUpdating ? "Menyimpan..." : "Update Role"}
-                  </button>
-                </div>
-              </div>
-
-              {roleMessage && (
-                <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", color: "#4ade80" }}>
-                  {roleMessage}
-                </p>
-              )}
-              {roleError && (
-                <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", color: "#f87171" }}>
-                  {roleError}
-                </p>
-              )}
             </div>
           )}
 

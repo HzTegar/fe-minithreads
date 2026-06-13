@@ -6,6 +6,7 @@ import { RoleBadge } from "../../../components/common/RoleBadge";
 import { ThreadCard } from "../../../components/ThreadCard";
 import { useProfilePage } from "../logic/ProfilePage";
 import { HiUser, HiCamera, HiX } from "react-icons/hi";
+import { resolveAvatarUrl } from "../../../utils/constants";
 
 export const ProfilePage: React.FC = () => {
   const {
@@ -24,7 +25,6 @@ export const ProfilePage: React.FC = () => {
     closeEdit,
     handleAvatarChange,
     formik,
-    handleLevelChange,
     handleLogout,
   } = useProfilePage();
 
@@ -33,13 +33,17 @@ export const ProfilePage: React.FC = () => {
       <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
         <Navbar />
         <div className="text-center mt-12 text-neutral-500">
-          Please <Link to="/login" className="text-indigo-400 hover:text-indigo-300">log in</Link> to view your profile.
+          Please{" "}
+          <Link to="/login" className="text-indigo-400 hover:text-indigo-300">
+            log in
+          </Link>{" "}
+          to view your profile.
         </div>
       </div>
     );
   }
 
-  const avatarSrc = avatarPreview || authUser.avatar_url || null;
+  const avatarSrc = avatarPreview || resolveAvatarUrl(authUser.avatar_url);
 
   return (
     <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
@@ -105,13 +109,31 @@ export const ProfilePage: React.FC = () => {
             </span>
           </div>
 
-          <h1 style={{ margin: "0 0 0.25rem 0", fontSize: "1.5rem", color: "#e5e5e5" }}>
+          <h1
+            style={{
+              margin: "0 0 0.25rem 0",
+              fontSize: "1.5rem",
+              color: "#e5e5e5",
+            }}
+          >
             {authUser.username}
           </h1>
-          <p style={{ color: "#737373", marginBottom: "1rem", fontSize: "0.9rem" }}>
+          <p
+            style={{
+              color: "#737373",
+              marginBottom: "1rem",
+              fontSize: "0.9rem",
+            }}
+          >
             {authUser.email}
           </p>
-          <p style={{ maxWidth: "500px", margin: "0 auto 1.5rem", color: "#a3a3a3" }}>
+          <p
+            style={{
+              maxWidth: "500px",
+              margin: "0 auto 1.5rem",
+              color: "#a3a3a3",
+            }}
+          >
             {authUser.bio ? (
               authUser.bio
             ) : (
@@ -134,80 +156,95 @@ export const ProfilePage: React.FC = () => {
             }}
           >
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
+              <div
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#818cf8",
+                }}
+              >
                 {reputation.toLocaleString()}
               </div>
-              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div
+                style={{
+                  fontSize: "0.7rem",
+                  color: "#737373",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                }}
+              >
                 Reputation
               </div>
             </div>
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
+              <div
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#818cf8",
+                }}
+              >
                 {myThreads.length}
               </div>
-              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div
+                style={{
+                  fontSize: "0.7rem",
+                  color: "#737373",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                }}
+              >
                 Threads
               </div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#818cf8' }}>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#818cf8",
+                }}
+              >
                 {authUser.followers_count ?? 0}
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div
+                style={{
+                  fontSize: "0.7rem",
+                  color: "#737373",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                }}
+              >
                 Followers
               </div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#818cf8' }}>
+            <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                  color: "#818cf8",
+                }}
+              >
                 {authUser.following_count ?? 0}
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#737373', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <div
+                style={{
+                  fontSize: "0.7rem",
+                  color: "#737373",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                }}
+              >
                 Following
               </div>
             </div>
           </div>
 
-          {/* Demo role switcher */}
-          <div
-            style={{
-              marginBottom: "2rem",
-              padding: "1rem",
-              backgroundColor: "#222",
-              borderRadius: "8px",
-              border: "1px dashed #404040",
-            }}
-          >
-            <label
-              style={{
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "#a3a3a3",
-                display: "block",
-                marginBottom: "0.5rem",
-              }}
-            >
-              [Demo Only] Switch Current Role:
-            </label>
-            <select
-              value={authUser.level}
-              onChange={handleLevelChange}
-              style={{
-                padding: "0.4rem",
-                borderRadius: "6px",
-                border: "1px solid #404040",
-                fontSize: "0.875rem",
-                backgroundColor: "#1a1a1a",
-                color: "#e5e5e5",
-              }}
-            >
-              <option value="user">Regular User</option>
-              <option value="moderator">Moderator</option>
-              <option value="admin">Administrator</option>
-            </select>
-          </div>
-
           {/* Actions */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+          >
             <Button variant="outline" onClick={openEdit}>
               Edit Profile
             </Button>
@@ -297,7 +334,14 @@ export const ProfilePage: React.FC = () => {
                 borderBottom: "1px solid #2a2a2a",
               }}
             >
-              <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 600, color: "#e5e5e5" }}>
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#e5e5e5",
+                }}
+              >
                 Edit Profile
               </h2>
               <button
@@ -341,11 +385,18 @@ export const ProfilePage: React.FC = () => {
                       overflow: "hidden",
                     }}
                   >
-                    {avatarPreview || authUser.avatar_url ? (
+                    {avatarPreview || resolveAvatarUrl(authUser.avatar_url) ? (
                       <img
-                        src={avatarPreview || authUser.avatar_url!}
+                        src={
+                          avatarPreview ||
+                          resolveAvatarUrl(authUser.avatar_url)!
+                        }
                         alt="preview"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
                       />
                     ) : (
                       <HiUser />
@@ -386,7 +437,13 @@ export const ProfilePage: React.FC = () => {
                   JPEG / PNG, maks 2MB
                 </span>
                 {avatarError && (
-                  <span style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#f87171",
+                      marginTop: "0.25rem",
+                    }}
+                  >
                     {avatarError}
                   </span>
                 )}
@@ -427,7 +484,13 @@ export const ProfilePage: React.FC = () => {
                   }}
                 />
                 {formik.touched.username && formik.errors.username && (
-                  <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#f87171",
+                      marginTop: "0.25rem",
+                    }}
+                  >
                     {formik.errors.username}
                   </div>
                 )}
@@ -522,7 +585,13 @@ export const ProfilePage: React.FC = () => {
                   }}
                 />
                 {formik.touched.password && formik.errors.password && (
-                  <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
+                  <div
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#f87171",
+                      marginTop: "0.25rem",
+                    }}
+                  >
                     {formik.errors.password}
                   </div>
                 )}
@@ -565,7 +634,13 @@ export const ProfilePage: React.FC = () => {
                   />
                   {formik.touched.confirmPassword &&
                     formik.errors.confirmPassword && (
-                      <div style={{ fontSize: "0.75rem", color: "#f87171", marginTop: "0.25rem" }}>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "#f87171",
+                          marginTop: "0.25rem",
+                        }}
+                      >
                         {formik.errors.confirmPassword}
                       </div>
                     )}

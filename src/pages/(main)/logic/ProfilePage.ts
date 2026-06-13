@@ -142,11 +142,6 @@ export const useProfilePage = () => {
     setAvatarFile(file);
     setAvatarPreview(URL.createObjectURL(file));
   };
-  const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (authUser) {
-      authStore.updateUser({ ...authUser, level: e.target.value as UserLevel });
-    }
-  };
 
   const handleLogout = () => {
     authStore.clearAuth();
@@ -172,7 +167,6 @@ export const useProfilePage = () => {
     openEdit,
     closeEdit,
     handleAvatarChange,
-    handleLevelChange,
     handleLogout,
   };
 };

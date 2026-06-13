@@ -104,11 +104,11 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
 
         <div className="space-y-6 mt-5">
           {loading ? (
-            <div className="text-center py-12 text-slate-500 bg-slate-50 rounded-2xl border border-dashed">
+            <div className="text-center py-12 text-slate-500 bg-black rounded-2xl border border-dashed">
               <p className="font-medium text-slate-700">Memuat riwayat...</p>
             </div>
           ) : histories.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 bg-slate-50 rounded-2xl border border-dashed">
+            <div className="text-center py-12 text-slate-500 bg-black rounded-2xl border border-dashed">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
