@@ -1,97 +1,48 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useAuth } from '../../../hooks/useAuth';
 import { userService } from '../../../services/userService';
 import { threadService } from '../../../services/threadService';
 import { authStore } from '../../../store/authStore';
 import type { UserLevel } from '../../../types/user.type';
-import type { Thread } from '../../../types/thread.type';
 
 export const useProfilePage = () => {
   const { user: authUser } = useAuth();
   const navigate = useNavigate();
-
-  const [myThreads, setMyThreads] = useState<Thread[]>([]);
-  const [isLoadingThreads, setIsLoadingThreads] = useState(true);
-
-  // Edit profile state
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [bioInput, setBioInput] = useState('');
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState('');
+  const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch fresh profile + threads on mount
-  useEffect(() => {
-    const refreshData = async () => {
-      try {
-        const freshUser = await userService.getProfile();
-        authStore.updateUser(freshUser);
-      } catch {
-        // silently ignore, use cached data
-      }
-    };
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-    const fetchMyThreads = async () => {
-      if (!authUser?.username) return;
-      try {
-        const threads = await threadService.getByUser(authUser.username);
-        setMyThreads(threads);
-      } catch {
-        setMyThreads([]);
-      } finally {
-        setIsLoadingThreads(false);
-      }
-    };
+  // 1. Fetch fresh profile query
+  useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const freshUser = await userService.getProfile();
+      authStore.updateUser(freshUser);
+      return freshUser;
+    },
+    enabled: !!authUser?.id,
+  });
 
-    refreshData();
-    fetchMyThreads();
-  }, [authUser?.id]);
+  // 2. Fetch my threads query
+  const { data: myThreads = [], isLoading: isLoadingThreads } = useQuery({
+    queryKey: ['my-threads', authUser?.username],
+    queryFn: () => threadService.getByUser(authUser?.username || ''),
+    enabled: !!authUser?.username,
+  });
 
-  // Sync bio input when edit opens
-  const openEdit = () => {
-    setBioInput(authUser?.bio ?? '');
-    setAvatarFile(null);
-    setAvatarPreview(null);
-    setSaveError('');
-    setIsEditOpen(true);
-  };
-
-  const closeEdit = () => {
-    setIsEditOpen(false);
-    setAvatarPreview(null);
-    setAvatarFile(null);
-    setSaveError('');
-  };
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    // Basic client-side validation
-    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
-      setSaveError('Hanya file JPEG/PNG yang diizinkan.');
-      return;
-    }
-    if (file.size > 2 * 1024 * 1024) {
-      setSaveError('Ukuran gambar maksimal 2MB.');
-      return;
-    }
-    setSaveError('');
-    setAvatarFile(file);
-    setAvatarPreview(URL.createObjectURL(file));
-  };
-
-  const handleSaveProfile = async () => {
-    setIsSaving(true);
-    setSaveError('');
-    try {
-      // Backend ProfileController uses multipart/form-data for avatar upload
+  // 3. Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: async (values: { bio: string; avatar: File | null }) => {
       const formData = new FormData();
-      formData.append('bio', bioInput);
-      if (avatarFile) {
-        formData.append('avatar', avatarFile);
+      formData.append('bio', values.bio);
+      if (values.avatar) {
+        formData.append('avatar', values.avatar);
       }
 
       const response = await fetch(
@@ -112,13 +63,64 @@ export const useProfilePage = () => {
       }
 
       const data = await response.json();
-      authStore.updateUser(data.user);
+      return data.user;
+    },
+    onSuccess: (updatedUser) => {
+      authStore.updateUser(updatedUser);
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
       closeEdit();
-    } catch (err: any) {
-      setSaveError(err.message || 'Gagal menyimpan profil.');
-    } finally {
-      setIsSaving(false);
-    }
+    },
+  });
+
+  // 4. Formik for Bio & Avatar validation
+  const formik = useFormik({
+    initialValues: {
+      bio: authUser?.bio ?? '',
+      avatar: null as File | null,
+    },
+    enableReinitialize: true,
+    validationSchema: Yup.object({
+      bio: Yup.string().max(500, 'Bio tidak boleh lebih dari 500 karakter'),
+      avatar: Yup.mixed()
+        .nullable()
+        .test('fileType', 'Hanya file JPEG/PNG yang diizinkan.', (value) => {
+          if (!value) return true;
+          const file = value as File;
+          return ['image/jpeg', 'image/png', 'image/jpg'].includes(file.type);
+        })
+        .test('fileSize', 'Ukuran gambar maksimal 2MB.', (value) => {
+          if (!value) return true;
+          const file = value as File;
+          return file.size <= 2 * 1024 * 1024;
+        }),
+    }),
+    onSubmit: async (values) => {
+      await updateProfileMutation.mutateAsync(values);
+    },
+  });
+
+  const openEdit = () => {
+    formik.resetForm({
+      values: {
+        bio: authUser?.bio ?? '',
+        avatar: null,
+      }
+    });
+    setAvatarPreview(null);
+    setIsEditOpen(true);
+  };
+
+  const closeEdit = () => {
+    setIsEditOpen(false);
+    setAvatarPreview(null);
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    formik.setFieldValue('avatar', file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   // Demo role switcher
@@ -142,19 +144,13 @@ export const useProfilePage = () => {
     rankName,
     myThreads,
     isLoadingThreads,
-    // edit modal
     isEditOpen,
-    bioInput,
-    setBioInput,
     avatarPreview,
     fileInputRef,
-    isSaving,
-    saveError,
     openEdit,
     closeEdit,
     handleAvatarChange,
-    handleSaveProfile,
-    // misc
+    formik,
     handleLevelChange,
     handleLogout,
   };

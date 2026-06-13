@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { Thread, CreateThreadInput } from '../types/thread.type';
+import type { Thread } from '../types/thread.type';
 
 export const threadService = {
   getAll: async (): Promise<Thread[]> => {

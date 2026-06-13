@@ -1,24 +1,21 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { threadService } from '../../../services/threadService';
 import { userService } from '../../../services/userService';
 import { authStore } from '../../../store/authStore';
 
 export const useCreateThreadPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const handleSubmit = async (data: any) => {
-    setIsLoading(true);
-    setError('');
-    try {
-      const response = await threadService.create(data);
-
+  const createMutation = useMutation({
+    mutationFn: (data: any) => threadService.create(data),
+    onSuccess: async (response) => {
       // Refresh user profile so reputation_points updates immediately in sidebar
       try {
         const freshUser = await userService.getProfile();
         authStore.updateUser(freshUser);
+        queryClient.invalidateQueries({ queryKey: ['user-profile', freshUser.id] });
       } catch {
         // non-critical, ignore
       }
@@ -30,17 +27,13 @@ export const useCreateThreadPage = () => {
       } else {
         navigate('/');
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to create thread.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   return {
-    isLoading,
-    error,
-    handleSubmit
+    isLoading: createMutation.isPending,
+    error: (createMutation.error as any)?.message || '',
+    handleSubmit: (data: any) => createMutation.mutate(data)
   };
 };
 

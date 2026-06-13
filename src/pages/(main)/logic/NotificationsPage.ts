@@ -1,70 +1,44 @@
-import { useEffect, useState } from 'react';
-import { notificationService, type Notification } from '../../../services/notificationService';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { notificationService } from '../../../services/notificationService';
 
 export const useNotificationsPage = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchNotifications = async () => {
-    try {
-      const { notifications: data, unread_count } = await notificationService.getAll();
-      setNotifications(data);
-      setUnreadCount(unread_count);
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data = { notifications: [], unread_count: 0 }, isLoading } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: () => notificationService.getAll(),
+  });
 
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
+  const notifications = data.notifications || [];
+  const unreadCount = data.unread_count ?? 0;
 
-  const handleMarkAsRead = async (id: string) => {
-    try {
-      await notificationService.markAsRead(id);
-      const now = new Date().toISOString();
-      setNotifications(prev =>
-        prev.map(n => (n.id === id ? { ...n, read_at: now } : n))
-      );
-      setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (error) {
-      console.error('Failed to mark as read:', error);
-    }
-  };
+  const markAsReadMutation = useMutation({
+    mutationFn: (id: string) => notificationService.markAsRead(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
 
-  const handleMarkAllAsRead = async () => {
-    try {
-      await notificationService.markAllAsRead();
-      const now = new Date().toISOString();
-      setNotifications(prev => prev.map(n => ({ ...n, read_at: now })));
-      setUnreadCount(0);
-    } catch (error) {
-      console.error('Failed to mark all as read:', error);
-    }
-  };
+  const markAllAsReadMutation = useMutation({
+    mutationFn: () => notificationService.markAllAsRead(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
 
-  const handleDelete = async (id: string) => {
-    try {
-      await notificationService.delete(id);
-      const deleted = notifications.find(n => n.id === id);
-      setNotifications(prev => prev.filter(n => n.id !== id));
-      if (deleted && !deleted.read_at) {
-        setUnreadCount(prev => Math.max(0, prev - 1));
-      }
-    } catch (error) {
-      console.error('Failed to delete notification:', error);
-    }
-  };
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => notificationService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
 
   return {
     notifications,
     unreadCount,
     isLoading,
-    handleMarkAsRead,
-    handleMarkAllAsRead,
-    handleDelete,
+    handleMarkAsRead: (id: string) => markAsReadMutation.mutate(id),
+    handleMarkAllAsRead: () => markAllAsReadMutation.mutate(),
+    handleDelete: (id: string) => deleteMutation.mutate(id),
   };
 };

@@ -7,13 +7,9 @@ import { useLoginPage } from '../logic/LoginPage';
 
 export const LoginPage: React.FC = () => {
   const {
-    email,
-    setEmail,
-    password,
-    setPassword,
+    formik,
     isLoading,
-    error,
-    handleSubmit
+    error
   } = useLoginPage();
 
   return (
@@ -24,22 +20,36 @@ export const LoginPage: React.FC = () => {
         
         {error && <p style={{ color: '#ef4444', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <Input 
-            label="Email" 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
-          />
-          <Input 
-            label="Password" 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-          <Button type="submit" disabled={isLoading} style={{ width: '100%', marginTop: '1rem' }}>
+        <form onSubmit={formik.handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <Input 
+              label="Email" 
+              type="email" 
+              name="email"
+              value={formik.values.email} 
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.email && formik.errors.email ? (
+              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.email}</p>
+            ) : null}
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <Input 
+              label="Password" 
+              type="password" 
+              name="password"
+              value={formik.values.password} 
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.password && formik.errors.password ? (
+              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password}</p>
+            ) : null}
+          </div>
+
+          <Button type="submit" disabled={isLoading || !formik.isValid} style={{ width: '100%', marginTop: '1rem' }}>
             {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>
         </form>

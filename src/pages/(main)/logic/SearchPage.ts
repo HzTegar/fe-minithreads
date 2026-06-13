@@ -1,38 +1,49 @@
 import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../../../services/api';
 import type { Thread } from '../../../types/thread.type';
+import type { User } from '../../../types/user.type';
+import type { Comment } from '../../../types/comment.type';
+
+export interface SearchResults {
+  posts: Thread[];
+  users: User[];
+  tags: any[];
+  categories: any[];
+  comments: Comment[];
+}
 
 export const useSearchPage = () => {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Thread[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState('');
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(async () => {
-      if (query.length >= 2) {
-        setIsLoading(true);
-        try {
-          // Menggunakan endpoint global search dari backend
-          const response = await api.get<{ data: { posts: Thread[] } }>(`/search/global?keyword=${encodeURIComponent(query)}`);
-          setResults(response.data.posts || []);
-        } catch (error) {
-          console.error('Search failed:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setResults([]);
-      }
+    const delayDebounceFn = setTimeout(() => {
+      setDebouncedQuery(query);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
+  const { data: results = { posts: [], users: [], tags: [], categories: [], comments: [] }, isLoading } = useQuery<SearchResults>({
+    queryKey: ['search', debouncedQuery],
+    queryFn: async () => {
+      if (!debouncedQuery.trim()) {
+        return { posts: [], users: [], tags: [], categories: [], comments: [] };
+      }
+      const response = await api.get<{ data: SearchResults }>(
+        `/search/global?keyword=${encodeURIComponent(debouncedQuery)}`
+      );
+      return response.data || { posts: [], users: [], tags: [], categories: [], comments: [] };
+    },
+    enabled: debouncedQuery.length >= 1,
+  });
+
   return {
     query,
     setQuery,
     results,
-    isLoading
+    isLoading: query !== debouncedQuery || isLoading,
   };
 };
 

@@ -15,16 +15,12 @@ export const ProfilePage: React.FC = () => {
     myThreads,
     isLoadingThreads,
     isEditOpen,
-    bioInput,
-    setBioInput,
     avatarPreview,
     fileInputRef,
-    isSaving,
-    saveError,
     openEdit,
     closeEdit,
     handleAvatarChange,
-    handleSaveProfile,
+    formik,
     handleLevelChange,
     handleLogout,
   } = useProfilePage();
@@ -89,7 +85,7 @@ export const ProfilePage: React.FC = () => {
           </p>
 
           {/* Stats row */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginBottom: '2rem', padding: '1rem 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '2rem', padding: '1rem 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
                 {reputation.toLocaleString()}
@@ -104,6 +100,22 @@ export const ProfilePage: React.FC = () => {
               </div>
               <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Threads
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
+                {authUser.followers_count ?? 0}
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Followers
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#2563eb' }}>
+                {authUser.following_count ?? 0}
+              </div>
+              <div style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Following
               </div>
             </div>
           </div>
@@ -167,82 +179,93 @@ export const ProfilePage: React.FC = () => {
             {/* Modal header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', borderBottom: '1px solid #e5e7eb' }}>
               <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Edit Profile</h2>
-              <button onClick={closeEdit} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: '1.25rem', display: 'flex' }}>
+              <button type="button" onClick={closeEdit} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', fontSize: '1.25rem', display: 'flex' }}>
                 <HiX />
               </button>
             </div>
 
             {/* Modal body */}
-            <div style={{ padding: '1.5rem' }}>
+            <form onSubmit={formik.handleSubmit}>
+              <div style={{ padding: '1.5rem' }}>
 
-              {/* Avatar upload */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
-                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', color: '#6b7280', overflow: 'hidden' }}>
-                    {avatarPreview || authUser.avatar_url
-                      ? <img src={avatarPreview || authUser.avatar_url!} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      : <HiUser />
-                    }
+                {/* Avatar upload */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ position: 'relative', marginBottom: '0.75rem' }}>
+                    <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', color: '#6b7280', overflow: 'hidden' }}>
+                      {avatarPreview || authUser.avatar_url
+                        ? <img src={avatarPreview || authUser.avatar_url!} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        : <HiUser />
+                      }
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: '#0a95ff', color: 'white', border: 'none', borderRadius: '50%', width: '26px', height: '26px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}
+                      title="Change avatar"
+                    >
+                      <HiCamera />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    style={{ position: 'absolute', bottom: 0, right: 0, backgroundColor: '#0a95ff', color: 'white', border: 'none', borderRadius: '50%', width: '26px', height: '26px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}
-                    title="Change avatar"
-                  >
-                    <HiCamera />
-                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/jpg"
+                    style={{ display: 'none' }}
+                    onChange={handleAvatarChange}
+                  />
+                  <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>JPEG / PNG, maks 2MB</span>
+                  {formik.touched.avatar && formik.errors.avatar ? (
+                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.avatar as string}</p>
+                  ) : null}
                 </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/jpg"
-                  style={{ display: 'none' }}
-                  onChange={handleAvatarChange}
-                />
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>JPEG / PNG, maks 2MB</span>
-              </div>
 
-              {/* Bio */}
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.5rem' }}>
-                  Bio
-                </label>
-                <textarea
-                  value={bioInput}
-                  onChange={e => setBioInput(e.target.value)}
-                  maxLength={500}
-                  rows={4}
-                  placeholder="Ceritakan sedikit tentang dirimu..."
-                  style={{ width: '100%', padding: '0.6rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '0.875rem', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }}
-                />
-                <div style={{ textAlign: 'right', fontSize: '0.75rem', color: '#9ca3af' }}>
-                  {bioInput.length}/500
+                {/* Bio */}
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.5rem' }}>
+                    Bio
+                  </label>
+                  <textarea
+                    name="bio"
+                    value={formik.values.bio}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    maxLength={500}
+                    rows={4}
+                    placeholder="Ceritakan sedikit tentang dirimu..."
+                    style={{ width: '100%', padding: '0.6rem 0.75rem', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '0.875rem', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }}
+                  />
+                  {formik.touched.bio && formik.errors.bio ? (
+                    <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.bio}</p>
+                  ) : null}
+                  <div style={{ textAlign: 'right', fontSize: '0.75rem', color: '#9ca3af' }}>
+                    {formik.values.bio.length}/500
+                  </div>
+                </div>
+
+                {/* Read-only info */}
+                <div style={{ backgroundColor: '#f9fafb', borderRadius: '6px', padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: '#6b7280' }}>
+                  <div style={{ marginBottom: '0.25rem' }}><strong>Username:</strong> {authUser.username} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
+                  <div><strong>Email:</strong> {authUser.email} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
+                </div>
+
+                {/* Error */}
+                {formik.status && (
+                  <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '0.6rem 0.75rem', marginBottom: '1rem', fontSize: '0.875rem', color: '#dc2626' }}>
+                    {formik.status}
+                  </div>
+                )}
+
+                {/* Footer buttons */}
+                <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+                  <Button type="button" variant="outline" onClick={closeEdit} disabled={formik.isSubmitting}>
+                    Batal
+                  </Button>
+                  <Button type="submit" isLoading={formik.isSubmitting} disabled={formik.isSubmitting || !formik.isValid}>
+                    Simpan
+                  </Button>
                 </div>
               </div>
-
-              {/* Read-only info */}
-              <div style={{ backgroundColor: '#f9fafb', borderRadius: '6px', padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: '#6b7280' }}>
-                <div style={{ marginBottom: '0.25rem' }}><strong>Username:</strong> {authUser.username} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
-                <div><strong>Email:</strong> {authUser.email} <span style={{ color: '#9ca3af' }}>(tidak bisa diubah)</span></div>
-              </div>
-
-              {/* Error */}
-              {saveError && (
-                <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '6px', padding: '0.6rem 0.75rem', marginBottom: '1rem', fontSize: '0.875rem', color: '#dc2626' }}>
-                  {saveError}
-                </div>
-              )}
-
-              {/* Footer buttons */}
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
-                <Button variant="outline" onClick={closeEdit} disabled={isSaving}>
-                  Batal
-                </Button>
-                <Button onClick={handleSaveProfile} isLoading={isSaving} disabled={isSaving}>
-                  Simpan
-                </Button>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       )}

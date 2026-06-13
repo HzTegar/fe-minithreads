@@ -1,62 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { threadService } from '../../../services/threadService';
 import { userService } from '../../../services/userService';
 import { useAuth } from '../../../hooks/useAuth';
 import { authStore } from '../../../store/authStore';
-import type { Thread } from '../../../types/thread.type';
 
 export const useHomePage = () => {
-  const [threads, setThreads] = useState<Thread[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [threadCount, setThreadCount] = useState(0);
   const { user, isAuthenticated } = useAuth();
 
-  // Fetch all threads for the list
-  useEffect(() => {
-    const fetchThreads = async () => {
-      try {
-        const data = await threadService.getAll();
-        setThreads(data);
-      } catch (error) {
-        console.error('Failed to fetch threads:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchThreads();
-  }, []);
+  // Fetch all threads with React Query
+  const { data: threads = [], isLoading: isLoadingThreads } = useQuery({
+    queryKey: ['threads'],
+    queryFn: () => threadService.getAll(),
+  });
 
-  // Refresh user data from server to get latest reputation_points & thread count
-  const userId = user?.id;
-  const username = user?.username;
+  // Refresh user data from server with React Query
+  useQuery({
+    queryKey: ['user-profile', user?.id],
+    queryFn: async () => {
+      const freshUser = await userService.getProfile();
+      authStore.updateUser(freshUser);
+      return freshUser;
+    },
+    enabled: !!isAuthenticated && !!user?.id,
+  });
 
-  useEffect(() => {
-    if (!isAuthenticated || !userId) return;
+  // Fetch user thread count with React Query
+  const { data: userThreads = [] } = useQuery({
+    queryKey: ['user-threads', user?.username],
+    queryFn: () => threadService.getByUser(user?.username || ''),
+    enabled: !!isAuthenticated && !!user?.username,
+  });
 
-    const refreshUser = async () => {
-      try {
-        const freshUser = await userService.getProfile();
-        authStore.updateUser(freshUser);
-      } catch {
-        // silently ignore — user data from localStorage is still usable
-      }
-    };
-
-    const fetchThreadCount = async () => {
-      if (!username) return;
-      try {
-        const userThreads = await threadService.getByUser(username);
-        setThreadCount(userThreads.length);
-      } catch {
-        setThreadCount(0);
-      }
-    };
-
-    refreshUser();
-    fetchThreadCount();
-  }, [isAuthenticated, userId, username]);
-
-  // reputation_points is the backend field
+  const threadCount = userThreads.length;
   const reputation = user?.reputation_points ?? 0;
 
   // Rank names & thresholds — identical to backend User.php RANKS constant
@@ -80,7 +55,7 @@ export const useHomePage = () => {
 
   return {
     threads,
-    isLoading,
+    isLoading: isLoadingThreads,
     user,
     isAuthenticated,
     reputation,

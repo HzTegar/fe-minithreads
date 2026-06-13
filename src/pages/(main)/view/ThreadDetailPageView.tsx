@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from '../../../components/Navbar';
 import { CommentItem } from '../../../components/CommentItem';
 import { CommentForm } from '../../../components/CommentForm';
@@ -6,6 +6,8 @@ import { formatTimeAgo } from '../../../utils/formatDate';
 import { RoleBadge } from '../../../components/common/RoleBadge';
 import { UserLink } from '../../../components/common/UserLink';
 import { useThreadDetailPage } from '../logic/ThreadDetailPage';
+import { ReportModal } from '../../../components/common/ReportModal';
+import { UserAvatar } from '../../../components/common/UserAvatar';
 import {
   HiChevronUp,
   HiChevronDown,
@@ -43,6 +45,8 @@ export const ThreadDetailPage: React.FC = () => {
     handleCommentUpdate,
     handleCommentDelete,
   } = useThreadDetailPage();
+
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   if (isLoading)
     return (
@@ -156,7 +160,10 @@ export const ThreadDetailPage: React.FC = () => {
                 <div className="flex justify-between items-end mb-8">
                   <div className="flex gap-3 text-xs text-[#6a737c]">
                     {currentUser && !isOwner(thread.user_id) && (
-                      <button className="hover:text-[#0074cc] flex items-center gap-1">
+                      <button
+                        onClick={() => setIsReportOpen(true)}
+                        className="hover:text-[#0074cc] flex items-center gap-1"
+                      >
                         <HiFlag className="w-3 h-3" />
                         Report
                       </button>
@@ -186,9 +193,11 @@ export const ThreadDetailPage: React.FC = () => {
                       asked {formatTimeAgo(thread.created_at)}
                     </div>
                     <div className="flex gap-2 items-center">
-                      <div className="size-8 bg-[#000000] rounded flex items-center justify-center text-white text-[10px]">
-                        {thread.user?.username?.substring(0, 2)?.toUpperCase() || '??'}
-                      </div>
+                      <UserAvatar
+                        username={thread.user?.username}
+                        avatarUrl={thread.user?.avatar_url}
+                        size={32}
+                      />
                       <div className="flex flex-col">
                         <div className="flex items-center gap-1">
                           <UserLink username={thread.user?.username} />
@@ -255,6 +264,13 @@ export const ThreadDetailPage: React.FC = () => {
           </div>
         </div>
       </main>
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        targetId={thread.id}
+        targetType="post"
+        targetTitle={thread.title}
+      />
     </div>
   );
 };

@@ -5,11 +5,14 @@ import { LoginPage } from '../pages/(main)/view/LoginPageView';
 import { RegisterPage } from '../pages/(main)/view/RegisterPageView';
 import { ThreadDetailPage } from '../pages/(main)/view/ThreadDetailPageView';
 import { CreateThreadPage } from '../pages/(main)/view/CreateThreadPageView';
+import { EditThreadPage } from '../pages/(main)/view/EditThreadPageView';
 import { ProfilePage } from '../pages/(main)/view/ProfilePageView';
 import { UserProfilePage } from '../pages/(main)/view/UserProfilePageView';
 import { SearchPage } from '../pages/(main)/view/SearchPageView';
 import { NotificationsPage } from '../pages/(main)/view/NotificationsPageView';
 import { BookmarksPage } from '../pages/(main)/view/BookmarksPageView';
+import { AdminReportsPage } from '../pages/(admin)/view/AdminReportsPageView';
+import { ProtectedRoute } from './ProtectedRoute';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -25,7 +28,15 @@ export const AppRoutes: React.FC = () => {
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/thread/:id" element={<ThreadDetailPage />} />
-        <Route path="/edit-thread/:id" element={<ThreadDetailPage />} />
+        <Route path="/edit-thread/:id" element={<EditThreadPage />} />
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute>
+              <AdminReportsPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

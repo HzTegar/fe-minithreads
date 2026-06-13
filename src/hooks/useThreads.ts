@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { threadService } from '../services/threadService';
-import type { Thread, CreateThreadInput } from '../types/thread.type';
+import type { Thread } from '../types/thread.type';
 
 export const useThreads = () => {
   const [threads, setThreads] = useState<Thread[]>([]);

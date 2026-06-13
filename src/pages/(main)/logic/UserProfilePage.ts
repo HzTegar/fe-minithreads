@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../../services/api';
 import { userService } from '../../../services/userService';
 import { useAuth } from '../../../hooks/useAuth';
@@ -20,63 +20,42 @@ interface PublicProfile {
 export const useUserProfilePage = () => {
   const { username } = useParams<{ username: string }>();
   const { user: currentUser, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
 
-  const [profile, setProfile] = useState<PublicProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followersCount, setFollowersCount] = useState(0);
-  const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const { data: profile, isLoading, isError: notFound } = useQuery<PublicProfile | null>({
+    queryKey: ['user-profile', username],
+    queryFn: async () => {
+      if (!username) return null;
+      const res = await api.get<{ success: boolean; data: PublicProfile }>(
+        `/users/${encodeURIComponent(username)}`
+      );
+      return res.data;
+    },
+    enabled: !!username,
+  });
 
   // Don't show Follow button on own profile
   const isOwnProfile = !!currentUser && currentUser.username === username;
 
-  useEffect(() => {
-    if (!username) return;
-
-    const fetchProfile = async () => {
-      setIsLoading(true);
-      setNotFound(false);
-      try {
-        const res = await api.get<{ success: boolean; data: PublicProfile }>(
-          `/users/${encodeURIComponent(username)}`
-        );
-        setProfile(res.data);
-        setIsFollowing(res.data.is_following);
-        setFollowersCount(res.data.user.followers_count ?? 0);
-      } catch {
-        setNotFound(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [username]);
-
-  const handleToggleFollow = async () => {
-    if (!profile || isFollowLoading) return;
-    setIsFollowLoading(true);
-    try {
-      const result = await userService.toggleFollow(profile.user.id);
-      setIsFollowing(result.is_following);
-      setFollowersCount(prev => result.is_following ? prev + 1 : prev - 1);
-    } catch (err: any) {
+  const followMutation = useMutation({
+    mutationFn: () => userService.toggleFollow(profile?.user.id || ''),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-profile', username] });
+    },
+    onError: (err: any) => {
       alert(err.message || 'Gagal mengikuti user.');
-    } finally {
-      setIsFollowLoading(false);
     }
-  };
+  });
 
   return {
-    profile,
+    profile: profile || null,
     isLoading,
     notFound,
     isAuthenticated,
     isOwnProfile,
-    isFollowing,
-    followersCount,
-    isFollowLoading,
-    handleToggleFollow,
+    isFollowing: profile?.is_following ?? false,
+    followersCount: profile?.user.followers_count ?? 0,
+    isFollowLoading: followMutation.isPending,
+    handleToggleFollow: () => followMutation.mutate(),
   };
 };

@@ -3,6 +3,7 @@ import { Navbar } from '../../../components/Navbar';
 import { ThreadCard } from '../../../components/ThreadCard';
 import { useBookmarksPage } from '../logic/BookmarksPage';
 import { HiBookmark } from 'react-icons/hi';
+import type { Thread } from '../../../types/thread.type';
 
 export const BookmarksPage: React.FC = () => {
   const {
@@ -23,7 +24,7 @@ export const BookmarksPage: React.FC = () => {
             </div>
           ) : bookmarks.length > 0 ? (
             <div className="space-y-4">
-              {bookmarks.map(thread => (
+              {bookmarks.map((thread: Thread) => (
                 <ThreadCard key={thread.id} thread={thread} />
               ))}
             </div>

@@ -7,11 +7,9 @@ import { useRegisterPage } from '../logic/RegisterPage';
 
 export const RegisterPage: React.FC = () => {
   const {
-    formData,
+    formik,
     isLoading,
-    error,
-    handleSubmit,
-    handleInputChange
+    error
   } = useRegisterPage();
 
   return (
@@ -22,35 +20,63 @@ export const RegisterPage: React.FC = () => {
         
         {error && <p style={{ color: '#ef4444', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <Input 
-            label="Username" 
-            value={formData.username} 
-            onChange={(e) => handleInputChange('username', e.target.value)} 
-            required 
-          />
-          <Input 
-            label="Email" 
-            type="email" 
-            value={formData.email} 
-            onChange={(e) => handleInputChange('email', e.target.value)} 
-            required 
-          />
-          <Input 
-            label="Password" 
-            type="password" 
-            value={formData.password} 
-            onChange={(e) => handleInputChange('password', e.target.value)} 
-            required 
-          />
-          <Input 
-            label="Confirm Password" 
-            type="password" 
-            value={formData.password_confirmation} 
-            onChange={(e) => handleInputChange('password_confirmation', e.target.value)} 
-            required 
-          />
-          <Button type="submit" disabled={isLoading} style={{ width: '100%', marginTop: '1rem' }}>
+        <form onSubmit={formik.handleSubmit}>
+          <div style={{ marginBottom: '1rem' }}>
+            <Input 
+              label="Username" 
+              name="username"
+              value={formik.values.username} 
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.username && formik.errors.username ? (
+              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.username}</p>
+            ) : null}
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <Input 
+              label="Email" 
+              type="email" 
+              name="email"
+              value={formik.values.email} 
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.email && formik.errors.email ? (
+              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.email}</p>
+            ) : null}
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <Input 
+              label="Password" 
+              type="password" 
+              name="password"
+              value={formik.values.password} 
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.password && formik.errors.password ? (
+              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password}</p>
+            ) : null}
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <Input 
+              label="Confirm Password" 
+              type="password" 
+              name="password_confirmation"
+              value={formik.values.password_confirmation} 
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.password_confirmation && formik.errors.password_confirmation ? (
+              <p style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>{formik.errors.password_confirmation}</p>
+            ) : null}
+          </div>
+
+          <Button type="submit" disabled={isLoading || !formik.isValid} style={{ width: '100%', marginTop: '1rem' }}>
             {isLoading ? 'Registering...' : 'Register'}
           </Button>
         </form>

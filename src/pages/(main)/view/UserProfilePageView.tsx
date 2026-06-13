@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar } from '../../../components/Navbar';
 import { RoleBadge } from '../../../components/common/RoleBadge';
 import { ThreadCard } from '../../../components/ThreadCard';
 import { useUserProfilePage } from '../logic/UserProfilePage';
+import { ReportModal } from '../../../components/common/ReportModal';
 import { HiUser, HiUserAdd, HiUserRemove } from 'react-icons/hi';
 
 export const UserProfilePage: React.FC = () => {
@@ -18,6 +19,8 @@ export const UserProfilePage: React.FC = () => {
     isFollowLoading,
     handleToggleFollow,
   } = useUserProfilePage();
+
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   if (isLoading) return (
     <div>
@@ -76,9 +79,9 @@ export const UserProfilePage: React.FC = () => {
             </p>
           )}
 
-          {/* Follow button */}
+          {/* Follow & Report buttons */}
           {isAuthenticated && !isOwnProfile && (
-            <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
               <button
                 onClick={handleToggleFollow}
                 disabled={isFollowLoading}
@@ -101,6 +104,26 @@ export const UserProfilePage: React.FC = () => {
               >
                 {isFollowing ? <HiUserRemove /> : <HiUserAdd />}
                 {isFollowLoading ? '...' : isFollowing ? 'Unfollow' : 'Follow'}
+              </button>
+
+              <button
+                onClick={() => setIsReportOpen(true)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '4px',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  border: '1px solid #dc2626',
+                  backgroundColor: '#ffffff',
+                  color: '#dc2626',
+                  transition: 'all 0.15s',
+                }}
+              >
+                🚩 Laporkan
               </button>
             </div>
           )}
@@ -170,6 +193,14 @@ export const UserProfilePage: React.FC = () => {
           )}
         </div>
       </main>
+
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        targetId={user.id}
+        targetType="user"
+        targetTitle={`User: ${user.username}`}
+      />
     </div>
   );
 };

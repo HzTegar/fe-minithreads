@@ -1,19 +1,39 @@
-export const useEditThreadPage = () => {
-  // Mock initial data
-  const initialData = {
-    title: 'Welcome to MiniThreads!',
-    content: 'This is a simple forum built with React and TypeScript. Start by creating a new thread!',
-    category: 'General',
-    tags: ['welcome', 'react'],
-  };
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { useParams, useNavigate } from 'react-router-dom';
+import { threadService } from '../../../services/threadService';
 
-  const handleSubmit = (data: any) => {
-    console.log('Updating thread:', data);
-  };
+export const useEditThreadPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const { data: thread, isLoading } = useQuery({
+    queryKey: ['thread', id],
+    queryFn: () => threadService.getById(id || ''),
+    enabled: !!id,
+  });
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => threadService.update(id || '', data),
+    onSuccess: () => {
+      navigate(`/thread/${id}`);
+    },
+    onError: (error: any) => {
+      alert(error.message || 'Failed to update thread');
+    }
+  });
+
+  const initialData = thread ? {
+    title: thread.title,
+    body: thread.body,
+    category_id: thread.category_id,
+    tags: thread.tags?.map(t => t.name) || [],
+  } : undefined;
 
   return {
     initialData,
-    handleSubmit
+    isLoading,
+    handleSubmit: (data: any) => mutation.mutate(data),
+    isSubmitting: mutation.isPending,
   };
 };
 

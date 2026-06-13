@@ -6,6 +6,7 @@ import { RoleBadge } from './common/RoleBadge';
 import { UserLink } from './common/UserLink';
 import { UserAvatar } from './common/UserAvatar';
 import { CommentForm } from './CommentForm';
+import { ReportModal } from './common/ReportModal';
 import {
   HiChevronUp,
   HiChevronDown,
@@ -43,6 +44,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 }) => {
   const { user: currentUser } = useAuth();
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   const canModerate = currentUser?.level === 'admin' || currentUser?.level === 'moderator';
   const isOwner = currentUser?.id === comment.user_id;
@@ -130,7 +132,10 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 
             {/* Report — only for non-owners */}
             {currentUser && !isOwner && !isEditing && (
-              <button className="hover:text-[#0074cc] flex items-center gap-1">
+              <button
+                onClick={() => setIsReportOpen(true)}
+                className="hover:text-[#0074cc] flex items-center gap-1"
+              >
                 <HiFlag className="w-3 h-3" />
                 Report
               </button>
@@ -212,6 +217,14 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             ))}
           </div>
         )}
+
+        <ReportModal
+          isOpen={isReportOpen}
+          onClose={() => setIsReportOpen(false)}
+          targetId={comment.id}
+          targetType="comment"
+          targetTitle={comment.body.substring(0, 60) + (comment.body.length > 60 ? '...' : '')}
+        />
       </div>
     </div>
   );

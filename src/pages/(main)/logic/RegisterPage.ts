@@ -1,49 +1,50 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { authService } from '../../../services/authService';
 
 export const useRegisterPage = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
+  const validationSchema = Yup.object({
+    username: Yup.string().min(3, 'Username must be at least 3 characters').required('Username is required'),
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    password_confirmation: Yup.string()
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+      .required('Password confirmation is required'),
+  });
 
-    if (formData.password !== formData.password_confirmation) {
-      setError('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      setError('');
 
-    try {
-      await authService.register(formData);
-      navigate('/login');
-    } catch (err: any) {
-      setError(err.message || 'Registration failed.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+      try {
+        await authService.register(values);
+        navigate('/login');
+      } catch (err: any) {
+        setError(err.message || 'Registration failed.');
+      } finally {
+        setIsLoading(false);
+      }
+    },
+  });
 
   return {
-    formData,
+    formik,
     isLoading,
-    error,
-    handleSubmit,
-    handleInputChange
+    error
   };
 };
 
