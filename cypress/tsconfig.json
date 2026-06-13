@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["cypress"]
+  },
+  "include": ["e2e/**/*.cy.ts", "support/**/*.ts"]
+}

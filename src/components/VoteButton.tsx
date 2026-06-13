@@ -1,4 +1,5 @@
 import React from 'react';
+import { HiChevronUp, HiChevronDown } from 'react-icons/hi';
 
 interface VoteButtonProps {
   count: number;
@@ -15,11 +16,14 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ count, userVote, onVote 
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          fontSize: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '24px',
           color: userVote === 1 ? '#2563eb' : '#9ca3af',
         }}
       >
-        ▲
+        <HiChevronUp />
       </button>
       <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{count}</span>
       <button
@@ -28,11 +32,14 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ count, userVote, onVote 
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          fontSize: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '24px',
           color: userVote === -1 ? '#ef4444' : '#9ca3af',
         }}
       >
-        ▼
+        <HiChevronDown />
       </button>
     </div>
   );

@@ -1,18 +1,39 @@
 import { api } from './api';
-import { Comment, CreateCommentInput } from '../types/comment.type';
+import type { Comment } from '../types/comment.type';
 
 export const commentService = {
-  getByThreadId: async (threadId: string): Promise<Comment[]> => {
-    // return api.get(`/threads/${threadId}/comments`);
-    return [];
+  create: async (postId: string, data: { body: string; parent_id?: string }): Promise<Comment> => {
+    const response = await api.post<{ data: Comment }>(`/posts/${postId}/comments`, data);
+    return response.data;
   },
 
-  create: async (data: CreateCommentInput): Promise<Comment> => {
-    // return api.post('/comments', data);
-    throw new Error('Not implemented');
+  update: async (id: string, data: { body: string }): Promise<Comment> => {
+    const response = await api.put<{ data: Comment }>(`/comments/${id}`, data);
+    return response.data;
   },
 
   delete: async (id: string): Promise<void> => {
-    // return api.delete(`/comments/${id}`);
+    await api.delete(`/comments/${id}`);
+  },
+
+  toggleLike: async (id: string): Promise<{ likes_count: number }> => {
+    const response = await api.post<any>(`/comments/${id}/like`, {});
+    return response.data || response;
+  },
+
+  vote: async (id: string, type: 'up' | 'down'): Promise<{ vote_score: number }> => {
+    const response = await api.post<any>('/vote', {
+      target_id: id,
+      target_type: 'comment',
+      vote_type: type,
+    });
+    return response.data || response;
+  },
+
+  // 👇 TAMBAHKAN FUNGSI INI UNTUK MENGAMBIL HISTORY
+  getHistory: async (id: string): Promise<any> => {
+    const response = await api.get<any>(`/comments/${id}/history`);
+    // Mengembalikan response data (meng-handle jika dibungkus "data" dari Laravel Resource)
+    return response.data?.data || response.data || response;
   },
 };
