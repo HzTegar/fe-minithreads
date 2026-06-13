@@ -4,7 +4,7 @@ import { api } from '../../../services/api';
 import { userService } from '../../../services/userService';
 import { useAuth } from '../../../hooks/useAuth';
 import type { Thread } from '../../../types/thread.type';
-import type { User } from '../../../types/user.type';
+import type { User, UserLevel } from '../../../types/user.type';
 
 interface PublicProfile {
   user: User & {
@@ -28,8 +28,17 @@ export const useUserProfilePage = () => {
   const [followersCount, setFollowersCount] = useState(0);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
 
+  // Role assignment (admin only, demo switch)
+  const [selectedRole, setSelectedRole] = useState<UserLevel>('moderator');
+  const [isRoleUpdating, setIsRoleUpdating] = useState(false);
+  const [roleMessage, setRoleMessage] = useState('');
+  const [roleError, setRoleError] = useState('');
+
   // Don't show Follow button on own profile
   const isOwnProfile = !!currentUser && currentUser.username === username;
+
+  // Hanya admin yang boleh mengubah role, dan tidak bisa mengubah role miliknya sendiri
+  const canAssignRole = currentUser?.level === 'admin' && !isOwnProfile;
 
   useEffect(() => {
     if (!username) return;
@@ -44,6 +53,8 @@ export const useUserProfilePage = () => {
         setProfile(res.data);
         setIsFollowing(res.data.is_following);
         setFollowersCount(res.data.user.followers_count ?? 0);
+        // Default pilihan switch role: kebalikan dari role saat ini (admin <-> moderator)
+        setSelectedRole(res.data.user.level === 'admin' ? 'moderator' : 'admin');
       } catch {
         setNotFound(true);
       } finally {
@@ -68,6 +79,24 @@ export const useUserProfilePage = () => {
     }
   };
 
+  const handleAssignRole = async () => {
+    if (!profile || isRoleUpdating) return;
+    setIsRoleUpdating(true);
+    setRoleMessage('');
+    setRoleError('');
+    try {
+      const result = await userService.assignRole(profile.user.id, selectedRole);
+      setProfile(prev =>
+        prev ? { ...prev, user: { ...prev.user, level: result.level } } : prev
+      );
+      setRoleMessage(result.message);
+    } catch (err: any) {
+      setRoleError(err.message || 'Gagal mengubah role user.');
+    } finally {
+      setIsRoleUpdating(false);
+    }
+  };
+
   return {
     profile,
     isLoading,
@@ -78,5 +107,12 @@ export const useUserProfilePage = () => {
     followersCount,
     isFollowLoading,
     handleToggleFollow,
+    canAssignRole,
+    selectedRole,
+    setSelectedRole,
+    isRoleUpdating,
+    roleMessage,
+    roleError,
+    handleAssignRole,
   };
 };

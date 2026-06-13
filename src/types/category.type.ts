@@ -3,7 +3,6 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
-  description: string;
   posts_count?: number;
 }
 
@@ -17,7 +16,6 @@ export interface CategoriesResponse {
 
 export interface CategoryFormValues {
   name: string;
-  description: string;
 }
 
 export const categoryValidationSchema = Yup.object({
@@ -26,10 +24,8 @@ export const categoryValidationSchema = Yup.object({
     .required("Nama kategori wajib diisi")
     .min(3, "Nama kategori minimal 3 karakter")
     .max(50, "Nama kategori maksimal 50 karakter"),
-  description: Yup.string().trim().max(255, "Deskripsi maksimal 255 karakter"),
 });
 
 export const categoryInitialValues: CategoryFormValues = {
   name: "",
-  description: "",
 };

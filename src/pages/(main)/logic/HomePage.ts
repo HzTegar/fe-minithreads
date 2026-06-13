@@ -76,10 +76,11 @@ export const useHomePage = () => {
   ) => {
     try {
       if (catModalMode === 'create') {
-        const newCat = await categoryService.create({ name: values.name.trim(), description: values.description.trim() });
+        const newCat = await categoryService.create({ name: values.name.trim() });
         setCategories(prev => [...prev, newCat]);
       } else if (selectedCat) {
-        const updated = await categoryService.update(selectedCat.id, { name: values.name.trim(), description: values.description.trim() });
+        const updated = await categoryService.update(selectedCat.id, { name: values.name.trim() });
+
         setCategories(prev => prev.map(c => c.id === selectedCat.id ? updated : c));
       }
       closeCatModal();

@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
 import { useAuth } from '../../../hooks/useAuth';
 import { userService } from '../../../services/userService';
 import { threadService } from '../../../services/threadService';
 import { authStore } from '../../../store/authStore';
-import type { UserLevel } from '../../../types/user.type';
+import type { UserLevel, ProfileFormValues } from '../../../types/user.type';
+import { profileInitialValues, profileValidationSchema } from '../../../types/user.type';
 import type { Thread } from '../../../types/thread.type';
-
 
 export const useProfilePage = () => {
   const { user: authUser } = useAuth();
@@ -15,16 +16,14 @@ export const useProfilePage = () => {
   const [myThreads, setMyThreads] = useState<Thread[]>([]);
   const [isLoadingThreads, setIsLoadingThreads] = useState(true);
 
-  // Edit profile state
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [bioInput, setBioInput] = useState('');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [avatarError, setAvatarError] = useState('');
   const [saveError, setSaveError] = useState('');
+  const [saveSuccess, setSaveSuccess] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch fresh profile + threads on mount
   useEffect(() => {
     const refreshData = async () => {
       try {
@@ -51,12 +50,80 @@ export const useProfilePage = () => {
     fetchMyThreads();
   }, [authUser?.id]);
 
-  // Sync bio input when edit opens
+  const formik = useFormik<ProfileFormValues>({
+    initialValues: profileInitialValues,
+    validationSchema: profileValidationSchema,
+    enableReinitialize: false,
+    onSubmit: async (values, { setSubmitting, setErrors, resetForm }) => {
+      setSaveError('');
+      setSaveSuccess('');
+      try {
+        const formData = new FormData();
+
+        if (values.username.trim() && values.username.trim() !== authUser?.username) {
+          formData.append('username', values.username.trim());
+        }
+
+        formData.append('bio', values.bio ?? '');
+
+        if (values.password) {
+          formData.append('password', values.password);
+        }
+
+        if (avatarFile) {
+          formData.append('avatar', avatarFile);
+        }
+
+        const updatedUser = await userService.updateProfile(formData);
+        authStore.updateUser(updatedUser);
+
+        setSaveSuccess('Profil berhasil diperbarui!');
+        setAvatarFile(null);
+        setAvatarPreview(null);
+
+        resetForm({
+          values: {
+            username: updatedUser.username,
+            bio: updatedUser.bio ?? '',
+            password: '',
+            confirmPassword: '',
+          },
+        });
+
+        setTimeout(() => {
+          setIsEditOpen(false);
+          setSaveSuccess('');
+        }, 1000);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Gagal menyimpan profil.';
+
+        if (/username/i.test(message)) {
+          setErrors({ username: message });
+        } else if (/password/i.test(message)) {
+          setErrors({ password: message });
+        } else {
+          setSaveError(message);
+        }
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
   const openEdit = () => {
-    setBioInput(authUser?.bio ?? '');
+    formik.resetForm({
+      values: {
+        username: authUser?.username ?? '',
+        bio: authUser?.bio ?? '',
+        password: '',
+        confirmPassword: '',
+      },
+    });
     setAvatarFile(null);
     setAvatarPreview(null);
+    setAvatarError('');
     setSaveError('');
+    setSaveSuccess('');
     setIsEditOpen(true);
   };
 
@@ -64,65 +131,27 @@ export const useProfilePage = () => {
     setIsEditOpen(false);
     setAvatarPreview(null);
     setAvatarFile(null);
+    setAvatarError('');
     setSaveError('');
+    setSaveSuccess('');
   };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Basic client-side validation
     if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
-      setSaveError('Hanya file JPEG/PNG yang diizinkan.');
+      setAvatarError('Hanya file JPEG/PNG yang diizinkan.');
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      setSaveError('Ukuran gambar maksimal 2MB.');
+      setAvatarError('Ukuran gambar maksimal 2MB.');
       return;
     }
-    setSaveError('');
+    setAvatarError('');
     setAvatarFile(file);
     setAvatarPreview(URL.createObjectURL(file));
   };
 
-  const handleSaveProfile = async () => {
-    setIsSaving(true);
-    setSaveError('');
-    try {
-      // Backend ProfileController uses multipart/form-data for avatar upload
-      const formData = new FormData();
-      formData.append('bio', bioInput);
-      if (avatarFile) {
-        formData.append('avatar', avatarFile);
-      }
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'}/profile/update`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            Accept: 'application/json',
-          },
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.message || 'Gagal menyimpan profil.');
-      }
-
-      const data = await response.json();
-      authStore.updateUser(data.user);
-      closeEdit();
-    } catch (err: any) {
-      setSaveError(err.message || 'Gagal menyimpan profil.');
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  // Demo role switcher
   const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (authUser) {
       authStore.updateUser({ ...authUser, level: e.target.value as UserLevel });
@@ -143,19 +172,16 @@ export const useProfilePage = () => {
     rankName,
     myThreads,
     isLoadingThreads,
-    // edit modal
+    formik,
     isEditOpen,
-    bioInput,
-    setBioInput,
     avatarPreview,
+    avatarError,
     fileInputRef,
-    isSaving,
     saveError,
+    saveSuccess,
     openEdit,
     closeEdit,
     handleAvatarChange,
-    handleSaveProfile,
-    // misc
     handleLevelChange,
     handleLogout,
   };

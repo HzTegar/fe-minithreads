@@ -500,7 +500,6 @@ export const HomePage: React.FC = () => {
             <Formik<CategoryFormValues>
               initialValues={{
                 name: selectedCat?.name ?? "",
-                description: selectedCat?.description ?? "",
               }}
               validationSchema={categoryValidationSchema}
               enableReinitialize
@@ -535,47 +534,6 @@ export const HomePage: React.FC = () => {
                       }}
                     />
                     <ErrorMessage name="name">
-                      {(msg) => (
-                        <p
-                          style={{
-                            color: "#ef4444",
-                            fontSize: "0.75rem",
-                            margin: "0.25rem 0 0",
-                          }}
-                        >
-                          {msg}
-                        </p>
-                      )}
-                    </ErrorMessage>
-                  </div>
-
-                  <div style={{ marginBottom: "1rem" }}>
-                    <label
-                      style={{
-                        fontSize: "0.85rem",
-                        fontWeight: 600,
-                        display: "block",
-                        marginBottom: "0.3rem",
-                      }}
-                    >
-                      Deskripsi
-                    </label>
-                    <Field
-                      name="description"
-                      as="textarea"
-                      rows={3}
-                      placeholder="Deskripsi kategori (opsional)"
-                      style={{
-                        width: "100%",
-                        padding: "0.5rem",
-                        border: "1px solid #babfc4",
-                        borderRadius: "4px",
-                        fontSize: "0.9rem",
-                        resize: "vertical",
-                        boxSizing: "border-box",
-                      }}
-                    />
-                    <ErrorMessage name="description">
                       {(msg) => (
                         <p
                           style={{

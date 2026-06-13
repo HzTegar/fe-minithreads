@@ -7,12 +7,12 @@ export const categoryService = {
     return Array.isArray(response) ? response : response.data;
   },
 
-  create: async (data: { name: string; description: string }): Promise<Category> => {
+  create: async (data: { name: string; }): Promise<Category> => {
     const response = await api.post<CategoryResponse | Category>('/categories', data);
     return 'data' in response ? response.data : response;
   },
 
-  update: async (id: string, data: { name: string; description: string }): Promise<Category> => {
+  update: async (id: string, data: { name: string;  }): Promise<Category> => {
     const response = await api.put<CategoryResponse | Category>(`/categories/${id}`, data);
     return 'data' in response ? response.data : response;
   },
