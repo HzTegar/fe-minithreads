@@ -2,8 +2,12 @@ import { api } from './api';
 import type { Thread } from '../types/thread.type';
 
 export const threadService = {
-  getAll: async (): Promise<Thread[]> => {
-    const response: any = await api.get('/posts');
+  getAll: async (params?: { category?: string; status?: string }): Promise<Thread[]> => {
+    const queryParts: string[] = [];
+    if (params?.category) queryParts.push(`category=${encodeURIComponent(params.category)}`);
+    if (params?.status) queryParts.push(`status=${encodeURIComponent(params.status)}`);
+    const query = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+    const response: any = await api.get(`/posts${query}`);
     // Jika response paginated (seperti data yang kamu kirim), ambil dari response.data.data
     if (response.data?.data && Array.isArray(response.data.data)) return response.data.data;
     if (response.data && Array.isArray(response.data)) return response.data;
@@ -54,6 +58,11 @@ export const threadService = {
       target_type: 'post',
       vote_type: type
     });
+    return response.data?.data || response.data || response;
+  },
+
+  toggleArchive: async (id: string): Promise<Thread> => {
+    const response: any = await api.post(`/posts/${id}/toggle-archive`, {});
     return response.data?.data || response.data || response;
   },
 };

@@ -42,6 +42,9 @@ export interface Thread {
   accepted_answer_id?: string | null;
   is_answered?: boolean;
   status: 'open' | 'closed';
+  closed_at?: string | null;
+  can_reopen?: boolean;
+  is_closed_permanently?: boolean;
   edit_count?: number;
   // Ini tambahannya bro
   edit_histories?: ThreadEditHistory[]; 

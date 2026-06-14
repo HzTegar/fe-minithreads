@@ -10,8 +10,8 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
   if (!user) return null;
 
   return (
-    <div className="px-5 py-4 bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl mb-3 transition-colors flex items-center gap-4">
-      <div className="w-12 h-12 rounded-full bg-[#2a2a2a] overflow-hidden shrink-0">
+    <div className="px-5 py-4 bg-card border border-border hover:border-foreground/20 rounded-xl mb-3 transition-colors flex items-center gap-4">
+      <div className="w-12 h-12 rounded-full bg-muted overflow-hidden shrink-0">
         {user.avatar_url ? (
           <img src={user.avatar_url} alt={user.username} className="w-full h-full object-cover" />
         ) : (

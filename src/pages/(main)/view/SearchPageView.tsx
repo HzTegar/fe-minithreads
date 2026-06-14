@@ -23,12 +23,12 @@ export const SearchPage: React.FC = () => {
     (results?.comments?.length ?? 0);
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+    <div className="bg-background min-h-screen text-foreground">
       <Navbar />
       <main className="max-w-[800px] mx-auto py-8 px-4">
         <h1 className="text-2xl font-bold mb-6">Search</h1>
         <div className="mb-8 relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 z-10 flex items-center">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10 flex items-center">
             <HiSearch fontSize="25px" />
           </div>
           <div className="pl-[42px]">
@@ -41,10 +41,10 @@ export const SearchPage: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <p className="text-center py-12 text-neutral-500">Searching...</p>
+          <p className="text-center py-12 text-muted-foreground">Searching...</p>
         ) : query.length >= 1 ? (
           <div>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-muted-foreground mb-6">
               {totalResults > 0
                 ? `Showing results for "${query}"`
                 : `No results found for "${query}"`}
@@ -53,7 +53,7 @@ export const SearchPage: React.FC = () => {
             {/* FIX: guard results?.users sebelum .length dan .map */}
             {(results?.users?.length ?? 0) > 0 && (
               <section className="mb-8">
-                <h2 className="text-lg font-semibold mb-4 border-b border-[#2a2a2a] pb-2 text-neutral-200">
+                <h2 className="text-lg font-semibold mb-4 border-b border-border pb-2 text-foreground">
                   Users
                 </h2>
                 <div>
@@ -67,7 +67,7 @@ export const SearchPage: React.FC = () => {
             {/* FIX: guard results?.posts sebelum .length dan .map */}
             {(results?.posts?.length ?? 0) > 0 && (
               <section className="mb-8">
-                <h2 className="text-lg font-semibold mb-4 border-b border-[#2a2a2a] pb-2 text-neutral-200">
+                <h2 className="text-lg font-semibold mb-4 border-b border-border pb-2 text-foreground">
                   Threads
                 </h2>
                 <div>
@@ -79,13 +79,13 @@ export const SearchPage: React.FC = () => {
             )}
 
             {totalResults === 0 && (
-              <p className="text-center py-12 text-neutral-600">
+              <p className="text-center py-12 text-muted-foreground">
                 Try searching for something else.
               </p>
             )}
           </div>
         ) : (
-          <p className="text-center py-12 text-neutral-600">
+          <p className="text-center py-12 text-muted-foreground">
             Type to search for threads, users, and more.
           </p>
         )}

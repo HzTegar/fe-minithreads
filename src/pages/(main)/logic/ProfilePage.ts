@@ -6,7 +6,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { userService } from '../../../services/userService';
 import { threadService } from '../../../services/threadService';
 import { authStore } from '../../../store/authStore';
-import type { UserLevel, ProfileFormValues } from '../../../types/user.type';
+import type { ProfileFormValues } from '../../../types/user.type';
 import { profileInitialValues, profileValidationSchema } from '../../../types/user.type';
 
 export const useProfilePage = () => {

@@ -18,6 +18,7 @@ export const useThreadDetailPage = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingBody, setEditingBody] = useState("");
+  const [isArchiving, setIsArchiving] = useState(false);
 
   const canModerate =
     currentUser?.level === "admin" || currentUser?.level === "moderator";
@@ -33,6 +34,8 @@ export const useThreadDetailPage = () => {
   const comments: Comment[] = (thread?.comments || []).filter(
     (c: Comment) => !c.parent_id,
   );
+
+  const isClosed = thread?.status === 'closed';
 
   const isLimitReached = useMemo(() => {
     if (!thread) return false;
@@ -79,6 +82,19 @@ export const useThreadDetailPage = () => {
       navigate("/");
     } catch (error: any) {
       alert(error.message || "Failed to delete thread");
+    }
+  };
+
+  const handleToggleArchive = async () => {
+    if (!id) return;
+    setIsArchiving(true);
+    try {
+      await threadService.toggleArchive(id);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
+    } catch (error: any) {
+      alert(error.response?.data?.message || error.message || "Gagal mengarsipkan thread");
+    } finally {
+      setIsArchiving(false);
     }
   };
 
@@ -150,6 +166,17 @@ export const useThreadDetailPage = () => {
     }
   };
 
+  const handleToggleAccept = async (commentId: string) => {
+    if (!id) return;
+    try {
+      await commentService.toggleAccept(id, commentId);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
+    } catch (error: any) {
+      console.error('Toggle accept error:', error);
+      alert(error?.message || "Gagal mengubah jawaban terbaik");
+    }
+  };
+
   return {
     id,
     currentUser,
@@ -161,6 +188,8 @@ export const useThreadDetailPage = () => {
     canModerate,
     isOwner,
     isLimitReached,
+    isClosed,
+    isArchiving,
     editingCommentId,
     editingBody,
     setEditingBody,
@@ -168,6 +197,7 @@ export const useThreadDetailPage = () => {
     handleVote,
     handleLike,
     handleDelete,
+    handleToggleArchive,
     handleCommentSubmit,
     handleReplySubmit,
     handleCommentVote,
@@ -175,5 +205,6 @@ export const useThreadDetailPage = () => {
     cancelEditComment,
     handleCommentUpdate,
     handleCommentDelete,
+    handleToggleAccept,
   };
 };

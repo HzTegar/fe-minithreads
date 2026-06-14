@@ -16,7 +16,6 @@ import {
 } from "react-icons/hi";
 import type { Notification } from "../../../services/notificationService";
 
-// Map notification type → icon + accent colour (dark theme)
 const NOTIF_META: Record<
   string,
   { icon: React.ReactNode; color: string; bg: string }
@@ -56,7 +55,6 @@ const NOTIF_META: Record<
     color: "#fbbf24",
     bg: "rgba(251,191,36,0.12)",
   },
-  // notifikasi khusus admin: ada laporan masuk
   report_submitted: {
     icon: <HiExclamation />,
     color: "#f87171",
@@ -85,7 +83,7 @@ export const NotificationsPage: React.FC = () => {
   const isAdmin = user?.level === "admin";
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+    <div className="bg-background min-h-screen text-foreground">
       <Navbar />
       <main className="max-w-[800px] mx-auto py-8 px-4">
         {/* Header */}
@@ -110,18 +108,18 @@ export const NotificationsPage: React.FC = () => {
 
         {/* Content */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-20 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl">
-            <p className="text-neutral-500">Loading notifications...</p>
+          <div className="flex items-center justify-center py-20 bg-card border border-border rounded-xl">
+            <p className="text-muted-foreground">Loading notifications...</p>
           </div>
         ) : notifications.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl gap-3">
-            <div className="text-5xl text-neutral-700">
+          <div className="flex flex-col items-center justify-center py-20 bg-card border border-border rounded-xl gap-3">
+            <div className="text-5xl text-muted-foreground">
               <HiBell />
             </div>
-            <h2 className="text-lg font-medium text-neutral-300">
+            <h2 className="text-lg font-medium text-foreground">
               No notifications yet
             </h2>
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-muted-foreground">
               When someone comments, likes, or votes on your posts, it'll show
               up here.
             </p>
@@ -138,8 +136,8 @@ export const NotificationsPage: React.FC = () => {
                   key={notif.id}
                   className={`rounded-xl border transition-all flex items-start gap-3 p-4 ${
                     isUnread
-                      ? "bg-[#1a1a2e] border-indigo-500/30"
-                      : "bg-[#1a1a1a] border-[#2a2a2a]"
+                      ? "bg-primary/10 border-indigo-500/30"
+                      : "bg-card border-border"
                   }`}
                 >
                   {/* Type icon */}
@@ -152,7 +150,6 @@ export const NotificationsPage: React.FC = () => {
 
                   {/* Body */}
                   <div className="flex-1 min-w-0">
-                    {/* Sender link */}
                     {notif.data.username && (
                       <Link
                         to={`/users/${encodeURIComponent(notif.data.username)}`}
@@ -162,7 +159,7 @@ export const NotificationsPage: React.FC = () => {
                       </Link>
                     )}{" "}
                     <span
-                      className={`text-sm ${isUnread ? "text-neutral-200" : "text-neutral-400"}`}
+                      className={`text-sm ${isUnread ? "text-foreground" : "text-muted-foreground"}`}
                     >
                       {notif.data.username
                         ? notif.data.message.replace(
@@ -172,7 +169,7 @@ export const NotificationsPage: React.FC = () => {
                         : notif.data.message}
                     </span>
                     <div className="flex items-center gap-3 mt-1.5">
-                      <span className="text-xs text-neutral-600">
+                      <span className="text-xs text-muted-foreground">
                         {formatTimeAgo(notif.created_at)}
                       </span>
                       {isUnread && (
@@ -188,9 +185,6 @@ export const NotificationsPage: React.FC = () => {
 
                   {/* Right side: View/Review link + Delete */}
                   <div className="flex items-center gap-2 shrink-0">
-                  
-
-                      {/*notifikasi report(khusus admin)*/}
                     {isReportNotif && isAdmin && notif.data.report_id && (
                       <Link
                         to={`/admin/reports/${notif.data.report_id}`}
@@ -203,16 +197,15 @@ export const NotificationsPage: React.FC = () => {
                     {!isReportNotif && notif.data.post_id && (
                       <Link
                         to={`/thread/${notif.data.post_id}`}
-                        className="text-xs font-bold text-indigo-300 hover:bg-indigo-500/20 px-2.5 py-1 rounded bg-[#2a2a2a] no-underline uppercase tracking-wide"
+                        className="text-xs font-bold text-indigo-300 hover:bg-indigo-500/20 px-2.5 py-1 rounded bg-muted no-underline uppercase tracking-wide"
                       >
                         View
                       </Link>
                     )}
 
-                    {/* Tombol hapus notifikasi (selalu muncul) */}
                     <button
                       onClick={() => handleDelete(notif.id)}
-                      className="text-neutral-600 hover:text-neutral-400 text-lg transition-colors p-1 rounded"
+                      className="text-muted-foreground hover:text-foreground text-lg transition-colors p-1 rounded"
                       title="Delete notification"
                     >
                       <HiX />

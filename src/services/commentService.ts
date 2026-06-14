@@ -31,6 +31,10 @@ export const commentService = {
   },
 
   // 👇 TAMBAHKAN FUNGSI INI UNTUK MENGAMBIL HISTORY
+  toggleAccept: async (postId: string, commentId: string): Promise<void> => {
+    await api.post(`/posts/${postId}/comments/${commentId}/toggle-accepted`, {});
+  },
+
   getHistory: async (id: string): Promise<any> => {
     const response = await api.get<any>(`/comments/${id}/history`);
     // Mengembalikan response data (meng-handle jika dibungkus "data" dari Laravel Resource)

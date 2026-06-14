@@ -30,9 +30,9 @@ export const ProfilePage: React.FC = () => {
 
   if (!authUser) {
     return (
-      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+      <div className="bg-background min-h-screen text-foreground">
         <Navbar />
-        <div className="text-center mt-12 text-neutral-500">
+        <div className="text-center mt-12 text-muted-foreground">
           Please{" "}
           <Link to="/login" className="text-indigo-400 hover:text-indigo-300">
             log in
@@ -46,13 +46,13 @@ export const ProfilePage: React.FC = () => {
   const avatarSrc = avatarPreview || resolveAvatarUrl(authUser.avatar_url);
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+    <div className="bg-background min-h-screen text-foreground">
       <Navbar />
       <main className="max-w-[800px] mx-auto py-8 px-4">
         {/* Profile Card */}
         <div
           style={{
-            backgroundColor: "#1a1a1a",
+            backgroundColor: "var(--card)",
             padding: "2rem",
             borderRadius: "12px",
             border: "1px solid #2a2a2a",
@@ -65,13 +65,13 @@ export const ProfilePage: React.FC = () => {
               width: "100px",
               height: "100px",
               borderRadius: "50%",
-              backgroundColor: "#2a2a2a",
+              backgroundColor: "var(--border)",
               margin: "0 auto 1rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "3rem",
-              color: "#525252",
+              color: "var(--muted-foreground)",
               overflow: "hidden",
             }}
           >
@@ -113,14 +113,14 @@ export const ProfilePage: React.FC = () => {
             style={{
               margin: "0 0 0.25rem 0",
               fontSize: "1.5rem",
-              color: "#e5e5e5",
+              color: "var(--foreground)",
             }}
           >
             {authUser.username}
           </h1>
           <p
             style={{
-              color: "#737373",
+              color: "var(--muted-foreground)",
               marginBottom: "1rem",
               fontSize: "0.9rem",
             }}
@@ -131,13 +131,13 @@ export const ProfilePage: React.FC = () => {
             style={{
               maxWidth: "500px",
               margin: "0 auto 1.5rem",
-              color: "#a3a3a3",
+              color: "var(--muted-foreground)",
             }}
           >
             {authUser.bio ? (
               authUser.bio
             ) : (
-              <span style={{ fontStyle: "italic", color: "#525252" }}>
+              <span style={{ fontStyle: "italic", color: "var(--muted-foreground)" }}>
                 No bio yet. Click Edit Profile to add one.
               </span>
             )}
@@ -168,7 +168,7 @@ export const ProfilePage: React.FC = () => {
               <div
                 style={{
                   fontSize: "0.7rem",
-                  color: "#737373",
+                  color: "var(--muted-foreground)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em",
                 }}
@@ -189,7 +189,7 @@ export const ProfilePage: React.FC = () => {
               <div
                 style={{
                   fontSize: "0.7rem",
-                  color: "#737373",
+                  color: "var(--muted-foreground)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em",
                 }}
@@ -210,7 +210,7 @@ export const ProfilePage: React.FC = () => {
               <div
                 style={{
                   fontSize: "0.7rem",
-                  color: "#737373",
+                  color: "var(--muted-foreground)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em",
                 }}
@@ -231,7 +231,7 @@ export const ProfilePage: React.FC = () => {
               <div
                 style={{
                   fontSize: "0.7rem",
-                  color: "#737373",
+                  color: "var(--muted-foreground)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em",
                 }}
@@ -260,7 +260,7 @@ export const ProfilePage: React.FC = () => {
             My Threads ({myThreads.length})
           </h2>
           {isLoadingThreads ? (
-            <p style={{ color: "#737373" }}>Loading your threads...</p>
+            <p style={{ color: "var(--muted-foreground)" }}>Loading your threads...</p>
           ) : myThreads.length > 0 ? (
             myThreads.map((thread) => (
               <ThreadCard key={thread.id} thread={thread} />
@@ -270,12 +270,12 @@ export const ProfilePage: React.FC = () => {
               style={{
                 textAlign: "center",
                 padding: "2rem",
-                backgroundColor: "#1a1a1a",
+                backgroundColor: "var(--card)",
                 border: "1px solid #2a2a2a",
                 borderRadius: "12px",
               }}
             >
-              <p style={{ color: "#737373", marginBottom: "1rem" }}>
+              <p style={{ color: "var(--muted-foreground)", marginBottom: "1rem" }}>
                 You haven't posted any threads yet.
               </p>
               <Link
@@ -315,7 +315,7 @@ export const ProfilePage: React.FC = () => {
         >
           <div
             style={{
-              backgroundColor: "#1a1a1a",
+              backgroundColor: "var(--card)",
               borderRadius: "12px",
               width: "100%",
               maxWidth: "480px",
@@ -339,7 +339,7 @@ export const ProfilePage: React.FC = () => {
                   margin: 0,
                   fontSize: "1.1rem",
                   fontWeight: 600,
-                  color: "#e5e5e5",
+                  color: "var(--foreground)",
                 }}
               >
                 Edit Profile
@@ -351,7 +351,7 @@ export const ProfilePage: React.FC = () => {
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: "#737373",
+                  color: "var(--muted-foreground)",
                   fontSize: "1.25rem",
                   display: "flex",
                 }}
@@ -376,12 +376,12 @@ export const ProfilePage: React.FC = () => {
                       width: "80px",
                       height: "80px",
                       borderRadius: "50%",
-                      backgroundColor: "#2a2a2a",
+                      backgroundColor: "var(--border)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: "2.5rem",
-                      color: "#525252",
+                      color: "var(--muted-foreground)",
                       overflow: "hidden",
                     }}
                   >
@@ -433,7 +433,7 @@ export const ProfilePage: React.FC = () => {
                   style={{ display: "none" }}
                   onChange={handleAvatarChange}
                 />
-                <span style={{ fontSize: "0.75rem", color: "#525252" }}>
+                <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)" }}>
                   JPEG / PNG, maks 2MB
                 </span>
                 {avatarError && (
@@ -457,7 +457,7 @@ export const ProfilePage: React.FC = () => {
                     display: "block",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "#a3a3a3",
+                    color: "var(--muted-foreground)",
                     marginBottom: "0.5rem",
                   }}
                 >
@@ -474,13 +474,13 @@ export const ProfilePage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "0.6rem 0.75rem",
-                    border: `1px solid ${formik.touched.username && formik.errors.username ? "#f87171" : "#333"}`,
+                    border: `1px solid ${formik.touched.username && formik.errors.username ? "#f87171" : "var(--border)"}`,
                     borderRadius: "6px",
                     fontSize: "0.875rem",
                     boxSizing: "border-box",
                     outline: "none",
-                    backgroundColor: "#0d0d0d",
-                    color: "#e5e5e5",
+                    backgroundColor: "var(--background)",
+                    color: "var(--foreground)",
                   }}
                 />
                 {formik.touched.username && formik.errors.username && (
@@ -504,7 +504,7 @@ export const ProfilePage: React.FC = () => {
                     display: "block",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "#a3a3a3",
+                    color: "var(--muted-foreground)",
                     marginBottom: "0.5rem",
                   }}
                 >
@@ -522,14 +522,14 @@ export const ProfilePage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "0.6rem 0.75rem",
-                    border: `1px solid ${formik.touched.bio && formik.errors.bio ? "#f87171" : "#333"}`,
+                    border: `1px solid ${formik.touched.bio && formik.errors.bio ? "#f87171" : "var(--border)"}`,
                     borderRadius: "6px",
                     fontSize: "0.875rem",
                     resize: "vertical",
                     boxSizing: "border-box",
                     outline: "none",
-                    backgroundColor: "#0d0d0d",
-                    color: "#e5e5e5",
+                    backgroundColor: "var(--background)",
+                    color: "var(--foreground)",
                   }}
                 />
                 <div
@@ -537,7 +537,7 @@ export const ProfilePage: React.FC = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     fontSize: "0.75rem",
-                    color: "#525252",
+                    color: "var(--muted-foreground)",
                   }}
                 >
                   <span style={{ color: "#f87171" }}>
@@ -555,12 +555,12 @@ export const ProfilePage: React.FC = () => {
                     display: "block",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "#a3a3a3",
+                    color: "var(--muted-foreground)",
                     marginBottom: "0.5rem",
                   }}
                 >
                   Password Baru{" "}
-                  <span style={{ color: "#525252", fontWeight: 400 }}>
+                  <span style={{ color: "var(--muted-foreground)", fontWeight: 400 }}>
                     (opsional)
                   </span>
                 </label>
@@ -575,13 +575,13 @@ export const ProfilePage: React.FC = () => {
                   style={{
                     width: "100%",
                     padding: "0.6rem 0.75rem",
-                    border: `1px solid ${formik.touched.password && formik.errors.password ? "#f87171" : "#333"}`,
+                    border: `1px solid ${formik.touched.password && formik.errors.password ? "#f87171" : "var(--border)"}`,
                     borderRadius: "6px",
                     fontSize: "0.875rem",
                     boxSizing: "border-box",
                     outline: "none",
-                    backgroundColor: "#0d0d0d",
-                    color: "#e5e5e5",
+                    backgroundColor: "var(--background)",
+                    color: "var(--foreground)",
                   }}
                 />
                 {formik.touched.password && formik.errors.password && (
@@ -606,7 +606,7 @@ export const ProfilePage: React.FC = () => {
                       display: "block",
                       fontSize: "0.875rem",
                       fontWeight: 500,
-                      color: "#a3a3a3",
+                      color: "var(--muted-foreground)",
                       marginBottom: "0.5rem",
                     }}
                   >
@@ -623,13 +623,13 @@ export const ProfilePage: React.FC = () => {
                     style={{
                       width: "100%",
                       padding: "0.6rem 0.75rem",
-                      border: `1px solid ${formik.touched.confirmPassword && formik.errors.confirmPassword ? "#f87171" : "#333"}`,
+                      border: `1px solid ${formik.touched.confirmPassword && formik.errors.confirmPassword ? "#f87171" : "var(--border)"}`,
                       borderRadius: "6px",
                       fontSize: "0.875rem",
                       boxSizing: "border-box",
                       outline: "none",
-                      backgroundColor: "#0d0d0d",
-                      color: "#e5e5e5",
+                      backgroundColor: "var(--background)",
+                      color: "var(--foreground)",
                     }}
                   />
                   {formik.touched.confirmPassword &&
@@ -650,17 +650,17 @@ export const ProfilePage: React.FC = () => {
               {/* Read-only info */}
               <div
                 style={{
-                  backgroundColor: "#222",
+                  backgroundColor: "var(--card)",
                   borderRadius: "6px",
                   padding: "0.75rem 1rem",
                   marginBottom: "1.5rem",
                   fontSize: "0.8rem",
-                  color: "#737373",
+                  color: "var(--muted-foreground)",
                 }}
               >
                 <div>
                   <strong>Email:</strong> {authUser.email}{" "}
-                  <span style={{ color: "#525252" }}>(tidak bisa diubah)</span>
+                  <span style={{ color: "var(--muted-foreground)" }}>(tidak bisa diubah)</span>
                 </div>
               </div>
 

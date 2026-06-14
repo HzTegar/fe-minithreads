@@ -136,7 +136,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             display: "block",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#a3a3a3",
+            color: "var(--muted-foreground)",
             marginBottom: "6px",
           }}
         >
@@ -151,10 +151,10 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             width: "100%",
             padding: "10px 12px",
             borderRadius: "6px",
-            border: "1px solid #333",
+            border: "1px solid var(--border)",
             fontSize: "15px",
-            backgroundColor: "#1a1a1a",
-            color: "#e5e5e5",
+            backgroundColor: "var(--card)",
+            color: "var(--foreground)",
           }}
         >
           <option value="" disabled>
@@ -179,7 +179,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             display: "block",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#a3a3a3",
+            color: "var(--muted-foreground)",
             marginBottom: "6px",
           }}
         >
@@ -201,9 +201,9 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
               flex: 1,
               padding: "8px",
               borderRadius: "6px",
-              border: "1px solid #333",
-              backgroundColor: "#1a1a1a",
-              color: "#e5e5e5",
+              border: "1px solid var(--border)",
+              backgroundColor: "var(--card)",
+              color: "var(--foreground)",
             }}
           />
           <button
@@ -238,8 +238,8 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
                   fontSize: "12px",
                   border: "none",
                   cursor: "pointer",
-                  backgroundColor: isSelected ? "#6366f1" : "#2a2a2a",
-                  color: isSelected ? "#ffffff" : "#a3a3a3",
+                  backgroundColor: isSelected ? tag.color : `${tag.color}1A`,
+                  color: isSelected ? "#ffffff" : tag.color,
                   transition: "all 0.2s",
                   fontWeight: isSelected ? 600 : 400,
                 }}
@@ -249,7 +249,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             );
           })}
         </div>
-        <p style={{ fontSize: "11px", color: "#737373", margin: "8px 0 0" }}>
+        <p style={{ fontSize: "11px", color: "var(--muted-foreground)", margin: "8px 0 0" }}>
           Select up to 5 tags to describe what your question is about.
         </p>
         {formik.errors.tags ? (
@@ -265,7 +265,7 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             display: "block",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#a3a3a3",
+            color: "var(--muted-foreground)",
             marginBottom: "6px",
           }}
         >
@@ -281,13 +281,13 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
             width: "100%",
             padding: "12px",
             borderRadius: "6px",
-            border: "1px solid #333",
+            border: "1px solid var(--border)",
             resize: "vertical",
             fontSize: "15px",
             fontFamily: "inherit",
             lineHeight: "1.5",
-            backgroundColor: "#1a1a1a",
-            color: "#e5e5e5",
+            backgroundColor: "var(--card)",
+            color: "var(--foreground)",
             boxSizing: "border-box",
           }}
           placeholder="Explain your problem in detail..."

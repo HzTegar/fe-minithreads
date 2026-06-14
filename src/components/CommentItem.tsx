@@ -237,6 +237,8 @@ interface CommentItemProps {
   onEditCancel: () => void;
   onDelete: (id: string) => void;
   onReply: (parentId: string, body: string) => void;
+  onAccept?: (commentId: string) => void;
+  isThreadOwner?: boolean;
 }
 
 export const CommentItem: React.FC<CommentItemProps> = ({
@@ -250,10 +252,13 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   onEditCancel,
   onDelete, 
   onReply,
+  onAccept,
+  isThreadOwner,
 }) => {
   const { user: currentUser } = useAuth();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isAcceptLoading, setIsAcceptLoading] = useState(false);
 
   const isEditing = activeEditId === comment.id;
 
@@ -275,28 +280,47 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   };
 
   return (
-    <div className="flex gap-4 py-4 border-b border-white/[0.08]">
+    <div className="flex gap-4 py-4 border-b border-border">
       <div className="flex flex-col items-center w-12 pt-1">
         <button
           onClick={() => onVote(comment.id, "up")}
-          className="text-neutral-500 hover:text-indigo-400 transition-colors text-3xl cursor-pointer"
+          className="text-muted-foreground hover:text-primary transition-colors text-3xl cursor-pointer"
         >
           <HiChevronUp />
         </button>
-        <span className="text-lg font-bold text-neutral-200 my-1">
+        <span className="text-lg font-bold text-foreground my-1">
           {comment.vote_score ?? 0}
         </span>
         <button
           onClick={() => onVote(comment.id, "down")}
-          className="text-neutral-500 hover:text-indigo-400 transition-colors text-3xl cursor-pointer"
+          className="text-muted-foreground hover:text-primary transition-colors text-3xl cursor-pointer"
         >
           <HiChevronDown />
         </button>
-        {comment.is_accepted && (
+        {isThreadOwner ? (
+          <button
+            onClick={() => {
+              if (isAcceptLoading) return;
+              setIsAcceptLoading(true);
+              Promise.resolve(onAccept?.(comment.id)).finally(() => setIsAcceptLoading(false));
+            }}
+            disabled={isAcceptLoading}
+            className={`mt-2 text-3xl transition-colors ${
+              isAcceptLoading
+                ? "text-muted-foreground animate-pulse cursor-not-allowed"
+                : "cursor-pointer " + (comment.is_accepted
+                    ? "text-emerald-500"
+                    : "text-muted-foreground hover:text-emerald-400")
+            }`}
+            title={comment.is_accepted ? "Cabut jawaban terbaik" : "Tandai sebagai jawaban terbaik"}
+          >
+            <HiCheckCircle />
+          </button>
+        ) : comment.is_accepted ? (
           <div className="text-emerald-500 mt-2 text-3xl">
             <HiCheckCircle />
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="flex-1 min-w-0">
@@ -305,19 +329,19 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             <textarea
               value={editingBody}
               onChange={(e) => onEditBodyChange(e.target.value)}
-              className="w-full bg-[#1a1a1a] border border-white/[0.08] text-white p-3 rounded-xl text-sm resize-y min-h-25 outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-card border border-border text-foreground p-3 rounded-xl text-sm resize-y min-h-25 outline-none focus:border-primary transition-colors"
               autoFocus
             />
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => onEditSave(comment.id)}
-                className="bg-white hover:bg-neutral-200 text-black font-semibold px-4 py-1.5 rounded-full text-xs transition-colors cursor-pointer"
+                className="bg-inverted-bg hover:bg-inverted-hover text-inverted font-semibold px-4 py-1.5 rounded-full text-xs transition-colors cursor-pointer"
               >
                 Save
               </button>
               <button
                 onClick={onEditCancel}
-                className="text-neutral-400 hover:text-white px-4 py-1.5 rounded-full text-xs border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer"
+                className="text-muted-foreground hover:text-foreground px-4 py-1.5 rounded-full text-xs border border-border hover:bg-accent transition-all cursor-pointer"
               >
                 Cancel
               </button>
@@ -325,21 +349,21 @@ export const CommentItem: React.FC<CommentItemProps> = ({
           </div>
         ) : (
           <div className="mb-4">
-            <div className="text-[0.925rem] leading-relaxed text-neutral-300 whitespace-pre-wrap break-all">
+            <div className="text-[0.925rem] leading-relaxed text-foreground whitespace-pre-wrap break-all">
               {comment.body}
             </div>
             {(comment.edit_count ?? 0) > 0 && (
-              <p className="text-[10px] text-neutral-500 italic mt-1">Edited</p>
+              <p className="text-[10px] text-muted-foreground italic mt-1">Edited</p>
             )}
           </div>
         )}
 
         <div className="flex justify-between items-center flex-wrap gap-2">
-          <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
             {currentUser && !isEditing && (
               <button
                 onClick={() => setShowReplyForm((v) => !v)}
-                className="hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition-colors"
+                className="hover:text-primary flex items-center gap-1 cursor-pointer transition-colors"
               >
                 <HiReply className="w-3.5 h-3.5" />{" "}
                 {showReplyForm ? "Cancel Reply" : "Reply"}
@@ -349,18 +373,18 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             {currentUser && !isOwner && !isEditing && (
               <button 
                 onClick={() => setIsReportOpen(true)}
-                className="hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition-colors"
+                className="hover:text-primary flex items-center gap-1 cursor-pointer transition-colors"
               >
                 <HiFlag className="w-3.5 h-3.5" />
                 Report
               </button>
             )}
 
-            {/* Tombol Edit (Cuma muncul buat yang bikin komentar) */}
-            {isOwner && !isEditing && (
+            {/* Tombol Edit (Cuma muncul buat yang bikin komentar, maksimal 1x) */}
+            {isOwner && !isEditing && (comment.edit_count ?? 0) < 1 && (
               <button
                 onClick={() => onEdit(comment)}
-                className="hover:text-indigo-400 flex items-center gap-1 text-indigo-500 font-medium cursor-pointer transition-colors"
+                className="hover:text-primary flex items-center gap-1 text-primary font-medium cursor-pointer transition-colors"
               >
                 <HiPencilAlt className="w-3.5 h-3.5" /> Edit
               </button>
@@ -384,13 +408,13 @@ export const CommentItem: React.FC<CommentItemProps> = ({
         </div>
 
         {showReplyForm && (
-          <div className="mt-4 pl-4 border-l-2 border-white/[0.08]">
+          <div className="mt-4 pl-4 border-l-2 border-border">
             <CommentForm onSubmit={handleReplySubmit} />
           </div>
         )}
 
         {comment.replies && comment.replies.length > 0 && (
-          <div className="mt-4 pl-4 border-l-2 border-white/[0.08] space-y-2">
+          <div className="mt-4 pl-4 border-l-2 border-border space-y-2">
             {comment.replies.map((reply) => (
               <CommentItem
                 key={reply.id}

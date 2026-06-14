@@ -6,6 +6,17 @@ import type { Category } from '../../../types/category.type';
 import { userService } from '../../../services/userService';
 import { useAuth } from '../../../hooks/useAuth';
 import { authStore } from '../../../store/authStore';
+import { api } from '../../../services/api';
+import type { Thread } from '../../../types/thread.type';
+import type { User } from '../../../types/user.type';
+
+interface SearchResults {
+  posts: Thread[];
+  users: User[];
+  tags: any[];
+  categories: any[];
+  comments: any[];
+}
 
 export const useHomePage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -16,12 +27,40 @@ export const useHomePage = () => {
   const [selectedCat, setSelectedCat] = useState<Category | null>(null);
   const [catDeleteTarget, setCatDeleteTarget] = useState<Category | null>(null);
   const [isCatDeleting, setIsCatDeleting] = useState(false);
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(null);
   const { user, isAuthenticated } = useAuth();
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const { data: searchData, isLoading: isSearchFetching } = useQuery<SearchResults>({
+    queryKey: ['home-search', debouncedSearch],
+    queryFn: async () => {
+      if (!debouncedSearch.trim()) {
+        return { posts: [], users: [], tags: [], categories: [], comments: [] };
+      }
+      const response = await api.get<{ data: SearchResults }>(
+        `/search/global?keyword=${encodeURIComponent(debouncedSearch)}`
+      );
+      return response.data || { posts: [], users: [], tags: [], categories: [], comments: [] };
+    },
+    enabled: debouncedSearch.length >= 1,
+  });
+
+  const searchResults = searchData ?? { posts: [], users: [], tags: [], categories: [], comments: [] };
+  const isSearchActive = debouncedSearch.length >= 1;
+  const isSearchLoading = searchQuery !== debouncedSearch || isSearchFetching;
 
   // Fetch all threads with React Query
   const { data: threads = [], isLoading: isLoadingThreads } = useQuery({
-    queryKey: ['threads'],
-    queryFn: () => threadService.getAll(),
+    queryKey: ['threads', selectedCategorySlug],
+    queryFn: () => threadService.getAll({ ...(selectedCategorySlug ? { category: selectedCategorySlug } : {}), status: 'open' }),
   });
 
   // Refresh user data from server with React Query
@@ -159,5 +198,12 @@ export const useHomePage = () => {
     closeCatModal,
     handleCatSubmit,
     handleCatDelete,
+    searchQuery,
+    setSearchQuery,
+    searchResults,
+    isSearchActive,
+    isSearchLoading,
+    selectedCategorySlug,
+    setSelectedCategorySlug,
   };
 };
