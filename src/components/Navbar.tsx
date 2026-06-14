@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { authStore } from "../store/authStore";
 import { ThemeToggle } from "./ThemeToggle";
 import { resolveAvatarUrl } from "../utils/constants";
+import { useTheme } from "../hooks/useTheme";
 
 export const Navbar: React.FC = () => {
   const [authState, setAuthState] = useState(authStore.getState());
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     return authStore.subscribe((state) => setAuthState(state));
@@ -38,7 +40,7 @@ export const Navbar: React.FC = () => {
           {/* ── Logo ── */}
           <Link to="/" className="hover:opacity-80 transition-opacity">
             <img
-              src="/logo-minithreads.png"
+              src={isDark ? "/logo-minithreads.png" : "/logo-minithreads-light.png"}
               alt="MiniThreads"
               className="h-10 w-auto"
             />
