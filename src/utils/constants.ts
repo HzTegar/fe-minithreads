@@ -1,6 +1,28 @@
 export const API_BASE_URL = "http://127.0.0.1:8000/api";
 
+// Base URL backend tanpa "/api", dipakai untuk akses file di /storage
+export const BACKEND_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
+
 export const APP_NAME = 'MiniThreads';
+
+/**
+ * Ubah path avatar relatif dari backend (mis. "/storage/avatars/xxx.jpg")
+ * menjadi full URL ke backend (mis. "http://127.0.0.1:8000/storage/avatars/xxx.jpg").
+ * Kalau sudah full URL (http/https), data:, atau blob:, dibiarkan apa adanya.
+ */
+export const resolveAvatarUrl = (url?: string | null): string | null => {
+  if (!url) return null;
+  if (
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("data:") ||
+    url.startsWith("blob:")
+  ) {
+    return url;
+  }
+  const path = url.startsWith("/") ? url : `/${url}`;
+  return `${BACKEND_BASE_URL}${path}`;
+};
 
 export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',

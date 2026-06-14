@@ -13,84 +13,141 @@ interface ThreadHistoryModalProps {
 }
 
 export const ThreadHistoryModal = ({ histories }: ThreadHistoryModalProps) => {
-  // Kalau nggak ada riwayat, komponen nggak akan muncul
   if (!histories || histories.length === 0) return null;
 
-  // Urutkan otomatis dari edit_number paling tinggi (terbaru) ke terlama
   const sortedHistories = [...histories].sort((a, b) => b.edit_number - a.edit_number);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          Lihat Riwayat Edit ({histories.length}/3)
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-1.5 text-xs border-border bg-transparent text-muted-foreground hover:text-foreground hover:bg-accent hover:border-border transition-all"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-3.5 h-3.5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+          Riwayat Edit ({histories.length}/3)
         </Button>
       </DialogTrigger>
-      
-      {/* max-w-6xl mengubah ukuran pop-up jadi jauh lebih lebar dan lega */}
-      <DialogContent className="max-w-6xl max-h-[85vh] overflow-y-auto w-[95vw]">
-        <DialogHeader className="border-b pb-2">
-          <DialogTitle className="text-xl font-semibold text-slate-800">
+
+      <DialogContent className="max-w-6xl max-h-[85vh] overflow-y-auto w-[95vw] bg-card border border-border text-foreground p-0">
+        <DialogHeader className="border-b border-border px-6 py-4">
+          <DialogTitle className="text-base font-semibold text-foreground flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-4 h-4 text-primary"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
             Riwayat Perubahan Thread
           </DialogTitle>
         </DialogHeader>
-        
-        <div className="space-y-6 mt-4">
+
+        <div className="space-y-4 p-6">
           {sortedHistories.map((history) => {
-            // Format parameter created_at jadi format tanggal lokal Indonesia yang rapi
             const formattedDate = new Date(history.created_at).toLocaleString("id-ID", {
               dateStyle: "medium",
               timeStyle: "short",
             });
 
             return (
-              <div key={history.id} className="border rounded-xl overflow-hidden shadow-sm bg-slate-50/50 w-full">
-                
-                {/* Bagian Metadata: Menampilkan edit_number, user_id, dan created_at */}
-                <div className="bg-slate-100 px-4 py-2.5 flex flex-wrap justify-between items-center gap-2 border-b text-xs text-slate-600">
-                  <span className="font-bold text-slate-700 bg-white border px-2.5 py-1 rounded-md shadow-sm">
+              <div
+                key={history.id}
+                className="border border-border rounded-xl overflow-hidden bg-card"
+              >
+                {/* Metadata bar */}
+                <div className="bg-muted px-4 py-2.5 flex flex-wrap justify-between items-center gap-2 border-b border-border text-xs text-muted-foreground">
+                  <span className="font-bold text-primary bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-md">
                     Edit ke-{history.edit_number}
                   </span>
-                  
-                  <div className="flex flex-wrap items-center gap-4">
-                    <span className="bg-white/80 px-2.5 py-1 rounded-md border border-slate-200">
-                      Editor User ID: <strong className="text-slate-800">{history.user_id}</strong>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="bg-muted px-2.5 py-1 rounded-md border border-border flex items-center gap-1.5">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-3 h-3 text-muted-foreground"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                        />
+                      </svg>
+                      Editor ID:{" "}
+                      <strong className="text-foreground">{history.user_id}</strong>
                     </span>
-                    <span className="bg-white/80 px-2.5 py-1 rounded-md border border-slate-200">
-                      Waktu Perubahan: <strong className="text-slate-800">{formattedDate}</strong>
+                    <span className="bg-muted px-2.5 py-1 rounded-md border border-border flex items-center gap-1.5">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-3 h-3 text-muted-foreground"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                      </svg>
+                      <strong className="text-foreground">{formattedDate}</strong>
                     </span>
                   </div>
                 </div>
 
-                {/* Grid Konten Perbandingan (dikunci pakai w-full & min-w-0) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white w-full">
-                  
-                  {/* Kolom Kiri: Versi Lama (old_title & old_body) */}
-                  <div className="bg-red-50/50 p-4 rounded-lg border border-red-100 min-w-0 w-full">
-                    <span className="text-[10px] font-extrabold text-red-600 tracking-wider bg-red-100/60 px-2 py-0.5 rounded mb-3 inline-block">
+                {/* Comparison grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                  {/* Sebelumnya */}
+                  <div className="bg-red-500/[0.05] p-4 rounded-lg border border-red-500/[0.15] min-w-0 w-full">
+                    <span className="text-[10px] font-extrabold text-red-400 tracking-wider bg-red-500/10 px-2 py-0.5 rounded mb-3 inline-block">
                       SEBELUMNYA
                     </span>
-                    <p className="font-bold text-slate-800 mb-2 break-all text-base border-b border-dashed border-red-200 pb-1">
+                    <p className="font-semibold text-foreground mb-2 break-all text-sm border-b border-red-500/[0.15] pb-2">
                       {history.old_title}
                     </p>
-                    <p className="text-sm text-slate-600 whitespace-pre-wrap break-all leading-relaxed">
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap break-all leading-relaxed">
                       {history.old_body}
                     </p>
                   </div>
 
-                  {/* Kolom Kanan: Versi Baru (new_title & new_body) */}
-                  <div className="bg-green-50/50 p-4 rounded-lg border border-green-100 min-w-0 w-full">
-                    <span className="text-[10px] font-extrabold text-green-600 tracking-wider bg-green-100/60 px-2 py-0.5 rounded mb-3 inline-block">
+                  {/* Sesudahnya */}
+                  <div className="bg-emerald-500/[0.05] p-4 rounded-lg border border-emerald-500/[0.15] min-w-0 w-full">
+                    <span className="text-[10px] font-extrabold text-emerald-400 tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded mb-3 inline-block">
                       SESUDAHNYA
                     </span>
-                    <p className="font-bold text-slate-800 mb-2 break-all text-base border-b border-dashed border-green-200 pb-1">
+                    <p className="font-semibold text-foreground mb-2 break-all text-sm border-b border-emerald-500/[0.15] pb-2">
                       {history.new_title}
                     </p>
-                    <p className="text-sm text-slate-600 whitespace-pre-wrap break-all leading-relaxed">
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap break-all leading-relaxed">
                       {history.new_body}
                     </p>
                   </div>
-
                 </div>
               </div>
             );

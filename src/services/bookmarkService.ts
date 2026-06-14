@@ -8,7 +8,7 @@ export const bookmarkService = {
   },
 
   toggle: async (postId: string): Promise<{ is_bookmarked: boolean }> => {
-    const response = await api.post<any>(`/posts/${postId}/bookmark`, {});
+    const response = await api.post<{ is_bookmarked: boolean }>(`/posts/${postId}/bookmark`, {});
     return response;
   },
 };

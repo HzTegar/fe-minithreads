@@ -4,6 +4,7 @@ import { Input } from '../../../components/common/Input';
 import { Button } from '../../../components/common/Button';
 import { APP_NAME } from '../../../utils/constants';
 import { useRegisterPage } from '../logic/RegisterPage';
+import { ThemeToggle } from '../../../components/ThemeToggle';
 
 export const RegisterPage: React.FC = () => {
   const {
@@ -13,10 +14,13 @@ export const RegisterPage: React.FC = () => {
   } = useRegisterPage();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0d0d0d' }}>
-      <div style={{ maxWidth: '400px', width: '100%', padding: '2rem', backgroundColor: '#1a1a1a', borderRadius: '12px', border: '1px solid #2a2a2a', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
-        <h1 style={{ textAlign: 'center', color: '#818cf8', marginBottom: '0.5rem' }}>{APP_NAME}</h1>
-        <h2 style={{ textAlign: 'center', fontSize: '1.25rem', marginBottom: '2rem', color: '#d4d4d4' }}>Create an account</h2>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--background)', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+        <ThemeToggle />
+      </div>
+      <div style={{ maxWidth: '400px', width: '100%', padding: '2rem', backgroundColor: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
+        <h1 style={{ textAlign: 'center', color: 'var(--primary)', marginBottom: '0.5rem' }}>{APP_NAME}</h1>
+        <h2 style={{ textAlign: 'center', fontSize: '1.25rem', marginBottom: '2rem', color: 'var(--foreground)' }}>Create an account</h2>
         
         {error && <p style={{ color: '#f87171', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}
 
@@ -81,11 +85,10 @@ export const RegisterPage: React.FC = () => {
           </Button>
         </form>
         
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: '#737373', fontSize: '0.875rem' }}>
-          Already have an account? <Link to="/login" style={{ color: '#818cf8', textDecoration: 'none', fontWeight: 500 }}>Sign In</Link>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--muted-foreground)', fontSize: '0.875rem' }}>
+          Already have an account? <Link to="/login" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 500 }}>Sign In</Link>
         </p>
       </div>
     </div>
   );
 };
-

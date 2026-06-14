@@ -8,7 +8,6 @@ import { CreateThreadPage } from "../pages/(main)/view/CreateThreadPageView";
 import { EditThreadPage } from "../pages/(main)/view/EditThreadPageView";
 import { ProfilePage } from "../pages/(main)/view/ProfilePageView";
 import { UserProfilePage } from "../pages/(main)/view/UserProfilePageView";
-import { SearchPage } from "../pages/(main)/view/SearchPageView";
 import { NotificationsPage } from "../pages/(main)/view/NotificationsPageView";
 import { BookmarksPage } from "../pages/(main)/view/BookmarksPageView";
 import { AdminReportsPage } from "../pages/(admin)/view/AdminReportsPageView";
@@ -24,7 +23,6 @@ export const AppRoutes: React.FC = () => {
         <Route path="/create-thread" element={<CreateThreadPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/users/:username" element={<UserProfilePage />} />
-        <Route path="/search" element={<SearchPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/thread/:id" element={<ThreadDetailPage />} />

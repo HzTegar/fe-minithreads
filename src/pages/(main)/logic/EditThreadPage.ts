@@ -2,13 +2,14 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { threadService } from "../../../services/threadService";
 import { useAuth } from "../../../hooks/useAuth";
+import type { Thread, CreateThreadInput } from "../../../types/thread.type";
 
 export const useEditThreadPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user: currentUser } = useAuth();
 
-  const [thread, setThread] = useState<any>(null);
+  const [thread, setThread] = useState<Thread | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,7 +47,7 @@ export const useEditThreadPage = () => {
     fetchThread();
   }, [id, currentUser?.id, isModerator, navigate]);
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: Partial<CreateThreadInput>) => {
     // Tombol akan menolak aksi jika edit_count sudah >= 3 untuk siapapun
     if (isLimitReached) {
       alert("Limit edit 3x sudah tercapai.");
@@ -57,9 +58,9 @@ export const useEditThreadPage = () => {
     try {
       await threadService.update(id!, formData);
       navigate(`/thread/${id}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMsg =
-        err.response?.data?.message || err.message || "Gagal mengupdate thread";
+        err instanceof Error ? err.message : "Gagal mengupdate thread";
       alert(errorMsg);
     } finally {
       setIsSubmitting(false);

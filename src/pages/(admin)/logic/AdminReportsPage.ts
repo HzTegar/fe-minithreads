@@ -71,8 +71,8 @@ export const useAdminReportsPage = () => {
         setActionSuccess(null);
       }, 3500);
     },
-    onError: (err: any) => {
-      setActionError(err?.message || 'Gagal mengubah status laporan.');
+    onError: (err: unknown) => {
+      setActionError(err instanceof Error ? err.message : 'Gagal mengubah status laporan.');
       setTimeout(() => {
         setActionError(null);
       }, 3500);
@@ -108,7 +108,7 @@ export const useAdminReportsPage = () => {
     pagination,
     isLoadingReports,
     isErrorReports,
-    reportsError: (reportsError as any)?.message || null,
+    reportsError: reportsError instanceof Error ? reportsError.message : null,
     selectedReport: selectedReportDetail || null,
     isLoadingDetail,
     statusFilter,

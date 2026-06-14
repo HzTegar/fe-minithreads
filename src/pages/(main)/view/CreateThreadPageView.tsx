@@ -11,10 +11,10 @@ export const CreateThreadPage: React.FC = () => {
   } = useCreateThreadPage();
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+    <div className="bg-background min-h-screen text-foreground">
       <Navbar />
       <main className="max-w-[1100px] mx-auto py-8 px-4 flex gap-8">
-        <div className="flex-1 bg-[#1a1a1a] p-8 rounded-xl border border-[#2a2a2a]">
+        <div className="flex-1 bg-card p-8 rounded-xl border border-border">
           <h1 className="text-2xl font-bold mb-8">Ask a public question</h1>
           
           {error && (
@@ -27,14 +27,14 @@ export const CreateThreadPage: React.FC = () => {
         </div>
 
         <aside className="w-[300px] hidden lg:block">
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl overflow-hidden">
-            <div className="bg-[#222] p-3 border-b border-[#2a2a2a] font-medium text-[15px] text-neutral-300">
+          <div className="bg-card border border-border rounded-xl overflow-hidden">
+            <div className="bg-muted p-3 border-b border-border font-medium text-[15px] text-foreground">
               Step 1: Draft your question
             </div>
-            <div className="p-4 text-sm text-neutral-400 space-y-4">
+            <div className="p-4 text-sm text-muted-foreground space-y-4">
               <p>The community is here to help you with specific coding, algorithm, or language problems.</p>
               <p>Avoid asking opinion-based questions.</p>
-              <ul className="list-disc pl-4 space-y-2 text-neutral-500">
+              <ul className="list-disc pl-4 space-y-2 text-muted-foreground">
                 <li>Summarize your problem in a one-line title.</li>
                 <li>Describe your problem in more detail.</li>
                 <li>Describe what you tried and what you expected to happen.</li>

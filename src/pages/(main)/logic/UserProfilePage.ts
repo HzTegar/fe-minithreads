@@ -63,8 +63,8 @@ export const useUserProfilePage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-profile", username] });
     },
-    onError: (err: any) => {
-      alert(err.message || "Gagal mengikuti user.");
+    onError: (err: unknown) => {
+      alert(err instanceof Error ? err.message : "Gagal mengikuti user.");
     },
   });
 
@@ -80,8 +80,8 @@ export const useUserProfilePage = () => {
       );
       queryClient.invalidateQueries({ queryKey: ["user-profile", username] });
       setRoleMessage(result.message);
-    } catch (err: any) {
-      setRoleError(err.message || "Gagal mengubah role user.");
+    } catch (err: unknown) {
+      setRoleError(err instanceof Error ? err.message : "Gagal mengubah role user.");
     } finally {
       setIsRoleUpdating(false);
     }

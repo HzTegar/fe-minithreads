@@ -5,6 +5,7 @@ import { ThreadCard } from "../../../components/ThreadCard";
 import { useUserProfilePage } from "../logic/UserProfilePage";
 import { ReportModal } from "../../../components/common/ReportModal";
 import { HiUser, HiUserAdd, HiUserRemove } from "react-icons/hi";
+import { resolveAvatarUrl } from "../../../utils/constants";
 
 export const UserProfilePage: React.FC = () => {
   const {
@@ -17,22 +18,15 @@ export const UserProfilePage: React.FC = () => {
     followersCount,
     isFollowLoading,
     handleToggleFollow,
-    canAssignRole,
-    selectedRole,
-    setSelectedRole,
-    isRoleUpdating,
-    roleMessage,
-    roleError,
-    handleAssignRole,
   } = useUserProfilePage();
 
   const [isReportOpen, setIsReportOpen] = useState(false);
 
   if (isLoading)
     return (
-      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+      <div className="bg-background min-h-screen text-foreground">
         <Navbar />
-        <div className="text-center mt-12 text-neutral-500">
+        <div className="text-center mt-12 text-muted-foreground">
           Loading profile...
         </div>
       </div>
@@ -40,18 +34,19 @@ export const UserProfilePage: React.FC = () => {
 
   if (notFound || !profile)
     return (
-      <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+      <div className="bg-background min-h-screen text-foreground">
         <Navbar />
-        <div className="text-center mt-12 text-neutral-500">
+        <div className="text-center mt-12 text-muted-foreground">
           User tidak ditemukan.
         </div>
       </div>
     );
 
   const { user, threads } = profile;
+  const avatarSrc = resolveAvatarUrl(user.avatar_url);
 
   return (
-    <div className="bg-[#0d0d0d] min-h-screen text-neutral-100">
+    <div className="bg-background min-h-screen text-foreground">
       <Navbar />
       <main
         style={{ maxWidth: "800px", margin: "2rem auto", padding: "0 1rem" }}
@@ -59,7 +54,7 @@ export const UserProfilePage: React.FC = () => {
         {/* Profile Card */}
         <div
           style={{
-            backgroundColor: "#1a1a1a",
+            backgroundColor: "var(--card)",
             padding: "2rem",
             borderRadius: "12px",
             border: "1px solid #2a2a2a",
@@ -72,19 +67,19 @@ export const UserProfilePage: React.FC = () => {
               width: "100px",
               height: "100px",
               borderRadius: "50%",
-              backgroundColor: "#2a2a2a",
+              backgroundColor: "var(--border)",
               margin: "0 auto 1rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: "3rem",
-              color: "#525252",
+              color: "var(--muted-foreground)",
               overflow: "hidden",
             }}
           >
-            {user.avatar_url ? (
+            {avatarSrc ? (
               <img
-                src={user.avatar_url}
+                src={avatarSrc}
                 alt={user.username}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
@@ -120,7 +115,7 @@ export const UserProfilePage: React.FC = () => {
             </span>
           </div>
 
-          <h1 style={{ margin: "0 0 0.5rem 0", fontSize: "1.5rem", color: "#e5e5e5" }}>
+          <h1 style={{ margin: "0 0 0.5rem 0", fontSize: "1.5rem", color: "var(--foreground)" }}>
             {user.username}
           </h1>
 
@@ -129,7 +124,7 @@ export const UserProfilePage: React.FC = () => {
               style={{
                 maxWidth: "500px",
                 margin: "0 auto 1.25rem",
-                color: "#a3a3a3",
+                color: "var(--muted-foreground)",
                 fontSize: "0.9rem",
               }}
             >
@@ -193,90 +188,6 @@ export const UserProfilePage: React.FC = () => {
             </div>
           )}
 
-          {/* [Admin Only] Switch Role Panel */}
-          {canAssignRole && (
-            <div
-              style={{
-                marginBottom: "1.5rem",
-                padding: "0.75rem 1rem",
-                backgroundColor: "#222",
-                border: "1px solid #333",
-                borderRadius: "8px",
-                textAlign: "left",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
-                  gap: "0.5rem",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "0.85rem",
-                    color: "#a3a3a3",
-                    fontWeight: 600,
-                  }}
-                >
-                  Switch Current Role:
-                </span>
-
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <select
-                    value={selectedRole}
-                    onChange={(e) =>
-                      setSelectedRole(e.target.value as "admin" | "moderator")
-                    }
-                    style={{
-                      padding: "0.4rem 0.6rem",
-                      borderRadius: "6px",
-                      border: "1px solid #404040",
-                      fontSize: "0.85rem",
-                      backgroundColor: "#1a1a1a",
-                      color: "#e5e5e5",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <option value="admin">Admin</option>
-                    <option value="moderator">Moderator</option>
-                  </select>
-
-                  <button
-                    onClick={handleAssignRole}
-                    disabled={isRoleUpdating}
-                    style={{
-                      padding: "0.4rem 1rem",
-                      borderRadius: "6px",
-                      border: "none",
-                      backgroundColor: "#6366f1",
-                      color: "white",
-                      fontSize: "0.85rem",
-                      fontWeight: 600,
-                      cursor: isRoleUpdating ? "not-allowed" : "pointer",
-                      opacity: isRoleUpdating ? 0.7 : 1,
-                    }}
-                  >
-                    {isRoleUpdating ? "Menyimpan..." : "Update Role"}
-                  </button>
-                </div>
-              </div>
-
-              {roleMessage && (
-                <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", color: "#4ade80" }}>
-                  {roleMessage}
-                </p>
-              )}
-              {roleError && (
-                <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", color: "#f87171" }}>
-                  {roleError}
-                </p>
-              )}
-            </div>
-          )}
-
           {/* Stats */}
           <div
             style={{
@@ -292,7 +203,7 @@ export const UserProfilePage: React.FC = () => {
               <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {(user.reputation_points ?? 0).toLocaleString()}
               </div>
-              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Reputation
               </div>
             </div>
@@ -300,7 +211,7 @@ export const UserProfilePage: React.FC = () => {
               <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {threads.length}
               </div>
-              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Threads
               </div>
             </div>
@@ -308,7 +219,7 @@ export const UserProfilePage: React.FC = () => {
               <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {followersCount}
               </div>
-              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Followers
               </div>
             </div>
@@ -316,7 +227,7 @@ export const UserProfilePage: React.FC = () => {
               <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#818cf8" }}>
                 {user.following_count ?? 0}
               </div>
-              <div style={{ fontSize: "0.7rem", color: "#737373", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Following
               </div>
             </div>
@@ -337,12 +248,12 @@ export const UserProfilePage: React.FC = () => {
               style={{
                 textAlign: "center",
                 padding: "2rem",
-                backgroundColor: "#1a1a1a",
+                backgroundColor: "var(--card)",
                 border: "1px solid #2a2a2a",
                 borderRadius: "12px",
               }}
             >
-              <p style={{ color: "#737373" }}>User ini belum punya threads.</p>
+              <p style={{ color: "var(--muted-foreground)" }}>User ini belum punya threads.</p>
             </div>
           )}
         </div>

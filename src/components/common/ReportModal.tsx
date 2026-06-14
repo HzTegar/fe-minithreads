@@ -54,9 +54,10 @@ export const ReportModal: React.FC<ReportModalProps> = ({
         setDescription('');
         setSuccess(null);
       }, 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Gagal mengirim laporan. Silakan coba lagi.';
       console.error(err);
-      setError(err?.message || 'Gagal mengirim laporan. Silakan coba lagi.');
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -90,13 +91,13 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     >
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: '#0f172a',
           borderRadius: '12px',
           width: '100%',
           maxWidth: '480px',
           overflow: 'hidden',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          border: '1px solid #f1f5f9',
+          border: '1px solid #1e293b',
           animation: 'modalFadeIn 0.2s ease-out',
         }}
       >
@@ -107,14 +108,15 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1.25rem 1.5rem',
-            borderBottom: '1px solid #f1f5f9',
+            borderBottom: '1px solid #1e293b',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ color: '#ef4444', fontSize: '1.25rem', display: 'flex' }}>
               ⚠️
             </span>
-            <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: '#1e293b' }}>
+            {/* 1. MENGUBAH WARNA JUDUL LAPORAN MENJADI PUTIH (#ffffff) */}
+            <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: '#ffffff' }}>
               Laporkan {getTypeName()}
             </h2>
           </div>
@@ -133,7 +135,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
               borderRadius: '50%',
               transition: 'background-color 0.2s',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f1f5f9')}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1e293b')}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
           >
             ✕
@@ -144,15 +146,16 @@ export const ReportModal: React.FC<ReportModalProps> = ({
         <form onSubmit={handleSubmit}>
           <div style={{ padding: '1.5rem' }}>
             {targetTitle && (
+              /* 2. MENGUBAH BACKGROUND KOTAK INFO KONTEN MENJADI GELAP (#1e293b) DAN TEKS MENJADI PUTIH (#ffffff) */
               <div
                 style={{
-                  backgroundColor: '#f8fafc',
+                  backgroundColor: '#1e293b',
                   borderLeft: '4px solid #3b82f6',
                   padding: '0.75rem 1rem',
                   borderRadius: '0 6px 6px 0',
                   marginBottom: '1.25rem',
                   fontSize: '0.875rem',
-                  color: '#475569',
+                  color: '#ffffff',
                 }}
               >
                 <strong>Konten:</strong> "{targetTitle}"

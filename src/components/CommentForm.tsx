@@ -32,7 +32,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({ onSubmit, isLoading, p
         value={formik.values.content}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
-        className="w-full bg-[#1a1a1a] border border-white/[0.08] text-white p-3 rounded-xl min-h-[100px] outline-none placeholder:text-neutral-600 focus:border-indigo-500 transition-colors box-border"
+        className="w-full bg-card border border-border text-foreground p-3 rounded-xl min-h-[100px] outline-none placeholder:text-muted-foreground focus:border-primary transition-colors box-border"
         placeholder={placeholder}
       />
       {formik.touched.content && formik.errors.content ? (

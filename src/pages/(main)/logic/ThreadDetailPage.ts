@@ -18,6 +18,7 @@ export const useThreadDetailPage = () => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editingBody, setEditingBody] = useState("");
+  const [isArchiving, setIsArchiving] = useState(false);
 
   const canModerate =
     currentUser?.level === "admin" || currentUser?.level === "moderator";
@@ -33,6 +34,8 @@ export const useThreadDetailPage = () => {
   const comments: Comment[] = (thread?.comments || []).filter(
     (c: Comment) => !c.parent_id,
   );
+
+  const isClosed = thread?.status === 'closed';
 
   const isLimitReached = useMemo(() => {
     if (!thread) return false;
@@ -56,8 +59,8 @@ export const useThreadDetailPage = () => {
     try {
       await threadService.vote(id, type);
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
-      alert(error.message || "Failed to vote");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to vote");
     }
   };
 
@@ -66,7 +69,7 @@ export const useThreadDetailPage = () => {
     try {
       await threadService.like(id);
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
     }
   };
@@ -77,8 +80,22 @@ export const useThreadDetailPage = () => {
     try {
       await threadService.delete(id);
       navigate("/");
-    } catch (error: any) {
-      alert(error.message || "Failed to delete thread");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to delete thread");
+    }
+  };
+
+  const handleToggleArchive = async () => {
+    if (!id) return;
+    setIsArchiving(true);
+    try {
+      await threadService.toggleArchive(id);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Gagal mengarsipkan thread";
+      alert(message);
+    } finally {
+      setIsArchiving(false);
     }
   };
 
@@ -90,8 +107,8 @@ export const useThreadDetailPage = () => {
     try {
       await commentService.create(id, { body });
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
-      alert(error.message || "Failed to post answer");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to post answer");
     } finally {
       setIsSubmitting(false);
     }
@@ -105,8 +122,8 @@ export const useThreadDetailPage = () => {
         parent_id: parentId,
       });
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
-      alert(error.message || "Failed to post reply");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to post reply");
     }
   };
 
@@ -114,8 +131,8 @@ export const useThreadDetailPage = () => {
     try {
       await commentService.vote(commentId, type);
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
-      alert(error.message || "Failed to vote on comment");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to vote on comment");
     }
   };
 
@@ -135,8 +152,8 @@ export const useThreadDetailPage = () => {
       await commentService.update(commentId, { body: editingBody });
       cancelEditComment();
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
-      alert(error.message || "Failed to update comment");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to update comment");
     }
   };
 
@@ -145,8 +162,20 @@ export const useThreadDetailPage = () => {
     try {
       await commentService.delete(commentId);
       queryClient.invalidateQueries({ queryKey: ["thread", id] });
-    } catch (error: any) {
-      alert(error.message || "Failed to delete comment");
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Failed to delete comment");
+    }
+  };
+
+  const handleToggleAccept = async (commentId: string) => {
+    if (!id) return;
+    try {
+      await commentService.toggleAccept(id, commentId);
+      queryClient.invalidateQueries({ queryKey: ["thread", id] });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Gagal mengubah jawaban terbaik";
+      console.error('Toggle accept error:', error);
+      alert(message);
     }
   };
 
@@ -161,6 +190,8 @@ export const useThreadDetailPage = () => {
     canModerate,
     isOwner,
     isLimitReached,
+    isClosed,
+    isArchiving,
     editingCommentId,
     editingBody,
     setEditingBody,
@@ -168,6 +199,7 @@ export const useThreadDetailPage = () => {
     handleVote,
     handleLike,
     handleDelete,
+    handleToggleArchive,
     handleCommentSubmit,
     handleReplySubmit,
     handleCommentVote,
@@ -175,5 +207,6 @@ export const useThreadDetailPage = () => {
     cancelEditComment,
     handleCommentUpdate,
     handleCommentDelete,
+    handleToggleAccept,
   };
 };

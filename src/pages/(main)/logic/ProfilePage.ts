@@ -6,7 +6,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { userService } from '../../../services/userService';
 import { threadService } from '../../../services/threadService';
 import { authStore } from '../../../store/authStore';
-import type { UserLevel, ProfileFormValues } from '../../../types/user.type';
+import type { ProfileFormValues } from '../../../types/user.type';
 import { profileInitialValues, profileValidationSchema } from '../../../types/user.type';
 
 export const useProfilePage = () => {
@@ -142,10 +142,10 @@ export const useProfilePage = () => {
     setAvatarFile(file);
     setAvatarPreview(URL.createObjectURL(file));
   };
-  const handleLevelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (authUser) {
-      authStore.updateUser({ ...authUser, level: e.target.value as UserLevel });
-    }
+
+  // Navigate ke form tambah thread baru
+  const handleAskQuestion = () => {
+    navigate('/create-thread');
   };
 
   const handleLogout = () => {
@@ -172,7 +172,7 @@ export const useProfilePage = () => {
     openEdit,
     closeEdit,
     handleAvatarChange,
-    handleLevelChange,
+    handleAskQuestion, // 👈 expose ke component
     handleLogout,
   };
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { HiUser } from 'react-icons/hi';
+import { resolveAvatarUrl } from '../../utils/constants';
 
 interface UserAvatarProps {
   username?: string | null;
@@ -10,6 +11,7 @@ interface UserAvatarProps {
 
 /**
  * Renders user avatar image if available, otherwise a 2-letter initial fallback.
+ * Shape: always circle. Avatar URL is resolved to full backend URL automatically.
  */
 export const UserAvatar: React.FC<UserAvatarProps> = ({
   username,
@@ -17,32 +19,34 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   size = 32,
   className,
 }) => {
-  const initials = username
-    ? username.substring(0, 2).toUpperCase()
-    : null;
+  const initials = username ? username.substring(0, 2).toUpperCase() : null;
+  const resolvedUrl = resolveAvatarUrl(avatarUrl);
 
   const style: React.CSSProperties = {
     width: size,
     height: size,
-    borderRadius: '4px',
+    borderRadius: '50%',      // ← bulat
     overflow: 'hidden',
     flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: size * 0.35,
-    backgroundColor: '#e5e7eb',
-    color: '#6b7280',
+    backgroundColor: '#2a2a2a',
+    color: '#9ca3af',
+    border: '1px solid #3a3a3a',
   };
 
   return (
     <div style={style} className={className}>
-      {avatarUrl ? (
+      {resolvedUrl ? (
         <img
-          src={avatarUrl}
+          src={resolvedUrl}
           alt={username ?? 'user'}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+          onError={e => {
+            (e.currentTarget as HTMLImageElement).style.display = 'none';
+          }}
         />
       ) : initials ? (
         <span style={{ fontWeight: 600, lineHeight: 1 }}>{initials}</span>
