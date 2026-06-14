@@ -8,6 +8,7 @@ import { UserLink } from "../../../components/common/UserLink";
 import { useThreadDetailPage } from "../logic/ThreadDetailPage";
 import { ReportModal } from "../../../components/common/ReportModal";
 import { UserAvatar } from "../../../components/common/UserAvatar";
+import { Footer } from "../../../components/Footer";
 import {
   HiChevronUp,
   HiChevronDown,
@@ -20,6 +21,7 @@ import {
   HiTrash,
   HiLockClosed,
 } from "react-icons/hi";
+import { Skeleton } from "../../../components/ui/skeleton";
 import { ThreadHistoryModal } from "@/components/ThreadsHistoryModal";
 
 export const ThreadDetailPage: React.FC = () => {
@@ -57,11 +59,52 @@ export const ThreadDetailPage: React.FC = () => {
 
   if (isLoading)
     return (
-      <div>
+      <div className="bg-background min-h-screen text-foreground">
         <Navbar />
-        <div style={{ textAlign: "center", marginTop: "2rem" }}>
-          Loading thread...
-        </div>
+        <main className="max-w-[900px] mx-auto py-8 px-4">
+          {/* Thread skeleton */}
+          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <Skeleton className="size-10 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-3 w-20" />
+              </div>
+            </div>
+            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+            <div className="flex items-center gap-4 pt-2">
+              <Skeleton className="h-8 w-8" />
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-8 w-8" />
+              <div className="flex gap-4 ml-auto">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+            </div>
+          </div>
+
+          {/* Comments skeleton */}
+          <div className="mt-8 space-y-4">
+            <Skeleton className="h-6 w-32" />
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex gap-3 py-4 border-b border-border">
+                <div className="flex flex-col items-center gap-2 w-12">
+                  <Skeleton className="h-6 w-6" />
+                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="h-6 w-6" />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-28" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
       </div>
     );
 
@@ -362,6 +405,7 @@ export const ThreadDetailPage: React.FC = () => {
         targetType="post"
         targetTitle={thread.title}
       />
+      <Footer />
     </div>
   );
 };

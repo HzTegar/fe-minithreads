@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { commentService } from "@/services/commentService";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // ==========================================
 // SUB-KOMPONEN: MODAL RIWAYAT (TEMA GELAP)
@@ -107,8 +108,22 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
 
         <div className="space-y-6 mt-5">
           {loading ? (
-            <div className="text-center py-12 bg-zinc-900 rounded-2xl border border-dashed border-zinc-800">
-              <p className="font-medium text-slate-300 animate-pulse">Memuat riwayat...</p>
+            <div className="space-y-4">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="border border-zinc-800 rounded-xl overflow-hidden bg-zinc-900">
+                  <div className="bg-black px-4 py-2.5 flex justify-between items-center border-b border-zinc-800">
+                    <Skeleton className="h-4 w-24 bg-zinc-700" />
+                    <div className="flex gap-4">
+                      <Skeleton className="h-4 w-32 bg-zinc-700" />
+                      <Skeleton className="h-4 w-36 bg-zinc-700" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-zinc-950">
+                    <Skeleton className="h-20 rounded-lg bg-zinc-800" />
+                    <Skeleton className="h-20 rounded-lg bg-zinc-800" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : histories.length === 0 ? (
             <div className="text-center py-12 bg-zinc-900 rounded-2xl border border-dashed border-zinc-800">

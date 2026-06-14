@@ -3,8 +3,16 @@ import type { Thread } from '../types/thread.type';
 
 export const bookmarkService = {
   getAll: async (): Promise<Thread[]> => {
-    const response = await api.get<{ data: Thread[] }>('/bookmarks');
-    return response.data;
+    const response = await api.get<{
+      success: boolean;
+      data: {
+        data: Array<{ id: string; post: Thread; created_at: string }>;
+        current_page: number;
+        total: number;
+        last_page: number;
+      };
+    }>('/bookmarks');
+    return response.data.data.map((item) => item.post);
   },
 
   toggle: async (postId: string): Promise<{ is_bookmarked: boolean }> => {

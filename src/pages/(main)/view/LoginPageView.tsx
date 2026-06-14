@@ -2,9 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '../../../components/common/Input';
 import { Button } from '../../../components/common/Button';
-import { APP_NAME } from '../../../utils/constants';
 import { useLoginPage } from '../logic/LoginPage';
 import { ThemeToggle } from '../../../components/ThemeToggle';
+
+const AppLogo: React.FC = () => (
+  <img
+    src="/logo-minithreads.png"
+    alt="MiniThreads Logo"
+    className="dark:block hidden"
+    style={{ width: '72px', height: '72px', objectFit: 'contain' }}
+  />
+);
+
+const AppLogoLight: React.FC = () => (
+  <img
+    src="/logo-minithreads-light.png"
+    alt="MiniThreads Logo"
+    className="dark:hidden block"
+    style={{ width: '72px', height: '72px', objectFit: 'contain' }}
+  />
+);
 
 export const LoginPage: React.FC = () => {
   const {
@@ -19,7 +36,10 @@ export const LoginPage: React.FC = () => {
         <ThemeToggle />
       </div>
       <div style={{ maxWidth: '400px', width: '100%', padding: '2rem', backgroundColor: 'var(--card)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}>
-        <h1 style={{ textAlign: 'center', color: 'var(--primary)', marginBottom: '0.5rem' }}>{APP_NAME}</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '0.5rem', gap: '0.75rem' }}>
+          <AppLogoLight />
+          <AppLogo />
+        </div>
         <h2 style={{ textAlign: 'center', fontSize: '1.25rem', marginBottom: '2rem', color: 'var(--foreground)' }}>Sign in to your account</h2>
         
         {error && <p style={{ color: '#f87171', textAlign: 'center', marginBottom: '1rem' }}>{error}</p>}

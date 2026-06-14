@@ -8,9 +8,11 @@ import { ThreadCard } from "../../../components/ThreadCard";
 import { useProfilePage } from "../logic/ProfilePage";
 import { HiUser, HiCamera, HiX, HiBookmark, HiCollection, HiSearch, HiHeart, HiPencilAlt } from "react-icons/hi";
 import { resolveAvatarUrl } from "../../../utils/constants";
+import { Footer } from "../../../components/Footer";
 import { bookmarkService } from "../../../services/bookmarkService";
 import { threadService } from "../../../services/threadService";
 import type { Thread } from "../../../types/thread.type";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 export const ProfilePage: React.FC = () => {
   const {
@@ -176,7 +178,24 @@ export const ProfilePage: React.FC = () => {
           {/* Tab: Threads */}
           {activeTab === "threads" && (
             isLoadingThreads ? (
-              <p style={{ color: "var(--muted-foreground)" }}>Loading your threads...</p>
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="size-7 rounded-full" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <div className="flex gap-4 pt-2">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : myThreads.length > 0 ? (
               myThreads.map((thread) => <ThreadCard key={thread.id} thread={thread} />)
             ) : (
@@ -194,8 +213,23 @@ export const ProfilePage: React.FC = () => {
           {/* Tab: Bookmarks */}
           {activeTab === "bookmarks" && (
             isLoadingBookmarks ? (
-              <div style={{ textAlign: "center", padding: "2rem", color: "var(--muted-foreground)" }}>
-                Loading your bookmarks...
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="size-7 rounded-full" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <div className="flex gap-4 pt-2">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (bookmarks as Thread[]).length > 0 ? (
               (bookmarks as Thread[]).map((thread) => <ThreadCard key={thread.id} thread={thread} />)
@@ -221,8 +255,23 @@ export const ProfilePage: React.FC = () => {
           {/* Tab: Liked */}
           {activeTab === "liked" && (
             isLoadingLiked ? (
-              <div style={{ textAlign: "center", padding: "2rem", color: "var(--muted-foreground)" }}>
-                Loading liked threads...
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="size-7 rounded-full" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <div className="flex gap-4 pt-2">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (likedThreads as Thread[]).length > 0 ? (
               (likedThreads as Thread[]).map((thread) => <ThreadCard key={thread.id} thread={thread} />)
@@ -336,6 +385,7 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };

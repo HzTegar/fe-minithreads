@@ -5,6 +5,8 @@ import { ThreadCard } from '../../../components/ThreadCard';
 import { UserCard } from '../../../components/UserCard';
 import { useSearchPage } from '../logic/SearchPage';
 import { HiSearch } from 'react-icons/hi';
+import { Skeleton } from '../../../components/ui/skeleton';
+import { Footer } from '../../../components/Footer';
 
 export const SearchPage: React.FC = () => {
   const {
@@ -41,7 +43,19 @@ export const SearchPage: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <p className="text-center py-12 text-muted-foreground">Searching...</p>
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Skeleton className="size-7 rounded-full" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ))}
+          </div>
         ) : query.length >= 1 ? (
           <div>
             <p className="text-muted-foreground mb-6">
@@ -90,6 +104,7 @@ export const SearchPage: React.FC = () => {
           </p>
         )}
       </main>
+      <Footer />
     </div>
   );
 };
