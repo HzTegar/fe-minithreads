@@ -141,22 +141,24 @@ export const HomePage: React.FC = () => {
                       {cat.name}
                     </span>
                   </div>
-                  {isAdminOrMod && (
-                    <div className="flex gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {isAdminOrMod && (
                       <button
                         onClick={() => openEditCatModal(cat)}
                         className="background-none border-none cursor-pointer text-muted-foreground hover:text-[rgb(0,116,204)] p-1 transition-colors"
                       >
                         <HiPencil size={12} />
                       </button>
+                    )}
+                    {user?.level === "admin" && (
                       <button
                         onClick={() => setCatDeleteTarget(cat)}
                         className="background-none border-none cursor-pointer text-muted-foreground hover:text-red-400 p-1 transition-colors"
                       >
                         <HiTrash size={12} />
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

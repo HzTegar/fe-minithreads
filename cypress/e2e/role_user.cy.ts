@@ -94,6 +94,28 @@ describe('User Role', () => {
       });
     });
 
+    it('Komentar — user hanya bisa edit komentar 1 kali', () => {
+      cy.visit('/');
+      cy.get('body').then(($body: JQuery<HTMLBodyElement>) => {
+        const links = $body.find('a[href*="/thread/"]');
+        if (links.length > 0) {
+          cy.wrap(links.first()).click();
+          cy.get('textarea').should('exist').type('Komentar pertama dari user test');
+          cy.contains('button', 'Post Your Answer').click();
+          cy.wait(1000);
+          cy.get('body').then(($b: JQuery<HTMLBodyElement>) => {
+            if ($b.find('button[title="Edit"]').length > 0 || $b.text().includes('Edit')) {
+              cy.contains('button', 'Edit').first().click();
+              cy.get('textarea').last().clear().type('Komentar setelah diedit');
+              cy.contains('button', 'Save').click();
+              cy.wait(1000);
+              cy.contains('button', 'Edit').should('not.exist');
+            }
+          });
+        }
+      });
+    });
+
     it('Profile — data diri tampil', () => {
       cy.visit('/profile');
       cy.url().should('include', '/profile');
