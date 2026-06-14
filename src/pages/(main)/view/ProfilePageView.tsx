@@ -6,7 +6,7 @@ import { Button } from "../../../components/common/Button";
 import { RoleBadge } from "../../../components/common/RoleBadge";
 import { ThreadCard } from "../../../components/ThreadCard";
 import { useProfilePage } from "../logic/ProfilePage";
-import { HiUser, HiCamera, HiX, HiBookmark, HiCollection, HiSearch, HiHeart } from "react-icons/hi";
+import { HiUser, HiCamera, HiX, HiBookmark, HiCollection, HiSearch, HiHeart, HiPencilAlt } from "react-icons/hi";
 import { resolveAvatarUrl } from "../../../utils/constants";
 import { bookmarkService } from "../../../services/bookmarkService";
 import { threadService } from "../../../services/threadService";
@@ -28,6 +28,7 @@ export const ProfilePage: React.FC = () => {
     openEdit,
     closeEdit,
     handleAvatarChange,
+    handleAskQuestion, // 👈 tambahan
     formik,
     handleLogout,
   } = useProfilePage();
@@ -48,7 +49,6 @@ export const ProfilePage: React.FC = () => {
   const { data: likedThreads = [], isLoading: isLoadingLiked } = useQuery({
     queryKey: ["liked-threads", authUser?.username],
     queryFn: async () => {
-      // Pakai endpoint getAll dengan filter liked_by, atau fallback ke /posts?liked_by=username
       const response: any = await threadService.getAll({ liked_by: authUser?.username } as any);
       return Array.isArray(response) ? response : [];
     },
@@ -145,8 +145,13 @@ export const ProfilePage: React.FC = () => {
           </div>
 
           {/* Actions */}
-          <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
             <Button variant="outline" onClick={openEdit}>Edit Profile</Button>
+            {/* 👇 Button Ask Question */}
+            <Button variant="primary" onClick={handleAskQuestion}>
+              <HiPencilAlt style={{ marginRight: "0.4rem", fontSize: "1rem" }} />
+              Ask Question
+            </Button>
             <Button variant="danger" onClick={handleLogout}>Logout</Button>
           </div>
         </div>

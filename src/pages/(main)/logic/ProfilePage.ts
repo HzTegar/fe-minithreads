@@ -143,6 +143,11 @@ export const useProfilePage = () => {
     setAvatarPreview(URL.createObjectURL(file));
   };
 
+  // Navigate ke form tambah thread baru
+  const handleAskQuestion = () => {
+    navigate('/create-thread');
+  };
+
   const handleLogout = () => {
     authStore.clearAuth();
     navigate('/login');
@@ -167,6 +172,7 @@ export const useProfilePage = () => {
     openEdit,
     closeEdit,
     handleAvatarChange,
+    handleAskQuestion, // 👈 expose ke component
     handleLogout,
   };
 };
