@@ -6,6 +6,7 @@ import { Input } from "./common/Input";
 import { categoryService } from "../services/categoryService";
 import type { Category } from "../types/category.type";
 import { tagService, type Tag } from "../services/tagService";
+import type { CreateThreadInput } from "../types/thread.type";
 
 interface ThreadFormProps {
   initialData?: {
@@ -14,7 +15,7 @@ interface ThreadFormProps {
     category_id: string;
     tags: string[];
   };
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CreateThreadInput) => void;
   isLoading?: boolean;
 }
 
@@ -102,8 +103,8 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
         const created = await tagService.create(newTag);
         setAvailableTags((prev) => [...prev, created]);
         handleTagToggle(created.name);
-      } catch (err: any) {
-        alert(err.message || "Failed to create tag");
+      } catch (err: unknown) {
+        alert(err instanceof Error ? err.message : "Failed to create tag");
       }
     }
     setNewTag("");

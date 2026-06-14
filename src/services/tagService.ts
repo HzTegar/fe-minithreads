@@ -28,12 +28,14 @@ export interface Tag {
 
 export const tagService = {
   getAll: async (): Promise<Tag[]> => {
-    const response: any = await api.get('/tags');
-    return response.data?.data || response.data || response;
+    const response = await api.get<{ data?: { data?: Tag[] } } | { data?: Tag[] } | Tag[]>('/tags');
+    const r = response as { data?: { data?: Tag[] } };
+    return r.data?.data || (response as { data?: Tag[] }).data || (response as Tag[]);
   },
 
   create: async (name: string): Promise<Tag> => {
-    const response: any = await api.post('/tags', { name, color: randomColor() });
-    return response.data?.data || response.data || response;
+    const response = await api.post<{ data?: { data?: Tag } } | { data?: Tag } | Tag>('/tags', { name, color: randomColor() });
+    const r = response as { data?: { data?: Tag } };
+    return r.data?.data || (response as { data?: Tag }).data || (response as Tag);
   },
 };

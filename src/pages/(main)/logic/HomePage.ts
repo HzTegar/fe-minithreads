@@ -2,20 +2,21 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { threadService } from '../../../services/threadService';
 import { categoryService } from '../../../services/categoryService';
-import type { Category } from '../../../types/category.type';
 import { userService } from '../../../services/userService';
 import { useAuth } from '../../../hooks/useAuth';
 import { authStore } from '../../../store/authStore';
 import { api } from '../../../services/api';
-import type { Thread } from '../../../types/thread.type';
+import type { Thread, Tag } from '../../../types/thread.type';
 import type { User } from '../../../types/user.type';
+import type { Category } from '../../../types/category.type';
+import type { Comment } from '../../../types/comment.type';
 
 interface SearchResults {
   posts: Thread[];
   users: User[];
-  tags: any[];
-  categories: any[];
-  comments: any[];
+  tags: Tag[];
+  categories: Category[];
+  comments: Comment[];
 }
 
 export const useHomePage = () => {

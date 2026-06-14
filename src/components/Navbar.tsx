@@ -35,65 +35,13 @@ export const Navbar: React.FC = () => {
       <nav className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="flex items-center justify-between h-14 px-6">
 
-          {/* ── Logo THREADS ── */}
-          <Link
-            to="/"
-            className="hover:opacity-80 transition-opacity select-none"
-            style={{ textDecoration: "none", display: "flex", alignItems: "flex-end", gap: 0, lineHeight: 1 }}
-          >
-            {/* T besar putih */}
-            <span style={{
-              fontFamily: "'Arial Black', Arial, sans-serif",
-              fontWeight: 900,
-              fontSize: "2.4rem",
-              color: "#ffffff",
-              lineHeight: 1,
-              letterSpacing: "-2px",
-            }}>T</span>
-
-            {/* H putih uppercase kecil */}
-            <span style={{
-              fontFamily: "'Arial Black', Arial, sans-serif",
-              fontWeight: 900,
-              fontSize: "0.95rem",
-              color: "#ffffff",
-              lineHeight: 1,
-              marginBottom: "6px",
-              letterSpacing: "0px",
-            }}>H</span>
-
-            {/* READ cyan dengan underline putih */}
-            <span style={{ position: "relative", lineHeight: 1, paddingBottom: "3px" }}>
-              <span style={{
-                fontFamily: "'Arial Black', Arial, sans-serif",
-                fontWeight: 900,
-                fontSize: "1.5rem",
-                color: "#00aaff",
-                letterSpacing: "-1px",
-              }}>READ</span>
-              {/* underline putih */}
-              <span style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "3px",
-                backgroundColor: "#ffffff",
-                borderRadius: "2px",
-                display: "block",
-              }} />
-            </span>
-
-            {/* S putih uppercase kecil */}
-            <span style={{
-              fontFamily: "'Arial Black', Arial, sans-serif",
-              fontWeight: 900,
-              fontSize: "0.95rem",
-              color: "#ffffff",
-              lineHeight: 1,
-              marginBottom: "6px",
-              letterSpacing: "0px",
-            }}>S</span>
+          {/* ── Logo ── */}
+          <Link to="/" className="hover:opacity-80 transition-opacity">
+            <img
+              src="/logo-minithreads.png"
+              alt="MiniThreads"
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop links */}

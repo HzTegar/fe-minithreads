@@ -1,15 +1,21 @@
 import { api } from './api';
 import type { CreateReportInput, UpdateReportInput, Report } from '../types/report.type';
 
+interface ReportsListResponse {
+  data?: Report[];
+  current_page?: number;
+  last_page?: number;
+  total?: number;
+  per_page?: number;
+}
+
 export const reportService = {
-  create: async (data: CreateReportInput): Promise<any> => {
-    // Backend endpoint POST /api/reports
-    const response: any = await api.post('/reports', data);
-    return response;
+  create: async (data: CreateReportInput): Promise<{ message?: string }> => {
+    const response = await api.post<{ data?: { message?: string } } | { message?: string }>('/reports', data as unknown as Record<string, unknown>);
+    return (response as { data?: { message?: string } }).data || (response as { message?: string });
   },
 
-  getAll: async (params?: { status?: string; keyword?: string; page?: number }): Promise<any> => {
-    // Backend endpoint GET /api/admin/reports
+  getAll: async (params?: { status?: string; keyword?: string; page?: number }): Promise<ReportsListResponse> => {
     let query = '';
     const queryParts: string[] = [];
     if (params?.status && params.status !== 'all') {
@@ -25,19 +31,17 @@ export const reportService = {
       query = `?${queryParts.join('&')}`;
     }
     
-    const response: any = await api.get(`/admin/reports${query}`);
-    return response.data || response;
+    const response = await api.get<{ data?: ReportsListResponse } | ReportsListResponse>(`/admin/reports${query}`);
+    return (response as { data?: ReportsListResponse }).data || (response as ReportsListResponse);
   },
 
   getById: async (id: string): Promise<Report> => {
-    // Backend endpoint GET /api/admin/reports/{id}
-    const response: any = await api.get(`/admin/reports/${id}`);
-    return response.data || response;
+    const response = await api.get<{ data?: Report } | Report>(`/admin/reports/${id}`);
+    return (response as { data?: Report }).data || (response as Report);
   },
 
-  update: async (id: string, data: UpdateReportInput): Promise<any> => {
-    // Backend endpoint PUT /api/admin/reports/{id}
-    const response: any = await api.put(`/admin/reports/${id}`, data);
-    return response.data || response;
+  update: async (id: string, data: UpdateReportInput): Promise<Report> => {
+    const response = await api.put<{ data?: Report } | Report>(`/admin/reports/${id}`, data as unknown as Record<string, unknown>);
+    return (response as { data?: Report }).data || (response as Report);
   },
 };

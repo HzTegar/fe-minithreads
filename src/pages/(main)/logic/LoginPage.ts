@@ -29,8 +29,8 @@ export const useLoginPage = () => {
         const response = await authService.login(values);
         authStore.setAuth(response.user, response.access_token);
         navigate('/');
-      } catch (err: any) {
-        setError(err.message || 'Login failed. Please check your credentials.');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Login failed. Please check your credentials.');
         console.error(err);
       } finally {
         setIsLoading(false);

@@ -39,8 +39,8 @@ export const ProfilePage: React.FC = () => {
   const { data: bookmarks = [], isLoading: isLoadingBookmarks } = useQuery({
     queryKey: ["bookmarks"],
     queryFn: async () => {
-      const response: any = await bookmarkService.getAll();
-      return (response.data?.data || response.data || []).map((b: any) => b.post || b);
+      const response = await bookmarkService.getAll();
+      return response;
     },
     enabled: activeTab === "bookmarks",
   });
@@ -49,7 +49,7 @@ export const ProfilePage: React.FC = () => {
   const { data: likedThreads = [], isLoading: isLoadingLiked } = useQuery({
     queryKey: ["liked-threads", authUser?.username],
     queryFn: async () => {
-      const response: any = await threadService.getAll({ liked_by: authUser?.username } as any);
+      const response = await threadService.getAll({ liked_by: authUser?.username });
       return Array.isArray(response) ? response : [];
     },
     enabled: activeTab === "liked" && !!authUser?.username,

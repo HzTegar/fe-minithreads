@@ -53,7 +53,7 @@ export const EditThreadPage: React.FC = () => {
                 title: thread.title,
                 body: thread.body,
                 category_id: thread.category_id,
-                tags: thread.tags?.map((t: any) => t.name) || [],
+                tags: thread.tags?.map((t: { name: string }) => t.name) || [],
               }}
               onSubmit={
                 isLimitReached

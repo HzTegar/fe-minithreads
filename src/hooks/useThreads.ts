@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { threadService } from '../services/threadService';
-import type { Thread } from '../types/thread.type';
+import type { Thread, CreateThreadInput } from '../types/thread.type';
 
 export const useThreads = () => {
   const [threads, setThreads] = useState<Thread[]>([]);
@@ -14,8 +14,8 @@ export const useThreads = () => {
     try {
       const data = await threadService.getAll();
       setThreads(data);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch threads');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch threads');
     } finally {
       setIsLoading(false);
     }
@@ -28,30 +28,30 @@ export const useThreads = () => {
       const data = await threadService.getById(id);
       setCurrentThread(data);
       return data;
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch thread');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch thread');
       return null;
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const createThread = async (data: any) => {
+  const createThread = async (data: CreateThreadInput) => {
     setIsLoading(true);
     setError(null);
     try {
       const newThread = await threadService.create(data);
       setThreads((prev) => [newThread, ...prev]);
       return newThread;
-    } catch (err: any) {
-      setError(err.message || 'Failed to create thread');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to create thread');
       throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const updateThread = async (id: string, data: any) => {
+  const updateThread = async (id: string, data: Partial<CreateThreadInput>) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -63,8 +63,8 @@ export const useThreads = () => {
         setCurrentThread(updatedThread);
       }
       return updatedThread;
-    } catch (err: any) {
-      setError(err.message || 'Failed to update thread');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update thread');
       throw err;
     } finally {
       setIsLoading(false);
@@ -80,8 +80,8 @@ export const useThreads = () => {
       if (currentThread?.id === id) {
         setCurrentThread(null);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to delete thread');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to delete thread');
       throw err;
     } finally {
       setIsLoading(false);
@@ -91,11 +91,8 @@ export const useThreads = () => {
   const toggleLike = async (id: string) => {
     try {
       await threadService.like(id);
-      // Optimistic update or refetch could be done here
-      // For now, let's just assume the UI will handle the toggle state locally 
-      // or the parent will refetch.
-    } catch (err: any) {
-      setError(err.message || 'Failed to like thread');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to like thread');
     }
   };
 

@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../../services/api';
-import type { Thread } from '../../../types/thread.type';
+import type { Thread, Tag } from '../../../types/thread.type';
 import type { User } from '../../../types/user.type';
 import type { Comment } from '../../../types/comment.type';
+import type { Category } from '../../../types/category.type';
 
 export interface SearchResults {
   posts: Thread[];
   users: User[];
-  tags: any[];
-  categories: any[];
+  tags: Tag[];
+  categories: Category[];
   comments: Comment[];
 }
 

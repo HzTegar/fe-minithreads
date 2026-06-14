@@ -54,9 +54,10 @@ export const ReportModal: React.FC<ReportModalProps> = ({
         setDescription('');
         setSuccess(null);
       }, 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Gagal mengirim laporan. Silakan coba lagi.';
       console.error(err);
-      setError(err?.message || 'Gagal mengirim laporan. Silakan coba lagi.');
+      setError(message);
     } finally {
       setIsLoading(false);
     }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; // 👈 TAMBAHAN IMPORT LINK
-import type { Comment } from "../types/comment.type";
+import type { Comment, CommentEditHistory } from "../types/comment.type";
 import { useAuth } from "../hooks/useAuth";
 import { CommentForm } from "./CommentForm";
 import { ReportModal } from "./common/ReportModal";
@@ -33,14 +33,14 @@ interface CommentHistoryModalProps {
 }
 
 const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
-  const [histories, setHistories] = useState<any[]>([]);
+  const [histories, setHistories] = useState<CommentEditHistory[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchHistory = async () => {
     setLoading(true);
     try {
       const result = await commentService.getHistory(commentId);
-      const historyData = result.data ? result.data : result;
+      const historyData = result;
       setHistories(Array.isArray(historyData) ? historyData : []);
     } catch (err) {
       console.error("Gagal mengambil riwayat:", err);
@@ -134,7 +134,7 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
               </p>
             </div>
           ) : (
-            sortedHistories.map((history: any) => {
+            sortedHistories.map((history: CommentEditHistory) => {
               const formattedDate = new Date(history.created_at).toLocaleString(
                 "id-ID",
                 {

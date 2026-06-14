@@ -307,7 +307,7 @@ export const HomePage: React.FC = () => {
                                 {p.title}
                               </div>
                               <div className="text-xs text-muted-foreground truncate">
-                                {(p as any).body?.substring(0, 80) || ''}
+                                {p.body?.substring(0, 80) || ''}
                               </div>
                             </div>
                           </Link>
