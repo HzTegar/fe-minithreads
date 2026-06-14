@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom"; // 👈 TAMBAHAN IMPORT LINK
 import type { Comment } from "../types/comment.type";
 import { useAuth } from "../hooks/useAuth";
 import { CommentForm } from "./CommentForm";
 import { ReportModal } from "./common/ReportModal";
+import { UserAvatar } from "./common/UserAvatar";
 import {
   HiChevronUp,
   HiChevronDown,
   HiFlag,
   HiPencilAlt,
-  HiTrash, // 👈 HiTrash dipanggil lagi khusus buat Admin
+  HiTrash, 
   HiCheckCircle,
   HiReply,
 } from "react-icons/hi";
@@ -24,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { commentService } from "@/services/commentService";
 
 // ==========================================
-// SUB-KOMPONEN: MODAL RIWAYAT (PAKAI SERVICE)
+// SUB-KOMPONEN: MODAL RIWAYAT (TEMA GELAP)
 // ==========================================
 interface CommentHistoryModalProps {
   commentId: string;
@@ -78,9 +80,10 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-[95vw] md:w-[90vw] max-w-7xl max-h-[90vh] overflow-y-auto p-6">
-        <DialogHeader className="border-b pb-3">
-          <DialogTitle className="text-xl font-semibold text-slate-800 flex items-center gap-2">
+      {/* BERUBAH: Ditambahkan bg-slate-950 text-white border-slate-800 */}
+      <DialogContent className="w-[95vw] md:w-[90vw] max-w-7xl max-h-[90vh] overflow-y-auto p-6 bg-slate-950 text-white border-slate-800">
+        <DialogHeader className="border-b border-slate-800 pb-3">
+          <DialogTitle className="text-xl font-semibold text-white flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -104,18 +107,18 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
 
         <div className="space-y-6 mt-5">
           {loading ? (
-            <div className="text-center py-12 text-slate-500 bg-black rounded-2xl border border-dashed">
-              <p className="font-medium text-slate-700">Memuat riwayat...</p>
+            <div className="text-center py-12 bg-zinc-900 rounded-2xl border border-dashed border-zinc-800">
+              <p className="font-medium text-slate-300 animate-pulse">Memuat riwayat...</p>
             </div>
           ) : histories.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 bg-black rounded-2xl border border-dashed">
+            <div className="text-center py-12 bg-zinc-900 rounded-2xl border border-dashed border-zinc-800">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-10 h-10 mx-auto text-slate-400 mb-2"
+                className="w-10 h-10 mx-auto text-slate-500 mb-2"
               >
                 <path
                   strokeLinecap="round"
@@ -123,10 +126,10 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
                   d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              <p className="font-medium text-slate-700">
+              <p className="font-medium text-slate-300">
                 Belum ada riwayat perubahan
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Komentar ini belum pernah diedit sebelumnya.
               </p>
             </div>
@@ -143,15 +146,16 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
               return (
                 <div
                   key={history.id}
-                  className="border rounded-xl overflow-hidden shadow-sm bg-slate-50/50 w-full"
+                  className="border border-zinc-800 rounded-xl overflow-hidden shadow-sm bg-zinc-900 w-full"
                 >
-                  <div className="bg-slate-100 px-4 py-2.5 flex flex-wrap justify-between items-center gap-3 border-b text-xs text-slate-600">
-                    <span className="font-bold text-slate-700 bg-white border px-2.5 py-1 rounded-md shadow-sm">
+                  {/* Header Item Riwayat */}
+                  <div className="bg-black px-4 py-2.5 flex flex-wrap justify-between items-center gap-3 border-b border-zinc-800 text-xs text-slate-400">
+                    <span className="font-bold text-white bg-zinc-800 px-2.5 py-1 rounded-md shadow-sm">
                       Edit ke-{history.edit_number}
                     </span>
 
                     <div className="flex flex-wrap items-center gap-4">
-                      <span className="bg-white/80 px-2.5 py-1 rounded-md border border-slate-200 flex items-center gap-1">
+                      <span className="bg-zinc-800/60 px-2.5 py-1 rounded-md border border-zinc-700 flex items-center gap-1 text-slate-300">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -167,11 +171,11 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
                           />
                         </svg>
                         Editor User ID:{" "}
-                        <strong className="text-slate-800">
+                        <strong className="text-white ml-0.5">
                           {history.user_id}
                         </strong>
                       </span>
-                      <span className="bg-white/80 px-2.5 py-1 rounded-md border border-slate-200 flex items-center gap-1">
+                      <span className="bg-zinc-800/60 px-2.5 py-1 rounded-md border border-zinc-700 flex items-center gap-1 text-slate-300">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -187,28 +191,31 @@ const CommentHistoryModal = ({ commentId }: CommentHistoryModalProps) => {
                           />
                         </svg>
                         Waktu Perubahan:{" "}
-                        <strong className="text-slate-800">
+                        <strong className="text-white ml-0.5">
                           {formattedDate}
                         </strong>
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-white w-full">
-                    <div className="bg-red-50/40 p-4 rounded-lg border border-red-100 min-w-0 w-full">
-                      <span className="text-[10px] font-extrabold text-red-600 tracking-wider bg-red-100/60 px-2 py-0.5 rounded mb-3 inline-block">
+                  {/* Konten Perbandingan (Sebelum vs Sesudah) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-zinc-950 w-full">
+                    {/* SEBELUMNYA */}
+                    <div className="bg-red-950/30 p-4 rounded-lg border border-red-900/50 min-w-0 w-full">
+                      <span className="text-[10px] font-extrabold text-red-400 tracking-wider bg-red-900/40 px-2 py-0.5 rounded mb-3 inline-block">
                         SEBELUMNYA
                       </span>
-                      <p className="text-sm text-slate-700 whitespace-pre-wrap break-all leading-relaxed pt-1">
+                      <p className="text-sm text-slate-200 whitespace-pre-wrap break-all leading-relaxed pt-1">
                         {history.old_content}
                       </p>
                     </div>
 
-                    <div className="bg-green-50/40 p-4 rounded-lg border border-green-100 min-w-0 w-full">
-                      <span className="text-[10px] font-extrabold text-green-600 tracking-wider bg-green-100/60 px-2 py-0.5 rounded mb-3 inline-block">
+                    {/* SESUDAHNYA */}
+                    <div className="bg-green-950/30 p-4 rounded-lg border border-green-900/50 min-w-0 w-full">
+                      <span className="text-[10px] font-extrabold text-green-400 tracking-wider bg-green-900/40 px-2 py-0.5 rounded mb-3 inline-block">
                         SESUDAHNYA
                       </span>
-                      <p className="text-sm text-slate-700 whitespace-pre-wrap break-all leading-relaxed pt-1">
+                      <p className="text-sm text-slate-200 whitespace-pre-wrap break-all leading-relaxed pt-1">
                         {history.new_content}
                       </p>
                     </div>
@@ -262,14 +269,11 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 
   const isEditing = activeEditId === comment.id;
 
-  // 👇 Variabel untuk cek akses riwayat (Admin & Mod bisa lihat riwayat)
   const canModerate =
     currentUser?.level === "admin" || currentUser?.level === "moderator";
     
-  // 👇 Variabel HANYA untuk Admin (buat hapus komentar)
   const isAdmin = currentUser?.level === "admin";
     
-  // Cek owner pakai String() biar anti bug kalau tipe datanya number
   const isOwner = currentUser?.id 
     ? String(currentUser.id) === String(comment.user_id) 
     : false;
@@ -324,6 +328,22 @@ export const CommentItem: React.FC<CommentItemProps> = ({
       </div>
 
       <div className="flex-1 min-w-0">
+        {comment.user && (
+          <Link 
+            to={`/users/${comment.user.username}`}
+            className="flex items-center gap-2 mb-2 w-fit hover:opacity-80 transition-opacity cursor-pointer group"
+          >
+            <UserAvatar
+              username={comment.user.username}
+              avatarUrl={comment.user.avatar_url}
+              size={28}
+            />
+            <span className="text-sm font-semibold text-foreground group-hover:text-primary group-hover:underline transition-colors">
+              {comment.user.username}
+            </span>
+          </Link>
+        )}
+
         {isEditing ? (
           <div className="mb-4">
             <textarea
@@ -380,7 +400,6 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               </button>
             )}
 
-            {/* Tombol Edit (Cuma muncul buat yang bikin komentar, maksimal 1x) */}
             {isOwner && !isEditing && (comment.edit_count ?? 0) < 1 && (
               <button
                 onClick={() => onEdit(comment)}
@@ -390,7 +409,6 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               </button>
             )}
 
-            {/* 👇 TOMBOL DELETE KEMBALI, TAPI KHUSUS ADMIN AJA 👇 */}
             {isAdmin && !isEditing && (
               <button
                 onClick={() => onDelete(comment.id)}
@@ -400,7 +418,6 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               </button>
             )}
 
-            {/* Tombol View History Ditampilkan Hanya untuk Admin/Moderator */}
             {canModerate && !isEditing && (
               <CommentHistoryModal commentId={comment.id} />
             )}

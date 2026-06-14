@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { APP_NAME } from "../utils/constants";
 import { authStore } from "../store/authStore";
 import { ThemeToggle } from "./ThemeToggle";
+import { resolveAvatarUrl } from "../utils/constants";
 
 export const Navbar: React.FC = () => {
   const [authState, setAuthState] = useState(authStore.getState());
@@ -21,20 +21,79 @@ export const Navbar: React.FC = () => {
   const isAdminOrMod =
     authState.user?.level === "admin" || authState.user?.level === "moderator";
 
-  const linkCls = "text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-3 py-1.5 rounded-full transition-all duration-150";
-  const mobileLinkCls = "block text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-4 py-2.5 rounded-xl transition-all duration-150";
+  const avatarUrl = authState.user
+    ? resolveAvatarUrl(authState.user.avatar_url || authState.user.avatarUrl)
+    : null;
+
+  const linkCls =
+    "text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-3 py-1.5 rounded-full transition-all duration-150";
+  const mobileLinkCls =
+    "block text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-4 py-2.5 rounded-xl transition-all duration-150";
 
   return (
     <>
       <nav className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="flex items-center justify-between h-14 px-6">
 
-          {/* Logo */}
+          {/* ── Logo THREADS ── */}
           <Link
             to="/"
-            className="text-xl font-bold text-foreground tracking-tight hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity select-none"
+            style={{ textDecoration: "none", display: "flex", alignItems: "flex-end", gap: 0, lineHeight: 1 }}
           >
-            {APP_NAME}
+            {/* T besar putih */}
+            <span style={{
+              fontFamily: "'Arial Black', Arial, sans-serif",
+              fontWeight: 900,
+              fontSize: "2.4rem",
+              color: "#ffffff",
+              lineHeight: 1,
+              letterSpacing: "-2px",
+            }}>T</span>
+
+            {/* H putih uppercase kecil */}
+            <span style={{
+              fontFamily: "'Arial Black', Arial, sans-serif",
+              fontWeight: 900,
+              fontSize: "0.95rem",
+              color: "#ffffff",
+              lineHeight: 1,
+              marginBottom: "6px",
+              letterSpacing: "0px",
+            }}>H</span>
+
+            {/* READ cyan dengan underline putih */}
+            <span style={{ position: "relative", lineHeight: 1, paddingBottom: "3px" }}>
+              <span style={{
+                fontFamily: "'Arial Black', Arial, sans-serif",
+                fontWeight: 900,
+                fontSize: "1.5rem",
+                color: "#00aaff",
+                letterSpacing: "-1px",
+              }}>READ</span>
+              {/* underline putih */}
+              <span style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "3px",
+                backgroundColor: "#ffffff",
+                borderRadius: "2px",
+                display: "block",
+              }} />
+            </span>
+
+            {/* S putih uppercase kecil */}
+            <span style={{
+              fontFamily: "'Arial Black', Arial, sans-serif",
+              fontWeight: 900,
+              fontSize: "0.95rem",
+              color: "#ffffff",
+              lineHeight: 1,
+              marginBottom: "6px",
+              letterSpacing: "0px",
+            }}>S</span>
           </Link>
 
           {/* Desktop links */}
@@ -55,12 +114,23 @@ export const Navbar: React.FC = () => {
                 )}
 
                 <Link to="/notifications" className={linkCls}>Notifications</Link>
-                <Link to="/bookmarks" className={linkCls}>Bookmarks</Link>
 
-                <Link to="/profile" className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-3 py-1.5 rounded-full transition-all duration-150">
-                  <div className="w-7 h-7 rounded-full bg-muted border border-border flex items-center justify-center text-[11px] font-semibold text-muted-foreground uppercase">
-                    {authState.user?.username?.[0] ?? "U"}
-                  </div>
+                {/* Profile avatar + username */}
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent px-3 py-1.5 rounded-full transition-all duration-150"
+                >
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt={authState.user?.username ?? "avatar"}
+                      className="w-7 h-7 rounded-full object-cover border border-border"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-muted border border-border flex items-center justify-center text-[11px] font-semibold text-muted-foreground uppercase">
+                      {authState.user?.username?.[0] ?? "U"}
+                    </div>
+                  )}
                   <span>{authState.user?.username}</span>
                 </Link>
 
@@ -83,7 +153,6 @@ export const Navbar: React.FC = () => {
               </>
             )}
 
-            {/* Theme Toggle */}
             <ThemeToggle />
           </div>
 
@@ -110,12 +179,15 @@ export const Navbar: React.FC = () => {
             {authState.isAuthenticated ? (
               <>
                 {isAdminOrMod && (
-                  <Link to="/admin/reports" className="block text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/40 px-4 py-2.5 rounded-xl transition-all duration-150" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    to="/admin/reports"
+                    className="block text-sm font-medium text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/40 px-4 py-2.5 rounded-xl transition-all duration-150"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Reports
                   </Link>
                 )}
                 <Link to="/notifications" className={mobileLinkCls} onClick={() => setMenuOpen(false)}>Notifications</Link>
-                <Link to="/bookmarks" className={mobileLinkCls} onClick={() => setMenuOpen(false)}>Bookmarks</Link>
                 <Link to="/profile" className={mobileLinkCls} onClick={() => setMenuOpen(false)}>
                   Profile ({authState.user?.username})
                 </Link>
@@ -129,7 +201,11 @@ export const Navbar: React.FC = () => {
             ) : (
               <>
                 <Link to="/login" className={mobileLinkCls} onClick={() => setMenuOpen(false)}>Login</Link>
-                <Link to="/register" className="block text-sm font-medium text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40 px-4 py-2.5 rounded-xl transition-all duration-150" onClick={() => setMenuOpen(false)}>
+                <Link
+                  to="/register"
+                  className="block text-sm font-medium text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/40 px-4 py-2.5 rounded-xl transition-all duration-150"
+                  onClick={() => setMenuOpen(false)}
+                >
                   Register
                 </Link>
               </>
