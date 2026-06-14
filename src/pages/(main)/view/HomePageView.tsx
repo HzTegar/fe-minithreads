@@ -9,6 +9,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { categoryValidationSchema } from "../../../types/category.type";
 import type { CategoryFormValues } from "../../../types/category.type";
 import { HiPencil, HiTrash, HiHashtag, HiSearch } from "react-icons/hi";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { Footer } from "../../../components/Footer";
 
 export const HomePage: React.FC = () => {
   const {
@@ -99,7 +101,14 @@ export const HomePage: React.FC = () => {
             </div>
 
             {isCatLoading && (
-              <p className="text-xs text-muted-foreground m-0">Loading...</p>
+              <div className="space-y-2 py-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-2 py-2 px-2">
+                    <Skeleton className="size-1 rounded-full" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                ))}
+              </div>
             )}
             {catError && (
               <p className="text-xs text-red-400 m-0">{catError}</p>
@@ -328,9 +337,24 @@ export const HomePage: React.FC = () => {
 
           {/* Thread List (always visible behind dropdown) */}
           {isLoading ? (
-            <p className="text-center py-12 text-muted-foreground text-sm">
-              Loading threads...
-            </p>
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-card border border-border rounded-xl p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="size-7 rounded-full" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
+                  <div className="flex gap-4 pt-2">
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-4 w-16" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="space-y-3">
               {Array.isArray(threads) && threads.length > 0 ? (
@@ -551,6 +575,7 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };

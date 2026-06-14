@@ -3,6 +3,8 @@ import { Navbar } from '../../../components/Navbar';
 import { useAdminReportsPage } from '../logic/AdminReportsPage';
 import { RoleBadge } from '../../../components/common/RoleBadge';
 import { Link } from 'react-router-dom';
+import { Skeleton } from '../../../components/ui/skeleton';
+import { Footer } from '../../../components/Footer';
 import {
   HiOutlineExclamation,
   HiOutlineSearch,
@@ -156,9 +158,17 @@ export const AdminReportsPage: React.FC = () => {
             {/* Reports List */}
             <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col min-h-[500px]">
               {isLoadingReports ? (
-                <div className="flex flex-col items-center justify-center flex-1 p-8 text-muted-foreground">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-400 mb-2"></div>
-                  <p className="text-sm">Memuat daftar laporan...</p>
+                <div className="space-y-2 p-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-4 p-3 border border-border rounded-lg">
+                      <Skeleton className="size-8 rounded-full" />
+                      <div className="flex-1 space-y-2">
+                        <Skeleton className="h-4 w-3/4" />
+                        <Skeleton className="h-3 w-1/2" />
+                      </div>
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                    </div>
+                  ))}
                 </div>
               ) : isErrorReports ? (
                 <div className="flex-1 p-8 text-center">
@@ -451,6 +461,7 @@ export const AdminReportsPage: React.FC = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

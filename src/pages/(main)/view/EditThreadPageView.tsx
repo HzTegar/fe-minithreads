@@ -2,6 +2,8 @@ import React from "react";
 import { Navbar } from "../../../components/Navbar";
 import { ThreadForm } from "../../../components/ThreadForm";
 import { useEditThreadPage } from "../logic/EditThreadPage";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { Footer } from "../../../components/Footer";
 
 export const EditThreadPage: React.FC = () => {
   const { thread, isLoading, isSubmitting, isLimitReached, handleSubmit } =
@@ -11,7 +13,35 @@ export const EditThreadPage: React.FC = () => {
     return (
       <div className="bg-background min-h-screen text-foreground">
         <Navbar />
-        <div className="text-center mt-10 text-muted-foreground">Loading...</div>
+        <main className="max-w-275 mx-auto py-8 px-4 flex gap-8">
+          <div className="flex-1 bg-card p-8 rounded-xl border border-border space-y-6">
+            <Skeleton className="h-8 w-48" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-10" />
+              <div className="flex gap-2">
+                <Skeleton className="h-6 w-16 rounded-full" />
+                <Skeleton className="h-6 w-20 rounded-full" />
+                <Skeleton className="h-6 w-14 rounded-full" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-10" />
+              <Skeleton className="h-48 w-full" />
+            </div>
+            <Skeleton className="h-10 w-40 rounded-lg" />
+          </div>
+          <aside className="w-75 hidden lg:block">
+            <Skeleton className="h-48 w-full rounded-xl" />
+          </aside>
+        </main>
       </div>
     );
   if (!thread)
@@ -40,8 +70,18 @@ export const EditThreadPage: React.FC = () => {
           )}
 
           {isLoading ? (
-            <div className="text-center py-12 text-muted-foreground">
-              Loading thread details...
+            <div className="space-y-6">
+              <Skeleton className="h-8 w-48" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+              <Skeleton className="h-48 w-full" />
+              <Skeleton className="h-10 w-40 rounded-lg" />
             </div>
           ) : !thread ? (
             <div className="text-center py-12 text-muted-foreground">
@@ -91,6 +131,7 @@ export const EditThreadPage: React.FC = () => {
           </div>
         </aside>
       </main>
+      <Footer />
     </div>
   );
 };

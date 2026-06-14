@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar } from '../../../components/Navbar';
 import { ThreadForm } from '../../../components/ThreadForm';
 import { useCreateThreadPage } from '../logic/CreateThreadPage';
+import { Footer } from '../../../components/Footer';
 
 export const CreateThreadPage: React.FC = () => {
   const {
@@ -44,6 +45,7 @@ export const CreateThreadPage: React.FC = () => {
           </div>
         </aside>
       </main>
+      <Footer />
     </div>
   );
 };

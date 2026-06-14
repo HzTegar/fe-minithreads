@@ -6,6 +6,8 @@ import { useUserProfilePage } from "../logic/UserProfilePage";
 import { ReportModal } from "../../../components/common/ReportModal";
 import { HiUser, HiUserAdd, HiUserRemove } from "react-icons/hi";
 import { resolveAvatarUrl } from "../../../utils/constants";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { Footer } from "../../../components/Footer";
 
 export const UserProfilePage: React.FC = () => {
   const {
@@ -18,6 +20,13 @@ export const UserProfilePage: React.FC = () => {
     followersCount,
     isFollowLoading,
     handleToggleFollow,
+    canAssignRole,
+    selectedRole,
+    setSelectedRole,
+    isRoleUpdating,
+    roleMessage,
+    roleError,
+    handleAssignRole,
   } = useUserProfilePage();
 
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -26,9 +35,29 @@ export const UserProfilePage: React.FC = () => {
     return (
       <div className="bg-background min-h-screen text-foreground">
         <Navbar />
-        <div className="text-center mt-12 text-muted-foreground">
-          Loading profile...
-        </div>
+        <main className="max-w-[800px] mx-auto py-8 px-4 space-y-6">
+          <div className="bg-card border border-border rounded-xl p-8 space-y-4">
+            <div className="flex flex-col items-center gap-3">
+              <Skeleton className="size-20 rounded-full" />
+              <Skeleton className="h-5 w-16 rounded-full" />
+              <Skeleton className="h-4 w-20 rounded-full" />
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-4 w-64" />
+            </div>
+            <div className="flex justify-center gap-12 py-4 border-y border-border">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="flex flex-col items-center gap-1">
+                  <Skeleton className="h-5 w-10" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center gap-3">
+              <Skeleton className="h-9 w-28 rounded-lg" />
+            </div>
+          </div>
+        </main>
       </div>
     );
 
@@ -188,6 +217,100 @@ export const UserProfilePage: React.FC = () => {
             </div>
           )}
 
+          {/* Admin: Role Switcher */}
+          {canAssignRole && (
+            <div
+              style={{
+                marginTop: "1rem",
+                marginBottom: "1rem",
+                padding: "1rem",
+                borderTop: "1px solid #2a2a2a",
+                borderBottom: "1px solid #2a2a2a",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.75rem",
+                  flexWrap: "wrap",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    color: "var(--foreground)",
+                  }}
+                >
+                  Change Role:
+                </span>
+                <select
+                  value={selectedRole}
+                  onChange={(e) =>
+                    setSelectedRole(e.target.value as "user" | "moderator" | "admin")
+                  }
+                  style={{
+                    padding: "0.4rem 0.75rem",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border)",
+                    backgroundColor: "var(--background)",
+                    color: "var(--foreground)",
+                    fontSize: "0.875rem",
+                    outline: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <option value="user">User</option>
+                  <option value="moderator">Moderator</option>
+                  <option value="admin">Admin</option>
+                </select>
+                <button
+                  onClick={handleAssignRole}
+                  disabled={isRoleUpdating}
+                  style={{
+                    padding: "0.4rem 1rem",
+                    borderRadius: "6px",
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    border: "none",
+                    backgroundColor: "#6366f1",
+                    color: "#ffffff",
+                    cursor: isRoleUpdating ? "not-allowed" : "pointer",
+                    opacity: isRoleUpdating ? 0.7 : 1,
+                  }}
+                >
+                  {isRoleUpdating ? "Updating..." : "Update Role"}
+                </button>
+              </div>
+              {roleMessage && (
+                <p
+                  style={{
+                    margin: "0.5rem 0 0",
+                    fontSize: "0.8rem",
+                    color: "#4ade80",
+                    textAlign: "center",
+                  }}
+                >
+                  {roleMessage}
+                </p>
+              )}
+              {roleError && (
+                <p
+                  style={{
+                    margin: "0.5rem 0 0",
+                    fontSize: "0.8rem",
+                    color: "#f87171",
+                    textAlign: "center",
+                  }}
+                >
+                  {roleError}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Stats */}
           <div
             style={{
@@ -266,6 +389,7 @@ export const UserProfilePage: React.FC = () => {
         targetType="user"
         targetTitle={`User: ${user.username}`}
       />
+      <Footer />
     </div>
   );
 };
