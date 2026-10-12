@@ -1,4 +1,45 @@
-# Logs
+
+# 1. Environment & Local Configuration (RAWAN / SENSITIF)
+
+.env
+.env.backup
+.env.*.local
+.env.production
+
+# Abaikan Folder & File SQL Database
+ini folder sql/
+*.sql
+*.sqlite
+
+
+# 2. Dependencies & Build Output
+
+/node_modules
+/vendor
+/public/build
+/public/hot
+/public/storage
+dist
+dist-ssr
+
+
+# 3. Laravel Specifics
+
+/storage/*.key
+/storage/app/public/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+!.gitignore
+Homestead.json
+Homestead.yaml
+auth.json
+
+
+# 4. Logs & Debugs
+
 logs
 *.log
 npm-debug.log*
@@ -7,12 +48,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
 
-# Editor directories and files
+# Testing & Cache
+
+.phpunit.result.cache
+/cypress/screenshots/*
+/cypress/videos/*
+
+
+# 6. Editor Directories & System Files
+
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,3 +67,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.local
