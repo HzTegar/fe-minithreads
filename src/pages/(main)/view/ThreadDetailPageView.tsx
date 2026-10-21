@@ -31,6 +31,8 @@ export const ThreadDetailPage: React.FC = () => {
     isLoading,
     isSubmitting,
     isBookmarked,
+    isBookmarkPending,
+    isLikePending,
     canModerate,
     isOwner,
     isLimitReached,
@@ -180,7 +182,12 @@ export const ThreadDetailPage: React.FC = () => {
 
             <button
               onClick={handleLike}
-              className="mt-3 text-muted-foreground hover:text-red-500 flex flex-col items-center gap-1 transition-colors cursor-pointer"
+              disabled={isLikePending}
+              className={`mt-3 flex flex-col items-center gap-1 transition-colors ${
+                isLikePending
+                  ? "cursor-wait opacity-70"
+                  : "text-muted-foreground hover:text-red-500 cursor-pointer"
+              }`}
             >
               <div className="text-2xl">
                 {thread.is_liked ? (
@@ -194,8 +201,14 @@ export const ThreadDetailPage: React.FC = () => {
 
             <button
               onClick={handleBookmark}
-              className={`mt-2 hover:text-primary transition-colors text-2xl cursor-pointer ${
-                isBookmarked ? "text-primary" : "text-muted-foreground"
+              disabled={isBookmarkPending}
+              title={isBookmarked ? "Hapus dari bookmark" : "Simpan ke bookmark"}
+              className={`mt-2 text-2xl transition-colors ${
+                isBookmarkPending
+                  ? "cursor-wait opacity-70"
+                  : `hover:text-primary cursor-pointer ${
+                      isBookmarked ? "text-primary" : "text-muted-foreground"
+                    }`
               }`}
             >
               {isBookmarked ? <HiBookmark /> : <HiOutlineBookmark />}

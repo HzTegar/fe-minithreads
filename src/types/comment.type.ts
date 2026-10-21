@@ -19,6 +19,7 @@ export interface Comment {
   parent_id?: string | null;
   replies?: Comment[];
   is_accepted?: boolean;
+  is_liked?: boolean;
   vote_score?: number;
   likes_count?: number;
   edit_count?: number;

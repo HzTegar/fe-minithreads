@@ -50,6 +50,7 @@ export interface Thread {
   edit_histories?: ThreadEditHistory[]; 
   vote_score?: number;
   is_liked?: boolean;
+  is_bookmarked?: boolean;
   comments?: Comment[];
   created_at: string;
   updated_at: string;

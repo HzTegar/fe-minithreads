@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from '../../../components/common/Input';
 import { Button } from '../../../components/common/Button';
-import { APP_NAME } from '../../../utils/constants';
 import { useRegisterPage } from '../logic/RegisterPage';
 import { ThemeToggle } from '../../../components/ThemeToggle';
 
