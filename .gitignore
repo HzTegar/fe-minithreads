@@ -5,6 +5,9 @@
 .env.backup
 .env.*.local
 .env.production
+# Semua varian .env.* ikut diabaikan, kecuali .env.example (template).
+.env.*
+!.env.example
 
 # Abaikan Folder & File SQL Database
 ini folder sql/
@@ -21,6 +24,9 @@ ini folder sql/
 /public/storage
 dist
 dist-ssr
+# Build artifact service worker PWA untuk mode dev (dibuat ulang otomatis
+# oleh vite-plugin-pwa saat dev server jalan).
+dev-dist
 
 
 # 3. Laravel Specifics

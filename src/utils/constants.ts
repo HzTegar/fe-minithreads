@@ -1,4 +1,18 @@
-export const API_BASE_URL = "http://127.0.0.1:8000/api";
+/**
+ * Base URL backend.
+ *
+ * Dibaca dari env VITE_API_URL supaya tidak hardcode dan bisa diarahkan ke
+ * domain production tanpa mengubah kode. Contoh:
+ *   VITE_API_URL=https://api.minithreads.com/api
+ *
+ * Kalau env tidak di-set, fallback ke backend lokal.
+ */
+const RAW_API_BASE_URL =
+  (import.meta.env.VITE_API_URL as string | undefined)?.trim() ||
+  "http://127.0.0.1:8000/api";
+
+// Buang trailing slash supaya URL tidak pernah jadi dobel slash.
+export const API_BASE_URL = RAW_API_BASE_URL.replace(/\/+$/, "");
 
 // Base URL backend tanpa "/api", dipakai untuk akses file di /storage
 export const BACKEND_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
